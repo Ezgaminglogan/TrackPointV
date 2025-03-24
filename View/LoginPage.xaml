@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TrackPointV.Converters"
+             x:Class="TrackPointV.MainPage"
+             BackgroundColor="#e6f2ff">
+
+    <ContentPage.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 24,24,24,24"/>
+            <Setter Property="Stroke" Value="#40a1d6ff"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#402b5797" Offset="0,6" Radius="16" />
+            </Setter>
+            <Setter Property="Padding" Value="28"/>
+            <Setter Property="Margin" Value="22"/>
+        </Style>
+
+        <!-- Style for FontAwesome icons -->
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+        </Style>
+
+        <Style x:Key="LoginButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="Margin" Value="0,15,0,0"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1a73e8" Offset="0.0" />
+                    <GradientStop Color="#0d47a1" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#f5f9ff"/>
+            <Setter Property="TextColor" Value="#333333"/>
+            <Setter Property="PlaceholderColor" Value="#8eadd4"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="HeightRequest" Value="54"/>
+        </Style>
+
+        <Style x:Key="InputFieldContainer" TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 12,12,12,12"/>
+            <Setter Property="Stroke" Value="#e0e0ff"/>
+            <Setter Property="BackgroundColor" Value="#f5f9ff"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="Margin" Value="0,5,0,10"/>
+        </Style>
+
+        <!-- Boolean Inverter Converter -->
+        <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background with enhanced gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#e6f2ff" Offset="0.0" />
+                    <GradientStop Color="#c7e1ff" Offset="0.3" />
+                    <GradientStop Color="#1a73e8" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Background pattern -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.1" />
+
+        <ScrollView Orientation="Both">
+            <Grid VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="480">
+                <Border Style="{StaticResource GlassCard}">
+                    <VerticalStackLayout Spacing="24">
+                        <!-- Logo and Title Section -->
+                        <Grid RowSpacing="8" Margin="0,0,0,15">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.Row="0" Source="inventory.png" 
+                                   HeightRequest="110" WidthRequest="110"
+                                   HorizontalOptions="Center">
+                                <Image.Shadow>
+                                    <Shadow Brush="#402b5797" Offset="0,3" Radius="6" />
+                                </Image.Shadow>
+                            </Image>
+
+                            <Label Grid.Row="1" Text="TRACKPOINT" 
+                                   FontSize="32" FontAttributes="Bold" 
+                                   TextColor="#0d47a1" HorizontalOptions="Center"
+                                   Margin="0,5,0,0">
+                                <Label.Shadow>
+                                    <Shadow Brush="#40000000" Offset="0,1" Radius="2" />
+                                </Label.Shadow>
+                            </Label>
+
+                            <Label Grid.Row="2" Text="Tracking Inventory and Sales" 
+                                   FontSize="17" TextColor="#4285f4" 
+                                   HorizontalOptions="Center" />
+                        </Grid>
+
+                        <!-- Divider with animation potential -->
+                        <Border HeightRequest="2" HorizontalOptions="Fill">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="1" />
+                            </Border.StrokeShape>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#e0e0ff" Offset="0.0" />
+                                    <GradientStop Color="#4285f4" Offset="0.5" />
+                                    <GradientStop Color="#e0e0ff" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <!-- Login Form -->
+                        <Grid RowSpacing="10" Margin="0,15,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Username label -->
+                            <HorizontalStackLayout Grid.Row="0">
+                                <Label Text="&#xf007;" Style="{StaticResource IconStyle}" />
+                                <Label Text="Username" FontSize="16" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                            <!-- Username input with styled container -->
+                            <Border Grid.Row="1" Style="{StaticResource InputFieldContainer}">
+                                <Entry Placeholder="Enter your username" x:Name="usernameEntry" 
+                                       TextColor="#333333" PlaceholderColor="#8eadd4" 
+                                       FontSize="16" BackgroundColor="Transparent" 
+                                       Margin="10,0" VerticalOptions="Center" />
+                            </Border>
+
+                            <!-- Password label -->
+                            <HorizontalStackLayout Grid.Row="2">
+                                <Label Text="&#xf023;" Style="{StaticResource IconStyle}" />
+                                <Label Text="Password" FontSize="16" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                            <!-- Password input with styled container -->
+                            <Border Grid.Row="3" Style="{StaticResource InputFieldContainer}">
+                                <Grid>
+                                    <Entry x:Name="passwordEntry" Placeholder="Enter your password" 
+                                         IsPassword="True" BackgroundColor="Transparent"
+                                         TextColor="#333333" PlaceholderColor="#8eadd4" 
+                                         FontSize="16" Margin="10,0" VerticalOptions="Center" />
+
+                                    <Button x:Name="passwordVisibilityButton" 
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center"
+                                            WidthRequest="40"
+                                            HeightRequest="40"
+                                            Margin="0,0,5,0"
+                                            Padding="0"
+                                            BackgroundColor="Transparent"
+                                            BorderColor="Transparent"
+                                            Clicked="OnPasswordVisibilityToggle_Clicked">
+                                        <Button.ImageSource>
+                                            <FontImageSource x:Name="passwordVisibilityIcon"
+                                                          FontFamily="{StaticResource FontAwesomeSolid}"
+                                                          Glyph="&#xf06e;"
+                                                          Color="#8eadd4"
+                                                          Size="20" />
+                                        </Button.ImageSource>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!-- Login Button with enhanced design -->
+                        <Button Style="{StaticResource LoginButton}" 
+                                Clicked="OnLogin_Clicked" 
+                                x:Name="OnLogin"
+                                Text="LOGIN"
+                                Margin="0,20,0,0"
+                                HeightRequest="50">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                               Glyph="&#xf2f6;"
+                                               Color="White"
+                                               Size="20" />
+                            </Button.ImageSource>
+                            <Button.Shadow>
+                                <Shadow Brush="#40000000" Offset="0,4" Radius="10" />
+                            </Button.Shadow>
+                        </Button>
+
+                        <!-- Activity Indicator -->
+                        <ActivityIndicator x:Name="loginActivityIndicator" 
+                                         IsRunning="False" 
+                                         IsVisible="False"
+                                         Color="#1a73e8"
+                                         HeightRequest="40"
+                                         WidthRequest="40"
+                                         HorizontalOptions="Center"
+                                         Margin="0,10,0,0" />
+
+                        <!-- Register Link with enhanced styling -->
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0">
+                            <Label Text="Don't have an account? " TextColor="#5f6368" VerticalOptions="Center" FontSize="15" />
+                            <Label Text="Register" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" x:Name="registerLabel" FontSize="15">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRegister_Tapped" x:Name="OnRegister"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+
+                        <!-- Version info or copyright -->
+                        <Label Text="TrackPoint v1.0" TextColor="#8eadd4" FontSize="12" HorizontalOptions="Center" Margin="0,15,0,0" Opacity="0.7" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

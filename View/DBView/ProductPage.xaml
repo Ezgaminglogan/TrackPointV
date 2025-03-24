@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrackPointV.Converters"
+             x:Class="TrackPointV.View.DBView.ProductPage"
+             BackgroundColor="#f8fafc"
+             Title="Product Management">
+
+    <ContentPage.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Opacity" Value="0.95"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 18,18,18,18"/>
+            <Setter Property="Stroke" Value="#15000000"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#30000000" Offset="0,6" Radius="10" />
+            </Setter>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            <Setter Property="TextColor" Value="#1d4ed8" />
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+
+        <Style x:Key="CardTitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#1e3a8a" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style x:Key="CardValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#374151" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+
+        <Style x:Key="PriceStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#15803d" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+
+        <Style x:Key="StockStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#1d4ed8" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#2563eb" Offset="0.0" />
+                    <GradientStop Color="#1e40af" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40000000" Offset="0,3" Radius="5" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="DeleteButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#ef4444" Offset="0.0" />
+                    <GradientStop Color="#b91c1c" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40000000" Offset="0,3" Radius="5" />
+            </Setter>
+        </Style>
+
+        <!-- Add this converter -->
+        <local:LowStockConverter x:Key="LowStockConverter" Threshold="10" />
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background with gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#f1f5f9" Offset="0.0" />
+                    <GradientStop Color="#e2e8f0" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Background pattern -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.08" />
+
+        <RefreshView x:Name="refreshView" IsRefreshing="False" RefreshColor="#2563eb" Refreshing="RefreshView_Refreshing">
+            <ScrollView>
+                <VerticalStackLayout Spacing="18" Padding="15">
+                    <!-- Header with Add Product Button -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Padding="10">
+                            <Label Text="&#xf466;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                   TextColor="#2563eb" FontSize="42" Grid.RowSpan="2" 
+                                   VerticalOptions="Center" Margin="0,0,15,0" />
+
+                            <Label Grid.Column="1" Text="PRODUCT INVENTORY" 
+                                   FontSize="22" FontAttributes="Bold" 
+                                   TextColor="#1e3a8a" VerticalOptions="End">
+                                <Label.Shadow>
+                                    <Shadow Brush="#40000000" Offset="0,1" Radius="1" />
+                                </Label.Shadow>
+                            </Label>
+
+                            <Label Grid.Column="1" Grid.Row="1" Text="Manage Your Products" 
+                                   FontSize="14" TextColor="#3b82f6" 
+                                   VerticalOptions="Start" />
+
+                            <!-- Add Product Button -->
+                            <Button Grid.Column="2" Grid.RowSpan="2"
+                                    Style="{StaticResource ActionButton}"
+                                    Text="Add Product"
+                                    Clicked="AddProduct_Clicked"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    x:Name="btnAddProduct">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                     Glyph="&#xf067;"
+                                                     Color="White"
+                                                     Size="16" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Search and Filter Section -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" Padding="5">
+                            <Frame Grid.Column="0" BorderColor="#e2e8f0" BackgroundColor="#f8fafc" 
+                                   CornerRadius="12" Padding="2,0" HasShadow="False" Margin="0,0,10,0">
+                                <SearchBar x:Name="searchBar" Placeholder="Search products..." 
+                                       BackgroundColor="Transparent" TextChanged="SearchBar_TextChanged"
+                                       TextColor="#334155" PlaceholderColor="#94a3b8" />
+                            </Frame>
+
+                            <Button Grid.Column="1" Style="{StaticResource ActionButton}"
+                                    Text="Filter" Clicked="Filter_Clicked" x:Name="btnFilter">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                     Glyph="&#xf0b0;"
+                                                     Color="White"
+                                                     Size="16" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Product Statistics -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="10">
+                        <!-- Total Products Card -->
+                        <Border Grid.Column="0" Style="{StaticResource GlassCard}">
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                <Ellipse Fill="#f0f9ff" WidthRequest="60" HeightRequest="60" HorizontalOptions="Center" />
+                                <Label Text="&#xf466;" Style="{StaticResource IconStyle}" />
+                                <Label Grid.Row="1" Text="Total Products" Style="{StaticResource CardTitleStyle}" />
+                                <Label Grid.Row="2" x:Name="totalProductsLabel" Text="0" Style="{StaticResource CardValueStyle}" 
+                                       FontSize="26" FontAttributes="Bold" TextColor="#2563eb" HorizontalOptions="Center" />
+                            </Grid>
+                        </Border>
+
+                        <!-- Low Stock Card -->
+                        <Border Grid.Column="1" Style="{StaticResource GlassCard}">
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                <Ellipse Fill="#fff7ed" WidthRequest="60" HeightRequest="60" HorizontalOptions="Center" />
+                                <Label Text="&#xf06a;" Style="{StaticResource IconStyle}" TextColor="#f97316" />
+                                <Label Grid.Row="1" Text="Low Stock Items" Style="{StaticResource CardTitleStyle}" />
+                                <Label Grid.Row="2" x:Name="lowStockLabel" Text="0" Style="{StaticResource CardValueStyle}" 
+                                       FontSize="26" FontAttributes="Bold" TextColor="#f97316" HorizontalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Featured Products Section -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="10,10,10,0">
+                        <Label Text="Featured Products" FontSize="20" FontAttributes="Bold" 
+                               TextColor="#1e3a8a" VerticalOptions="Center">
+                            <Label.Shadow>
+                                <Shadow Brush="#40000000" Offset="0,1" Radius="1" />
+                            </Label.Shadow>
+                        </Label>
+
+                        <!-- Indicator dots for carousel -->
+                        <IndicatorView Grid.Column="1" x:Name="indicatorView" 
+                                      IndicatorColor="#cbd5e1"
+                                      SelectedIndicatorColor="#2563eb"
+                                      HorizontalOptions="End"
+                                      VerticalOptions="Center"
+                                      Margin="0,0,5,0"
+                                      IndicatorSize="8" />
+                    </Grid>
+
+                    <Border Style="{StaticResource GlassCard}" Margin="10,0,10,10">
+                        <CarouselView x:Name="featuredProductsCarousel" HeightRequest="280" 
+                                   PeekAreaInsets="40" IsSwipeEnabled="True" Loop="False"
+                                   CurrentItemChanged="FeaturedProductsCarousel_CurrentItemChanged">
+                            <CarouselView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15" 
+                                                  SnapPointsAlignment="Center" 
+                                                  SnapPointsType="MandatorySingle" />
+                            </CarouselView.ItemsLayout>
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeShape="RoundRectangle 16,16,16,16" Stroke="#16000000" 
+                                            Margin="5" WidthRequest="600" Padding="0">
+                                        <Border.Shadow>
+                                            <Shadow Brush="#30000000" Offset="0,4" Radius="8" />
+                                        </Border.Shadow>
+                                        <Grid>
+                                            <Rectangle>
+                                                <Rectangle.Fill>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#ffffff" Offset="0.0" />
+                                                        <GradientStop Color="#f1f5f9" Offset="1.0" />
+                                                    </LinearGradientBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+
+                                            <Grid Padding="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+                                                <Label Text="{Binding Name}" FontSize="22" FontAttributes="Bold" 
+                                                       TextColor="#1e3a8a" LineBreakMode="TailTruncation" />
+
+                                                <BoxView Grid.Row="1" HeightRequest="1" BackgroundColor="#e2e8f0" 
+                                                         HorizontalOptions="Fill" Margin="0,5" />
+
+                                                <Label Grid.Row="2" Text="{Binding Description}" 
+                                                       LineBreakMode="TailTruncation" MaxLines="2" 
+                                                       TextColor="#475569" FontSize="15" />
+
+                                                <Label Grid.Row="3" Text="{Binding Price, StringFormat='${0:N2}'}" 
+                                                       Style="{StaticResource PriceStyle}" Margin="0,8,0,0" />
+
+                                                <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Margin="0,5,0,0">
+                                                    <Frame BackgroundColor="#f1f5f9" CornerRadius="8" Padding="10,5"
+                                                           HasShadow="False" BorderColor="Transparent" HorizontalOptions="Start">
+                                                        <Label Text="{Binding Stock, StringFormat='In Stock: {0}'}" 
+                                                               Style="{StaticResource StockStyle}" VerticalOptions="Center" />
+                                                    </Frame>
+
+                                                    <Button Grid.Column="1" Text="View Details" Style="{StaticResource ActionButton}"
+                                                            Clicked="ViewProductDetails_Clicked" CommandParameter="{Binding Id}"
+                                                            HeightRequest="40" Padding="15,0">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                            Glyph="&#xf06e;"
+                                                                            Color="White"
+                                                                            Size="14" />
+                                                        </Button.ImageSource>
+                                                    </Button>
+                                                </Grid>
+
+                                                <!-- Add a visual indicator for low stock -->
+                                                <Border Grid.Row="0" HorizontalOptions="End" IsVisible="{Binding Stock, Converter={StaticResource LowStockConverter}}"
+                                                        BackgroundColor="#f97316" Padding="10,4" StrokeShape="RoundRectangle 12,12,12,12">
+                                                    <Label Text="Low Stock" TextColor="White" FontSize="12" FontAttributes="Bold" />
+                                                </Border>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
+                    </Border>
+
+                    <!-- All Products Section -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="10,5,10,0">
+                        <Label Text="All Products" FontSize="20" FontAttributes="Bold" 
+                               TextColor="#1e3a8a" VerticalOptions="Center">
+                            <Label.Shadow>
+                                <Shadow Brush="#40000000" Offset="0,1" Radius="1" />
+                            </Label.Shadow>
+                        </Label>
+
+                        <Label Grid.Column="1" x:Name="productCountLabel" Text="0 items" 
+                               TextColor="#64748b" FontSize="14" VerticalOptions="Center" />
+                    </Grid>
+
+                    <CollectionView x:Name="productsCollection" SelectionMode="None">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <Border Style="{StaticResource GlassCard}" HeightRequest="200">
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="15">
+                                    <Ellipse Fill="#fff1f2" WidthRequest="80" HeightRequest="80" HorizontalOptions="Center" />
+                                    <Label Text="&#xf071;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           TextColor="#f43f5e" FontSize="42" HorizontalOptions="Center" 
+                                           VerticalOptions="Center" Margin="0,-62,0,0" />
+                                    <Label Text="No products found" FontSize="18" TextColor="#64748b" 
+                                           HorizontalOptions="Center" Margin="0,10,0,0" />
+                                    <Label Text="Try adjusting your search or filters" FontSize="14" TextColor="#94a3b8" 
+                                           HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource GlassCard}" Margin="0,2,0,2">
+                                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="10">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" 
+                                                TextColor="#1e3a8a" />
+
+                                            <!-- Low stock badge -->
+                                            <Border Grid.Column="1" IsVisible="{Binding Stock, Converter={StaticResource LowStockConverter}}"
+                                                    BackgroundColor="#f97316" Padding="8,3" StrokeShape="RoundRectangle 10,10,10,10">
+                                                <Label Text="Low Stock" TextColor="White" FontSize="10" FontAttributes="Bold" />
+                                            </Border>
+                                        </Grid>
+
+                                        <Label Grid.Row="1" Text="{Binding Description}" 
+                                               Style="{StaticResource CardValueStyle}" 
+                                               MaxLines="2" LineBreakMode="TailTruncation" 
+                                               Grid.ColumnSpan="2" Margin="0,8,0,8" />
+
+                                        <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*">
+                                            <Frame BackgroundColor="#f0fdf4" CornerRadius="8" Padding="10,5"
+                                                   HasShadow="False" BorderColor="Transparent">
+                                                <Label Text="{Binding Price, StringFormat='${0:N2}'}" 
+                                                       Style="{StaticResource PriceStyle}" FontSize="18" />
+                                            </Frame>
+
+                                            <Frame Grid.Column="1" BackgroundColor="#f1f5f9" CornerRadius="8" Padding="10,5"
+                                                   HasShadow="False" BorderColor="Transparent" Margin="10,0,0,0">
+                                                <Label Text="{Binding Stock, StringFormat='Stock: {0}'}" 
+                                                       Style="{StaticResource StockStyle}" VerticalOptions="Center" />
+                                            </Frame>
+                                        </Grid>
+
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="10">
+                                            <Button Style="{StaticResource ActionButton}" 
+                                                    Clicked="EditProduct_Clicked"
+                                                    CommandParameter="{Binding Id}"
+                                                    WidthRequest="45" HeightRequest="45" Padding="0">
+                                                <Button.ImageSource>
+                                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                    Glyph="&#xf304;"
+                                                                    Color="White"
+                                                                    Size="18" />
+                                                </Button.ImageSource>
+                                            </Button>
+
+                                            <Button Style="{StaticResource DeleteButton}"
+                                                    Clicked="DeleteProduct_Clicked"
+                                                    CommandParameter="{Binding Id}"
+                                                    WidthRequest="45" HeightRequest="45" Padding="0">
+                                                <Button.ImageSource>
+                                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                    Glyph="&#xf2ed;"
+                                                                    Color="White"
+                                                                    Size="18" />
+                                                </Button.ImageSource>
+                                            </Button>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

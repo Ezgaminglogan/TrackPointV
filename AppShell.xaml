@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TrackPointV.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TrackPointV"
+    xmlns:dbView="clr-namespace:TrackPointV.View.DBView"
+    xmlns:view="clr-namespace:TrackPointV.View"
+    Shell.FlyoutBehavior="Disabled"
+    Title="TrackPoint">
+
+    <Shell.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Regular" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="MacCatalyst" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="Assets/Fonts/fa-solid-900.ttf#Font Awesome 6 Free Solid" />
+        </OnPlatform>
+    </Shell.Resources>
+    
+    
+    <!-- Login route (not visible in flyout) -->
+    <ShellContent
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage"/>
+
+    <!-- Dashboard and other authenticated pages (visible in flyout) -->
+    <FlyoutItem Title="Dashboard">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                             Glyph="&#xf0e4;"
+                             Color="#1a73e8"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate dbView:DashboardPage}"
+            Route="DashboardPage" />
+    </FlyoutItem>
+
+    <!-- USER MANAGEMENT-->
+    <FlyoutItem Title="User Management">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                             Glyph="&#xf007;"
+                             Color="#1a73e8"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent
+            Title="User Management"
+            ContentTemplate="{DataTemplate dbView:UserPage}"
+            Route="UserPage" />
+    </FlyoutItem>
+
+
+    <!-- SALE MANAGEMENT-->
+    <FlyoutItem Title="Sale Management">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                             Glyph="&#xf54e;"
+                             Color="#1a73e8"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent
+            Title="Sale Management"
+            ContentTemplate="{DataTemplate dbView:SalePage}"
+            Route="SalePage" />
+    </FlyoutItem>
+
+    <!-- PRODUCT MANAGEMENT-->
+    <FlyoutItem Title="Product Management">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                             Glyph="&#xf07a;"
+                             Color="#1a73e8"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent
+            Title="Product Management"
+            ContentTemplate="{DataTemplate dbView:ProductPage}"
+            Route="ProductPage" />
+    </FlyoutItem>
+
+</Shell>

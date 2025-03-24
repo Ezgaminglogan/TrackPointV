@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TrackPointV.Converters"
+             x:Class="TrackPointV.View.DBView.DashboardPage"
+             BackgroundColor="#f8faff"
+             Shell.FlyoutBehavior="Flyout">
+
+    <ContentPage.Resources>
+        <!-- Converters -->
+        <converters:ActivityTypeToIconConverter x:Key="ActivityTypeToIconConverter" />
+        <converters:ActivityTypeToColorConverter x:Key="ActivityTypeToColorConverter" />
+
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <!-- Glass Card Style with enhanced shadow and depth -->
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Opacity" Value="0.95"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20"/>
+            <Setter Property="Stroke" Value="#20a1d6ff"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#302b5797" Offset="0,6" Radius="12" />
+            </Setter>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="12"/>
+        </Style>
+
+        <!-- Enhanced Icon Style with shadow -->
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Shadow">
+                <Shadow Brush="#201a73e8" Offset="0,2" Radius="3" />
+            </Setter>
+        </Style>
+
+        <!-- Enhanced Card Title Style -->
+        <Style x:Key="CardTitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#0d47a1" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+            <Setter Property="CharacterSpacing" Value="0.5" />
+        </Style>
+
+        <!-- Enhanced Card Value Style with shadow -->
+        <Style x:Key="CardValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Shadow">
+                <Shadow Brush="#201a73e8" Offset="0,1" Radius="2" />
+            </Setter>
+        </Style>
+
+        <!-- Enhanced Logout Button -->
+        <Style x:Key="LogoutButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#f44336" Offset="0.0" />
+                    <GradientStop Color="#d32f2f" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40d32f2f" Offset="0,3" Radius="6" />
+            </Setter>
+        </Style>
+
+        <!-- Style for Activity Item Container -->
+        <Style x:Key="ActivityItemContainer" TargetType="Grid">
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="0,2,0,2" />
+        </Style>
+
+        <!-- Style for Activity Icon Container -->
+        <Style x:Key="ActivityIconContainer" TargetType="Frame">
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="BackgroundColor" Value="#f5f5f5" />
+            <Setter Property="BorderColor" Value="Transparent" />
+            <Setter Property="Shadow">
+                <Shadow Brush="#30000000" Offset="0,2" Radius="3" />
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Enhanced Background with gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f0f7ff" Offset="0.0" />
+                    <GradientStop Color="#cfe8ff" Offset="0.5" />
+                    <GradientStop Color="#b1d8ff" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Enhanced Background pattern with more subtle opacity -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.07" />
+
+        <RefreshView x:Name="refreshView" IsRefreshing="False" RefreshColor="#1a73e8" Refreshing="refreshView_Refreshing">
+            <ScrollView>
+                <VerticalStackLayout Spacing="18" Padding="15">
+                    <!-- Enhanced Header with Logout Button -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Padding="10">
+                            <Image Grid.RowSpan="2" Source="inventory.png" HeightRequest="65" WidthRequest="65" Margin="0,0,15,0">
+                                <Image.Shadow>
+                                    <Shadow Brush="#402b5797" Offset="0,3" Radius="5" />
+                                </Image.Shadow>
+                            </Image>
+
+                            <Label Grid.Column="1" Text="TRACKPOINT DASHBOARD" 
+                                   FontSize="24" FontAttributes="Bold" 
+                                   CharacterSpacing="1"
+                                   TextColor="#0d47a1" VerticalOptions="End">
+                                <Label.Shadow>
+                                    <Shadow Brush="#30000000" Offset="0,1" Radius="1" />
+                                </Label.Shadow>
+                            </Label>
+
+                            <Label Grid.Column="1" Grid.Row="1" Text="Tracking Inventory and Sales" 
+                                   FontSize="15" TextColor="#4285f4" 
+                                   CharacterSpacing="0.3"
+                                   VerticalOptions="Start" />
+
+                            <!-- Enhanced Logout Button -->
+                            <Button Grid.Column="2" Grid.RowSpan="2"
+                                    Style="{StaticResource LogoutButton}"
+                                    Text="Logout"
+                                    Clicked="btnLogout_Clicked"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    x:Name="btnLogout">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                     Glyph="&#xf2f5;"
+                                                     Color="White"
+                                                     Size="16" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Enhanced Date and Time Display with subtle background -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" Padding="8,5">
+                            <Frame WidthRequest="36" HeightRequest="36" 
+                                   CornerRadius="18" Padding="0" Margin="0,0,12,0"
+                                   BackgroundColor="#e6f0ff" BorderColor="Transparent"
+                                   HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="&#xf017;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                       TextColor="#1a73e8" FontSize="18" 
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Frame>
+
+                            <Label Grid.Column="1" x:Name="dateTimeLabel" 
+                                   Text="Monday, January 1, 2023 - 12:00 PM" 
+                                   FontSize="16" TextColor="#333333" VerticalOptions="Center" />
+
+                            <Frame Grid.Column="2" Padding="10,5" CornerRadius="12" 
+                                   BackgroundColor="#1a73e8" BorderColor="Transparent"
+                                   HorizontalOptions="End" VerticalOptions="Center">
+                                <Label x:Name="greetingLabel" 
+                                       Text="Welcome, User" 
+                                       FontSize="14" FontAttributes="Bold" TextColor="White" 
+                                       VerticalOptions="Center" HorizontalOptions="End" />
+                            </Frame>
+                        </Grid>
+                    </Border>
+
+                    <!-- Enhanced Quick Stats Cards with improved layout -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="12" RowSpacing="12">
+                        <!-- Total Inventory Card with subtle animation prep -->
+                        <Border Grid.Column="0" Style="{StaticResource GlassCard}">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                <Frame WidthRequest="60" HeightRequest="60" 
+                                       CornerRadius="30" Padding="0" 
+                                       BackgroundColor="#e6f0ff" BorderColor="Transparent"
+                                       HorizontalOptions="Center" Margin="0,0,0,5">
+                                    <Label Text="&#xf466;" Style="{StaticResource IconStyle}" />
+                                </Frame>
+                                <Label Text="Total Inventory" Style="{StaticResource CardTitleStyle}" />
+                                <Label x:Name="totalInventoryLabel" Text="0" Style="{StaticResource CardValueStyle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Enhanced Sales Today Card with gradient background -->
+                        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource GlassCard}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#f0f8ff" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                <Frame WidthRequest="60" HeightRequest="60" 
+                                       CornerRadius="30" Padding="0" 
+                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
+                                       HorizontalOptions="Center" Margin="0,0,0,5">
+                                    <Frame.Shadow>
+                                        <Shadow Brush="#305c93eb" Offset="0,4" Radius="8" />
+                                    </Frame.Shadow>
+                                    <Grid>
+                                        <Ellipse Fill="#eef5ff" WidthRequest="60" HeightRequest="60" />
+                                        <Label Text="&#xf54e;" Style="{StaticResource IconStyle}" TextColor="#5c93eb" />
+                                    </Grid>
+                                </Frame>
+                                <Label Text="Today's Sales" Style="{StaticResource CardTitleStyle}" TextColor="#3b78e7" />
+                                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                    <Label x:Name="salesTodayAmountLabel" Text="$0.00" Style="{StaticResource CardValueStyle}" TextColor="#3b78e7" />
+                                    <Label x:Name="salesTodayCountLabel" Text="0 sales" FontSize="14" TextColor="#5e87ca" HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Low Stock Card -->
+                        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource GlassCard}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#fff8f0" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                <Frame WidthRequest="60" HeightRequest="60" 
+                                       CornerRadius="30" Padding="0" 
+                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
+                                       HorizontalOptions="Center" Margin="0,0,0,5">
+                                    <Frame.Shadow>
+                                        <Shadow Brush="#40ff9800" Offset="0,4" Radius="8" />
+                                    </Frame.Shadow>
+                                    <Grid>
+                                        <Ellipse Fill="#fff4e5" WidthRequest="60" HeightRequest="60" />
+                                        <Label Text="&#xf06a;" Style="{StaticResource IconStyle}" TextColor="#ff9800" />
+                                    </Grid>
+                                </Frame>
+                                <Label Text="Low Stock Items" Style="{StaticResource CardTitleStyle}" TextColor="#e67e00" />
+                                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                    <Label x:Name="lowStockLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#ff9800" />
+                                    <Label x:Name="lowStockPercentLabel" Text="0% of inventory" FontSize="14" TextColor="#e67e00" HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Users Card (Replacing Transactions Today) -->
+                        <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource GlassCard}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#f0fff5" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                <Frame WidthRequest="60" HeightRequest="60" 
+                                       CornerRadius="30" Padding="0" 
+                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
+                                       HorizontalOptions="Center" Margin="0,0,0,5">
+                                    <Frame.Shadow>
+                                        <Shadow Brush="#404caf50" Offset="0,4" Radius="8" />
+                                    </Frame.Shadow>
+                                    <Grid>
+                                        <Ellipse Fill="#e6f5e6" WidthRequest="60" HeightRequest="60" />
+                                        <Label Text="&#xf007;" Style="{StaticResource IconStyle}" TextColor="#4caf50" />
+                                    </Grid>
+                                </Frame>
+                                <Label Text="Active Users" Style="{StaticResource CardTitleStyle}" TextColor="#3d8c40" />
+                                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                    <Label x:Name="userCountLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#4caf50" />
+                                    <Label x:Name="lastLoginLabel" Text="Last login today" FontSize="14" TextColor="#3d8c40" HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Enhanced Recent Activity Section with improved visual hierarchy and product details -->
+                    <Border Style="{StaticResource GlassCard}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Grid RowDefinitions="Auto,*">
+                            <Border BackgroundColor="#f5f9ff" 
+                                    StrokeShape="RoundRectangle 12,12,12,12"
+                                    Stroke="#20a1d6ff" 
+                                    Padding="15,10" Margin="0,0,0,15">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Frame WidthRequest="32" HeightRequest="32" 
+                                           CornerRadius="16" Padding="0" Margin="0,0,10,0"
+                                           BackgroundColor="#e6f0ff" BorderColor="Transparent"
+                                           HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label Text="&#xf017;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                               TextColor="#1a73e8" FontSize="16" 
+                                               HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Frame>
+
+                                    <Label Grid.Column="1" Text="Recent Activity" FontSize="18" FontAttributes="Bold" 
+                                           TextColor="#0d47a1" VerticalOptions="Center" CharacterSpacing="0.5"/>
+
+                                    <Frame Grid.Column="2" WidthRequest="32" HeightRequest="32" 
+                                           CornerRadius="16" Padding="0"
+                                           BackgroundColor="#e6f0ff" BorderColor="Transparent"
+                                           HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label Text="&#xf0a2;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                               TextColor="#1a73e8" FontSize="16" 
+                                               HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Frame>
+                                </Grid>
+                            </Border>
+
+                            <Label x:Name="noActivityLabel" Text="No recent activity" 
+                                   Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"
+                                   TextColor="#666666" FontSize="15" IsVisible="False" Margin="0,20,0,20"/>
+
+                            <ListView x:Name="recentActivityList" Grid.Row="1" 
+                                      SelectionMode="None" HasUnevenRows="True" 
+                                      SeparatorVisibility="Default" SeparatorColor="#e0e0e0"
+                                      Margin="0,0,5,0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid Style="{StaticResource ActivityItemContainer}" 
+                                                 ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                                <!-- Activity type icon with enhanced frame -->
+                                                <Frame Grid.RowSpan="3" Style="{StaticResource ActivityIconContainer}">
+                                                    <Label HorizontalOptions="Center" VerticalOptions="Center"
+                                                          FontFamily="{StaticResource FontAwesomeSolid}"
+                                                          FontSize="18">
+                                                        <Label.Text>
+                                                            <MultiBinding Converter="{StaticResource ActivityTypeToIconConverter}">
+                                                                <Binding Path="Type" />
+                                                            </MultiBinding>
+                                                        </Label.Text>
+                                                        <Label.TextColor>
+                                                            <MultiBinding Converter="{StaticResource ActivityTypeToColorConverter}">
+                                                                <Binding Path="Type" />
+                                                            </MultiBinding>
+                                                        </Label.TextColor>
+                                                    </Label>
+                                                </Frame>
+
+                                                <!-- Enhanced Activity text with improved typography -->
+                                                <Label Grid.Column="1" Text="{Binding DisplayText}" 
+                                                      FontSize="15" TextColor="#333333" FontAttributes="Bold"
+                                                      LineBreakMode="TailTruncation" VerticalOptions="End"/>
+
+                                                <!-- Product Details (if available) -->
+                                                <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="5"
+                                                           IsVisible="{Binding HasQuantity}">
+                                                    <Label Text="Quantity:" FontSize="13" TextColor="#666666" 
+                                                         Opacity="0.9" VerticalOptions="Center"/>
+                                                    <Label Text="{Binding Quantity}" FontSize="13" TextColor="#4285f4" 
+                                                         FontAttributes="Bold" VerticalOptions="Center"/>
+                                                </StackLayout>
+
+                                                <!-- Activity date with improved styling -->
+                                                <Label Grid.Column="1" Grid.Row="2" Text="{Binding FormattedDate}" 
+                                                      FontSize="13" TextColor="#666666" Opacity="0.8"
+                                                      VerticalOptions="Start"/>
+
+                                                <!-- Amount (if available) -->
+                                                <Label Grid.Column="2" Grid.RowSpan="3" 
+                                                      Text="{Binding FormattedAmount}" 
+                                                      TextColor="#14b8a6" FontAttributes="Bold"
+                                                      FontSize="15" VerticalOptions="Center"
+                                                      IsVisible="{Binding HasAmount}"/>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

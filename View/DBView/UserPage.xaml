@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrackPointV.View.DBView.UserPage"
+             BackgroundColor="#e6f2ff"
+             Title="User Management">
+
+    <ContentPage.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Opacity" Value="0.85"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 15,15,15,15"/>
+            <Setter Property="Stroke" Value="#40a1d6ff"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#402b5797" Offset="0,4" Radius="8" />
+            </Setter>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+
+        <Style x:Key="CardTitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#0d47a1" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style x:Key="CardValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+
+        <Style x:Key="AddUserButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#4CAF50" Offset="0.0" />
+                    <GradientStop Color="#388E3C" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40000000" Offset="0,2" Radius="4" />
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background with gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#e6f2ff" Offset="0.0" />
+                    <GradientStop Color="#1a73e8" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Background pattern -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.1" />
+
+        <RefreshView x:Name="refreshView" IsRefreshing="False" RefreshColor="#1a73e8" Refreshing="refreshView_Refreshing">
+            <ScrollView>
+                <VerticalStackLayout Spacing="15" Padding="15">
+                    <!-- Header with Add User Button -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Padding="10">
+                            <Label Grid.RowSpan="2" Text="&#xf007;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                   FontSize="40" TextColor="#1a73e8" Margin="0,0,15,0" VerticalOptions="Center"/>
+
+                            <Label Grid.Column="1" Text="USER MANAGEMENT" 
+                                   FontSize="22" FontAttributes="Bold" 
+                                   TextColor="#0d47a1" VerticalOptions="End">
+                                <Label.Shadow>
+                                    <Shadow Brush="#40000000" Offset="0,1" Radius="1" />
+                                </Label.Shadow>
+                            </Label>
+
+                            <Label Grid.Column="1" Grid.Row="1" Text="Manage system users and permissions" 
+                                   FontSize="14" TextColor="#4285f4" 
+                                   VerticalOptions="Start" />
+
+                            <!-- Add User Button -->
+                            <Button Grid.Column="2" Grid.RowSpan="2"
+                                    Style="{StaticResource AddUserButton}"
+                                    Text="Add User"
+                                    Clicked="AddUserButton_Clicked"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    x:Name="addUserButton">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                     Glyph="&#xf234;"
+                                                     Color="White"
+                                                     Size="16" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Quick Stats Cards -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*" ColumnSpacing="10" RowSpacing="10">
+                        <!-- Total Users Card -->
+                        <Border Grid.Column="0" Style="{StaticResource GlassCard}">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
+                                <Label Text="&#xf0c0;" Style="{StaticResource IconStyle}" />
+                                <Label Text="Total Users" Style="{StaticResource CardTitleStyle}" />
+                                <Label x:Name="totalUsersLabel" Text="0" Style="{StaticResource CardValueStyle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Active Users Card -->
+                        <Border Grid.Column="1" Style="{StaticResource GlassCard}">
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
+                                <Label Text="&#xf2f6;" Style="{StaticResource IconStyle}" TextColor="#4caf50" />
+                                <Label Text="Active Today" Style="{StaticResource CardTitleStyle}" />
+                                <Label x:Name="activeUsersLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#4caf50" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Search Bar -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                            <SearchBar x:Name="searchBar" Placeholder="Search users..." 
+                                       TextChanged="SearchBar_TextChanged"
+                                       BackgroundColor="Transparent"
+                                       CancelButtonColor="#1a73e8" 
+                                       TextColor="Black"/>
+                            
+                            <Button Grid.Column="1" Text="&#xf0b0;" 
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                    Clicked="FilterButton_Clicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#1a73e8"
+                                    FontSize="18"
+                                    WidthRequest="50"
+                                    Margin="0,0,5,0" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Users List -->
+                    <Border Style="{StaticResource GlassCard}">
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
+                                <Label Text="&#xf0c0;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                       TextColor="#1a73e8" FontSize="18" VerticalOptions="Center" Margin="0,0,10,0" />
+                                <Label Grid.Column="1" Text="User Accounts" FontSize="18" FontAttributes="Bold" 
+                                       TextColor="#0d47a1" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="&#xf0ae;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                       TextColor="#1a73e8" FontSize="18" VerticalOptions="Center" />
+                            </Grid>
+                                
+                            <Label x:Name="noUsersLabel" Text="No users found" 
+                                   Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"
+                                   TextColor="#666666" FontSize="14" IsVisible="False"/>
+                                   
+                            <CollectionView x:Name="usersCollection" Grid.Row="1" 
+                                           SelectionMode="Single" 
+                                           SelectionChanged="UsersCollection_SelectionChanged"
+                                           Margin="0,0,5,0">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border StrokeShape="RoundRectangle 10,10,10,10" 
+                                               Stroke="#e0e0e0" StrokeThickness="1"
+                                               BackgroundColor="#f8f9fa">
+                                            <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                                <!-- User Avatar -->
+                                                <Border Grid.RowSpan="3" WidthRequest="50" HeightRequest="50" 
+                                                       StrokeShape="RoundRectangle 25,25,25,25" Padding="0" Margin="0,0,15,0"
+                                                       BackgroundColor="#e3f2fd" Stroke="#bbdefb"
+                                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                                    <Label Text="&#xf007;" 
+                                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                                           FontSize="24" TextColor="#1a73e8"
+                                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                                </Border>
+                                                
+                                                <!-- Username -->
+                                                <Label Grid.Column="1" Text="{Binding Username}" 
+                                                       FontSize="16" FontAttributes="Bold" TextColor="#333333"
+                                                       VerticalOptions="Start"/>
+                                                
+                                                <!-- Created Date -->
+                                                <Label Grid.Column="1" Grid.Row="1" 
+                                                       Text="{Binding CreatedDate, StringFormat='Created: {0:MMM dd, yyyy}'}" 
+                                                       FontSize="12" TextColor="#666666"
+                                                       VerticalOptions="Center"/>
+                                                
+                                                <!-- Last Login -->
+                                                <Label Grid.Column="1" Grid.Row="2" 
+                                                       Text="{Binding LastLoginDate, StringFormat='Last Login: {0:MMM dd, yyyy h:mm tt}'}" 
+                                                       FontSize="12" TextColor="#666666"
+                                                       VerticalOptions="End"/>
+                                                
+                                                <!-- Action Buttons -->
+                                                <StackLayout Grid.Column="2" Grid.RowSpan="3" 
+                                                             Orientation="Horizontal" Spacing="10"
+                                                             VerticalOptions="Center">
+                                                    <!-- Edit Button -->
+                                                    <Button Text="&#xf044;" 
+                                                            FontFamily="{StaticResource FontAwesomeSolid}"
+                                                            BackgroundColor="Transparent" TextColor="#1a73e8"
+                                                            FontSize="18" WidthRequest="40" HeightRequest="40"
+                                                            Padding="0" CornerRadius="20"
+                                                            CommandParameter="{Binding Id}"
+                                                            Clicked="EditUser_Clicked" />
+                                                    
+                                                    <!-- Delete Button -->
+                                                    <Button Text="&#xf2ed;" 
+                                                            FontFamily="{StaticResource FontAwesomeSolid}"
+                                                            BackgroundColor="Transparent" TextColor="#f44336"
+                                                            FontSize="18" WidthRequest="40" HeightRequest="40"
+                                                            Padding="0" CornerRadius="20"
+                                                            CommandParameter="{Binding Id}"
+                                                            Clicked="DeleteUser_Clicked" />
+                                                </StackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

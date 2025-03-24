@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrackPointV.View.DBView.CrudView.ProductDetailPage"
+             BackgroundColor="#f5f9ff"
+             Title="Product Details">
+
+    <ContentPage.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Opacity" Value="0.95"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 18,18,18,18"/>
+            <Setter Property="Stroke" Value="#40a1d6ff"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#402b5797" Offset="0,6" Radius="10" />
+            </Setter>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="10,8"/>
+        </Style>
+
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+            <Setter Property="TextColor" Value="#1a73e8" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#f8faff"/>
+            <Setter Property="TextColor" Value="#333333"/>
+            <Setter Property="PlaceholderColor" Value="#8eadd4"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+
+        <Style x:Key="EditorStyle" TargetType="Editor">
+            <Setter Property="BackgroundColor" Value="#f8faff"/>
+            <Setter Property="TextColor" Value="#333333"/>
+            <Setter Property="PlaceholderColor" Value="#8eadd4"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="AutoSize" Value="TextChanges"/>
+            <Setter Property="HeightRequest" Value="120"/>
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Margin" Value="0,12,0,0"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1a73e8" Offset="0.0" />
+                    <GradientStop Color="#0d47a1" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40000000" Offset="0,3" Radius="6" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="CancelButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Margin" Value="0,12,0,0"/>
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#f44336" Offset="0.0" />
+                    <GradientStop Color="#d32f2f" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40000000" Offset="0,3" Radius="6" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#0d47a1"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="Margin" Value="0,12,0,0"/>
+        </Style>
+
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 12,12,12,12"/>
+            <Setter Property="Stroke" Value="#30a1d6ff"/>
+            <Setter Property="BackgroundColor" Value="#f8faff"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#20000000" Offset="0,2" Radius="4" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputBorderStyle" TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
+            <Setter Property="Stroke" Value="#E0E0E0"/>
+            <Setter Property="BackgroundColor" Value="#f8faff"/>
+            <Setter Property="Padding" Value="2,0"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background with gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f5f9ff" Offset="0.0" />
+                    <GradientStop Color="#1a73e8" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Background pattern -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.08" />
+
+        <ScrollView>
+            <VerticalStackLayout Spacing="15" Padding="18">
+                <!-- Header -->
+                <Border Style="{StaticResource GlassCard}">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Padding="10">
+                        <Border StrokeShape="RoundRectangle 15" BackgroundColor="#E6F0FF" Padding="12" 
+                                Margin="0,0,15,0">
+                            <Label Text="&#xf466;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                   TextColor="#1a73e8" FontSize="40" 
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label x:Name="pageTitle" Text="Add New Product" 
+                                   FontSize="24" FontAttributes="Bold" 
+                                   TextColor="#0d47a1">
+                                <Label.Shadow>
+                                    <Shadow Brush="#40000000" Offset="0,1" Radius="1" />
+                                </Label.Shadow>
+                            </Label>
+
+                            <Label x:Name="pageSubtitle" Text="Enter product details below" 
+                                   FontSize="15" TextColor="#4285f4" Margin="0,5,0,0" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Product Form -->
+                <Border Style="{StaticResource GlassCard}">
+                    <VerticalStackLayout Padding="10">
+                        <!-- Product Name -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Text="&#xf02b;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
+                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Product Name" Style="{StaticResource LabelStyle}" />
+                                <Border Style="{StaticResource InputBorderStyle}">
+                                    <Entry x:Name="nameEntry" Placeholder="Enter product name" 
+                                           Style="{StaticResource EntryStyle}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Product Price -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Text="&#xf155;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
+                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Price" Style="{StaticResource LabelStyle}" />
+                                <Border Style="{StaticResource InputBorderStyle}">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Text="$" FontSize="20" VerticalOptions="Center" 
+                                               TextColor="#333333" Margin="10,0,0,0" />
+                                        <Entry x:Name="priceEntry" Grid.Column="1" Placeholder="0.00" 
+                                               Keyboard="Numeric" Style="{StaticResource EntryStyle}" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Product Stock -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Text="&#xf49e;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
+                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Stock Quantity" Style="{StaticResource LabelStyle}" />
+                                <Border Style="{StaticResource InputBorderStyle}">
+                                    <Entry x:Name="stockEntry" Placeholder="Enter stock quantity" 
+                                           Keyboard="Numeric" Style="{StaticResource EntryStyle}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Product Description -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Text="&#xf15c;" Style="{StaticResource IconStyle}" VerticalOptions="Start" 
+                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Description" Style="{StaticResource LabelStyle}" />
+                                <Border Style="{StaticResource InputBorderStyle}">
+                                    <Editor x:Name="descriptionEditor" Placeholder="Enter product description" 
+                                            Style="{StaticResource EditorStyle}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Date Uploaded (Read-only for edit mode) -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" IsVisible="False" x:Name="dateUploadedGrid">
+                            <Label Text="&#xf073;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
+                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Date Uploaded" Style="{StaticResource LabelStyle}" 
+                                       x:Name="dateUploadedLabel" />
+                                <Border Style="{StaticResource InputBorderStyle}">
+                                    <Entry x:Name="dateUploadedEntry" IsReadOnly="True" 
+                                           Style="{StaticResource EntryStyle}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Validation Message -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" IsVisible="False" x:Name="validationGrid">
+                            <Label Text="&#xf071;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                   TextColor="#f44336" FontSize="24" VerticalOptions="Center" />
+                            <Label x:Name="validationLabel" TextColor="#f44336" Grid.Column="1"
+                                   FontSize="14" VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Buttons -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,20,0,0">
+                            <Button x:Name="cancelButton" Text="Cancel" 
+                                    Style="{StaticResource CancelButton}" 
+                                    Clicked="CancelButton_Clicked">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
+                                                     Glyph="&#xf00d;" Color="White" />
+                                </Button.ImageSource>
+                            </Button>
+
+                            <Button x:Name="saveButton" Text="Save Product" 
+                                    Grid.Column="1" Style="{StaticResource ActionButton}" 
+                                    Clicked="SaveButton_Clicked">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
+                                                     Glyph="&#xf0c7;" Color="White" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- View Mode Only Section (visible when in view-only mode) -->
+                <Border Style="{StaticResource GlassCard}" x:Name="viewModeSection" IsVisible="False">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Text="&#xf080;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                   TextColor="#1a73e8" FontSize="24" VerticalOptions="Center" Margin="0,0,10,0" />
+                            <Label Text="Product Statistics" Grid.Column="1" FontSize="18" FontAttributes="Bold" 
+                                   TextColor="#0d47a1" VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="15" RowSpacing="15">
+                            <!-- Date Added -->
+                            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource StatCardStyle}">
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                    <Label Text="&#xf073;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Label Text="Date Added" Grid.Row="1" FontSize="14" TextColor="#666666" 
+                                           HorizontalOptions="Center" />
+                                    <Label x:Name="dateAddedValue" Grid.Row="2" Text="Jan 1, 2023" FontSize="16" 
+                                           TextColor="#333333" FontAttributes="Bold" HorizontalOptions="Center" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Last Updated -->
+                            <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource StatCardStyle}">
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                    <Label Text="&#xf044;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Label Text="Last Updated" Grid.Row="1" FontSize="14" TextColor="#666666" 
+                                           HorizontalOptions="Center" />
+                                    <Label x:Name="lastUpdatedValue" Grid.Row="2" Text="Jan 1, 2023" FontSize="16" 
+                                           TextColor="#333333" FontAttributes="Bold" HorizontalOptions="Center" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Sales Count -->
+                            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource StatCardStyle}">
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                    <Label Text="&#xf07a;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Label Text="Total Sales" Grid.Row="1" FontSize="14" TextColor="#666666" 
+                                           HorizontalOptions="Center" />
+                                    <Label x:Name="salesCountValue" Grid.Row="2" Text="0" FontSize="16" 
+                                           TextColor="#333333" FontAttributes="Bold" HorizontalOptions="Center" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Revenue -->
+                            <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource StatCardStyle}">
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                                    <Label Text="&#xf0d6;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Label Text="Total Revenue" Grid.Row="1" FontSize="14" TextColor="#666666" 
+                                           HorizontalOptions="Center" />
+                                    <Label x:Name="revenueValue" Grid.Row="2" Text="$0.00" FontSize="16" 
+                                           TextColor="#333333" FontAttributes="Bold" HorizontalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!-- Edit Button (only in view mode) -->
+                        <Button Text="Edit Product" Style="{StaticResource ActionButton}" 
+                                Clicked="EditButton_Clicked" Margin="0,15,0,0">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
+                                                 Glyph="&#xf044;" Color="White" />
+                            </Button.ImageSource>
+                        </Button>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading Indicator -->
+        <Border x:Name="loadingIndicator" IsVisible="False" BackgroundColor="#80000000"
+                StrokeShape="Rectangle">
+            <Border StrokeShape="RoundRectangle 15" BackgroundColor="#ffffff" 
+                    Padding="25" Opacity="0.9"
+                    WidthRequest="150" HeightRequest="150"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="15">
+                    <ActivityIndicator IsRunning="True" Color="#1a73e8" HeightRequest="50" WidthRequest="50" />
+                    <Label Text="Loading..." TextColor="#1a73e8" FontSize="16" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+        </Border>
+    </Grid>
+</ContentPage>

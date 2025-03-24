@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+node_modules/
+.vscode/
+*.suo
+*.userprefs
+*.lock.json
+.DS_Store
+Thumbs.db

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TrackPointV.Converters"
+             x:Class="TrackPointV.View.DBView.SalePage"
+             BackgroundColor="#f8faff"
+             Title="Sales Dashboard">
+
+    <ContentPage.Resources>
+        <!-- FontAwesome font resource -->
+        <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+        </OnPlatform>
+
+        <!-- Converters -->
+        <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+        <!-- Core styles -->
+        <Color x:Key="PrimaryColor">#6366f1</Color>
+        <Color x:Key="PrimaryDarkColor">#4f46e5</Color>
+        <Color x:Key="PrimaryLightColor">#a5b4fc</Color>
+        <Color x:Key="SecondaryColor">#14b8a6</Color>
+        <Color x:Key="AccentColor">#f59e0b</Color>
+        <Color x:Key="TextDarkColor">#1e293b</Color>
+        <Color x:Key="TextMediumColor">#64748b</Color>
+        <Color x:Key="TextLightColor">#94a3b8</Color>
+        <Color x:Key="BackgroundColor">#f8faff</Color>
+        <Color x:Key="CardBackgroundColor">#ffffff</Color>
+        <Color x:Key="BorderColor">#e2e8f0</Color>
+
+        <!-- Card Styles -->
+        <Style x:Key="MainCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 24,24,24,24"/>
+            <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#20000000" Offset="0,4" Radius="12" />
+            </Setter>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20,20,20,20"/>
+            <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#15000000" Offset="0,3" Radius="8" />
+            </Setter>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="4,6"/>
+        </Style>
+
+        <Style x:Key="SaleItemStyle" TargetType="Border">
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 16,16,16,16"/>
+            <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Background" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#08000000" Offset="0,2" Radius="6" />
+            </Setter>
+        </Style>
+
+        <!-- Typography Styles -->
+        <Style x:Key="TitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryDarkColor}"/>
+            <Setter Property="CharacterSpacing" Value="0.4"/>
+        </Style>
+
+        <Style x:Key="SubtitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextColor" Value="{StaticResource TextMediumColor}"/>
+        </Style>
+
+        <Style x:Key="StatTitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextColor" Value="{StaticResource TextMediumColor}"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="Margin" Value="0,6,0,2"/>
+        </Style>
+
+        <Style x:Key="StatValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="IconStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+
+        <!-- Button Styles -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#406366f1" Offset="0,4" Radius="8" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="SuccessButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#4014b8a6" Offset="0,4" Radius="8" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="AccentButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#40f59e0b" Offset="0,4" Radius="8" />
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Enhanced Background with subtle gradient -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f1f5f9" Offset="0.0" />
+                    <GradientStop Color="#e0e7ff" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- Background subtle pattern -->
+        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.05" />
+
+        <RefreshView x:Name="refreshView" Refreshing="refreshView_Refreshing">
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="16">
+                    <!-- Header with Title and Action Buttons -->
+                    <Border Style="{StaticResource MainCardStyle}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Padding="4">
+                            <!-- Icon Container -->
+                            <Border Grid.RowSpan="2" Background="#EEF2FF" 
+                                   StrokeShape="RoundRectangle 16,16,16,16"
+                                   Padding="16" Margin="0,0,16,0"
+                                   WidthRequest="60" HeightRequest="60">
+                                <Label Text="&#xf54e;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                       FontSize="28" TextColor="{StaticResource PrimaryColor}" 
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- Title and Subtitle -->
+                            <VerticalStackLayout Grid.Column="1" Grid.RowSpan="2" 
+                                                VerticalOptions="Center" Spacing="4">
+                                <Label Text="SALES DASHBOARD" Style="{StaticResource TitleStyle}"/>
+                                <Label Text="Track and manage all sales activities" 
+                                       Style="{StaticResource SubtitleStyle}"/>
+                            </VerticalStackLayout>
+
+                            <!-- New Sale Button -->
+                            <Button Grid.Column="2" Grid.RowSpan="2" 
+                                    Text="New Sale"
+                                    ImageSource="{FontImageSource FontFamily={StaticResource FontAwesomeSolid}, Glyph=&#xf07a;, Color=White, Size=16}"
+                                    Clicked="NewOrderButton_Clicked"
+                                    Style="{StaticResource SuccessButtonStyle}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Statistics Cards with improved layout -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                        <!-- Total Sales Card -->
+                        <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                            <VerticalStackLayout Spacing="8">
+                                <!-- Icon Container -->
+                                <Border Background="#EEF2FF" 
+                                       StrokeShape="RoundRectangle 12,12,12,12"
+                                       Padding="10" 
+                                       HorizontalOptions="Center"
+                                       WidthRequest="48" HeightRequest="48">
+                                    <Label Text="&#xf07a;" Style="{StaticResource IconStyle}"/>
+                                </Border>
+                                <Label Text="Total Sales" Style="{StaticResource StatTitleStyle}"/>
+                                <Label x:Name="totalSalesLabel" Text="0" Style="{StaticResource StatValueStyle}"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Revenue Card -->
+                        <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                            <VerticalStackLayout Spacing="8">
+                                <!-- Icon Container -->
+                                <Border Background="#EEF2FF" 
+                                       StrokeShape="RoundRectangle 12,12,12,12"
+                                       Padding="10" 
+                                       HorizontalOptions="Center"
+                                       WidthRequest="48" HeightRequest="48">
+                                    <Label Text="&#xf0d6;" Style="{StaticResource IconStyle}"/>
+                                </Border>
+                                <Label Text="Revenue" Style="{StaticResource StatTitleStyle}"/>
+                                <Label x:Name="totalRevenueLabel" Text="$0" Style="{StaticResource StatValueStyle}"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Today's Sales Card -->
+                        <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                            <VerticalStackLayout Spacing="8">
+                                <!-- Icon Container -->
+                                <Border Background="#EEF2FF" 
+                                       StrokeShape="RoundRectangle 12,12,12,12"
+                                       Padding="10" 
+                                       HorizontalOptions="Center"
+                                       WidthRequest="48" HeightRequest="48">
+                                    <Label Text="&#xf073;" Style="{StaticResource IconStyle}"/>
+                                </Border>
+                                <Label Text="Today" Style="{StaticResource StatTitleStyle}"/>
+                                <Label x:Name="todaySalesLabel" Text="0" Style="{StaticResource StatValueStyle}"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Enhanced Sales Chart Card -->
+                    <Border Style="{StaticResource MainCardStyle}">
+                        <VerticalStackLayout Spacing="16">
+                            <!-- Chart Header -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                                    <Label Text="&#xf201;" FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           FontSize="22" TextColor="{StaticResource PrimaryColor}" 
+                                           VerticalOptions="Center"/>
+                                    <Label Text="Performance" 
+                                           FontSize="20" FontAttributes="Bold" 
+                                           TextColor="{StaticResource TextDarkColor}" 
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+
+                                <!-- Period Selector -->
+                                <Border Grid.Column="1" 
+                                       Background="#F8FAFC" 
+                                       StrokeShape="RoundRectangle 10,10,10,10"
+                                       Stroke="{StaticResource BorderColor}"
+                                       StrokeThickness="1"
+                                       Padding="4">
+                                    <Picker x:Name="chartPeriodPicker" 
+                                            Title="Select Period" 
+                                            WidthRequest="140"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource TextDarkColor}"
+                                            SelectedIndexChanged="ChartPeriodPicker_SelectedIndexChanged">
+                                        <Picker.Items>
+                                            <x:String>Last 7 Days</x:String>
+                                            <x:String>Last 30 Days</x:String>
+                                            <x:String>Last 90 Days</x:String>
+                                            <x:String>This Year</x:String>
+                                        </Picker.Items>
+                                    </Picker>
+                                </Border>
+                            </Grid>
+
+                            <!-- Chart Area -->
+                            <Border Background="#FCFCFF" 
+                                   StrokeShape="RoundRectangle 16,16,16,16"
+                                   Stroke="{StaticResource BorderColor}"
+                                   StrokeThickness="1"
+                                   Padding="16">
+                                <GraphicsView x:Name="salesChartView" HeightRequest="240" />
+                            </Border>
+
+                            <!-- Chart Legend -->
+                            <Grid ColumnDefinitions="*,*" Margin="8,0">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="10">
+                                    <Border Background="{StaticResource PrimaryColor}" 
+                                           WidthRequest="16" HeightRequest="16" 
+                                           StrokeShape="RoundRectangle 4,4,4,4"/>
+                                    <Label Text="Sales Count" 
+                                           TextColor="{StaticResource TextMediumColor}" 
+                                           FontSize="14" 
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                                    <Border Background="{StaticResource SecondaryColor}" 
+                                           WidthRequest="16" HeightRequest="16" 
+                                           StrokeShape="RoundRectangle 4,4,4,4"/>
+                                    <Label Text="Revenue" 
+                                           TextColor="{StaticResource TextMediumColor}" 
+                                           FontSize="14" 
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Enhanced Search and Filter Bar -->
+                    <Border Style="{StaticResource MainCardStyle}">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <!-- Search Field -->
+                            <Border Grid.Column="0" 
+                                   Background="#F8FAFC" 
+                                   StrokeShape="RoundRectangle 12,12,12,12"
+                                   Stroke="{StaticResource BorderColor}"
+                                   StrokeThickness="1"
+                                   Padding="8,0">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Label Text="&#xf002;" 
+                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                           FontSize="16"
+                                           TextColor="{StaticResource TextLightColor}"
+                                           Margin="8,0,0,0"
+                                           VerticalOptions="Center"/>
+                                    <Entry Grid.Column="1" 
+                                           x:Name="searchBar"
+                                           Placeholder="Search sales or customers..." 
+                                           PlaceholderColor="{StaticResource TextLightColor}"
+                                           TextColor="{StaticResource TextDarkColor}"
+                                           BackgroundColor="Transparent"
+                                           TextChanged="SearchBar_TextChanged"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Filter Button -->
+                            <Button Grid.Column="1" 
+                                    Text="&#xf0b0; Filter" 
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Clicked="FilterButton_Clicked" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Enhanced Sales List -->
+                    <Border Style="{StaticResource MainCardStyle}">
+                        <VerticalStackLayout Spacing="16">
+                            <!-- Recent Sales Header -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <HorizontalStackLayout Spacing="12">
+                                    <Label Text="&#xf0cb;" 
+                                           FontFamily="{StaticResource FontAwesomeSolid}" 
+                                           FontSize="22" 
+                                           TextColor="{StaticResource PrimaryColor}" 
+                                           VerticalOptions="Center"/>
+                                    <Label Text="Recent Transactions" 
+                                           FontSize="20" 
+                                           FontAttributes="Bold" 
+                                           TextColor="{StaticResource TextDarkColor}" 
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Sales List -->
+                            <CollectionView x:Name="salesCollection" 
+                                           SelectionMode="Single" 
+                                           HeightRequest="360"
+                                           SelectionChanged="SalesCollection_SelectionChanged">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SaleItemStyle}">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" 
+                                                 RowDefinitions="Auto,Auto,Auto" 
+                                                 RowSpacing="4">
+                                                <!-- Sale Icon -->
+                                                <Border Grid.RowSpan="3" 
+                                                       Background="#EEF2FF" 
+                                                       StrokeShape="RoundRectangle 12,12,12,12"
+                                                       Padding="12"
+                                                       Margin="0,0,16,0"
+                                                       WidthRequest="50" HeightRequest="50">
+                                                    <Label Text="&#xf07a;" 
+                                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                                           FontSize="22" 
+                                                           TextColor="{StaticResource PrimaryColor}" 
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+
+                                                <!-- Sale Details -->
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding SaleIdDisplay}" 
+                                                       FontAttributes="Bold" 
+                                                       FontSize="16"
+                                                       TextColor="{StaticResource TextDarkColor}" />
+
+                                                <Label Grid.Column="1" Grid.Row="1" 
+                                                       Text="{Binding SaleDateDisplay}" 
+                                                       FontSize="14" 
+                                                       TextColor="{StaticResource TextMediumColor}" />
+
+                                                <Label Grid.Column="1" Grid.Row="2" 
+                                                       Text="{Binding UserDisplay}" 
+                                                       FontSize="14" 
+                                                       TextColor="{StaticResource TextMediumColor}" />
+
+                                                <!-- Amount Badge -->
+                                                <Border Grid.Column="2" Grid.RowSpan="3" 
+                                                       Background="#ecfdf5"
+                                                       StrokeShape="RoundRectangle 10,10,10,10"
+                                                       Padding="12,8"
+                                                       VerticalOptions="Center">
+                                                    <Label Text="{Binding TotalAmountDisplay}" 
+                                                           FontAttributes="Bold" 
+                                                           TextColor="{StaticResource SecondaryColor}"
+                                                           FontSize="16" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+
+                                <!-- Empty State -->
+                                <CollectionView.EmptyView>
+                                    <Grid RowDefinitions="Auto,Auto,Auto" 
+                                         RowSpacing="16" 
+                                         Padding="20" 
+                                         VerticalOptions="Center">
+                                        <Border HorizontalOptions="Center"
+                                               Background="#F1F5F9"
+                                               StrokeShape="RoundRectangle 40,40,40,40"
+                                               Padding="16"
+                                               WidthRequest="80" HeightRequest="80">
+                                            <Label Text="&#xf07a;" 
+                                                   FontFamily="{StaticResource FontAwesomeSolid}" 
+                                                   FontSize="36" 
+                                                   TextColor="{StaticResource TextLightColor}"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                        <Label Grid.Row="1"
+                                               Text="No sales found" 
+                                               FontSize="18" 
+                                               TextColor="{StaticResource TextDarkColor}"
+                                               HorizontalOptions="Center" />
+                                        <Label Grid.Row="2"
+                                               Text="Try adjusting your filters or add a new sale"
+                                               FontSize="14"
+                                               TextColor="{StaticResource TextMediumColor}"
+                                               HorizontalOptions="Center" />
+                                    </Grid>
+                                </CollectionView.EmptyView>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"
+                           Color="{StaticResource PrimaryColor}"/>
+    </Grid>
+</ContentPage>
