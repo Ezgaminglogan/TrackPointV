@@ -16,8 +16,8 @@ namespace TrackPointV.View.DBView
         private string _searchText = string.Empty;
         private DateTime? _filterStartDate;
         private DateTime? _filterEndDate;
-        private DateTime _startDate;
-        private DateTime _endDate;
+        private DateTime _startDate = DateTime.Now.AddDays(-7);
+        private DateTime _endDate = DateTime.Now;
 
         public SalePage()
         {
@@ -26,8 +26,8 @@ namespace TrackPointV.View.DBView
             _sales = new ObservableCollection<SaleViewModel>();
             salesCollection.ItemsSource = _sales;
             
-            // Set default chart period
-            chartPeriodPicker.SelectedIndex = 0;
+            // Update date range label
+            UpdateDateRangeLabel();
         }
 
         protected override async void OnAppearing()
@@ -117,10 +117,17 @@ namespace TrackPointV.View.DBView
             todaySalesLabel.Text = todaySales.ToString();
         }
 
+        private void UpdateDateRangeLabel()
+        {
+            // Format the date range for display
+            dateRangeLabel.Text = $"{_startDate:MMM d, yyyy} - {_endDate:MMM d, yyyy}";
+        }
+
         private void SetChartDateRange(int days)
         {
             _startDate = DateTime.Now.AddDays(-days);
             _endDate = DateTime.Now;
+            UpdateDateRangeLabel();
         }
 
         private async Task UpdateChartDataAsync()
@@ -155,7 +162,7 @@ namespace TrackPointV.View.DBView
                 }
                 
                 // Update chart
-                salesChartView.Drawable = new SalesChartDrawable(chartData);
+                salesChartView.Drawable = new SalesChart3DDrawable(chartData);
             }
             catch (Exception ex)
             {
@@ -246,27 +253,93 @@ namespace TrackPointV.View.DBView
             }
         }
 
-        private async void ChartPeriodPicker_SelectedIndexChanged(object sender, EventArgs e)
+        private async void DateRangeButton_Clicked(object sender, EventArgs e)
         {
-            switch (chartPeriodPicker.SelectedIndex)
+            // Show custom date range picker
+            await ShowCustomDateRangeForChartAsync();
+        }
+
+        private async Task ShowCustomDateRangeForChartAsync()
+        {
+            // Create a simple date range picker dialog
+            var startDatePicker = new DatePicker { Date = _startDate };
+            var endDatePicker = new DatePicker { Date = _endDate };
+            
+            var layout = new VerticalStackLayout
             {
-                case 0: // Last 7 days
-                    SetChartDateRange(7);
-                    break;
-                case 1: // Last 30 days
-                    SetChartDateRange(30);
-                    break;
-                case 2: // Last 90 days
-                    SetChartDateRange(90);
-                    break;
-                case 3: // This year
-                    _startDate = new DateTime(DateTime.Now.Year, 1, 1);
-                    _endDate = DateTime.Now;
-                    break;
+                Spacing = 16,
+                Padding = new Thickness(20),
+                Children =
+                {
+                    new Label { Text = "Select Date Range", FontAttributes = FontAttributes.Bold, FontSize = 18, TextColor = Color.FromArgb("#1e293b") },
+                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 4) },
+                    new Label { Text = "Start Date:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b") },
+                    startDatePicker,
+                    new Label { Text = "End Date:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b"), Margin = new Thickness(0, 16, 0, 0) },
+                    endDatePicker,
+                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 16, 0, 16) },
+                    new Label { Text = "Preset Ranges:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b") },
+                    new HorizontalStackLayout
+                    {
+                        Spacing = 10,
+                        Children =
+                        {
+                            new Button { Text = "Last 7 Days", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) },
+                            new Button { Text = "Last 30 Days", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) },
+                            new Button { Text = "This Month", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) }
+                        }
+                    }
+                }
+            };
+            
+            // Add event handlers for preset buttons
+            if (layout.Children[8] is HorizontalStackLayout buttonStack)
+            {
+                if (buttonStack.Children[0] is Button btn7Days)
+                {
+                    btn7Days.Clicked += (s, e) => {
+                        startDatePicker.Date = DateTime.Now.AddDays(-7);
+                        endDatePicker.Date = DateTime.Now;
+                    };
+                }
+                
+                if (buttonStack.Children[1] is Button btn30Days)
+                {
+                    btn30Days.Clicked += (s, e) => {
+                        startDatePicker.Date = DateTime.Now.AddDays(-30);
+                        endDatePicker.Date = DateTime.Now;
+                    };
+                }
+                
+                if (buttonStack.Children[2] is Button btnThisMonth)
+                {
+                    btnThisMonth.Clicked += (s, e) => {
+                        startDatePicker.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        endDatePicker.Date = DateTime.Now;
+                    };
+                }
             }
             
-            await UpdateChartDataAsync();
-            DrawSalesChart();
+            // Show custom dialog
+            bool result = await Application.Current.MainPage.DisplayAlert("Custom Date Range", "Please select a date range for the chart:", "Apply", "Cancel");
+            if (result)
+            {
+                _startDate = startDatePicker.Date;
+                _endDate = endDatePicker.Date;
+                
+                // Ensure end date is not before start date
+                if (_endDate < _startDate)
+                {
+                    _endDate = _startDate;
+                }
+                
+                // Update date range label
+                UpdateDateRangeLabel();
+                
+                // Update chart
+                await UpdateChartDataAsync();
+                DrawSalesChart();
+            }
         }
 
         private async void SalesCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -345,16 +418,21 @@ namespace TrackPointV.View.DBView
         public List<float> Revenues { get; set; } = new List<float>();
     }
 
-    // Chart drawable class
-    public class SalesChartDrawable : IDrawable
+    // Enhanced 3D Bar Chart Implementation
+    public class SalesChart3DDrawable : IDrawable
     {
         private readonly ChartData _data;
-        private readonly Color _salesLineColor = Color.FromArgb("#6366f1");  // PrimaryColor 
-        private readonly Color _revenueLineColor = Color.FromArgb("#14b8a6"); // SecondaryColor
+        private readonly Color _salesBarColor = Color.FromArgb("#6366f1");  // PrimaryColor 
+        private readonly Color _salesBarShadowColor = Color.FromArgb("#4338ca");  // Darker PrimaryColor
+        private readonly Color _revenueBarColor = Color.FromArgb("#14b8a6"); // SecondaryColor
+        private readonly Color _revenueBarShadowColor = Color.FromArgb("#0f766e"); // Darker SecondaryColor
         private readonly Color _gridLineColor = Color.FromArgb("#e2e8f0");    // BorderColor
         private readonly Color _textColor = Color.FromArgb("#64748b");        // TextMediumColor
+        private readonly float _barWidth = 12;  // Width of each bar
+        private readonly float _barGap = 8;    // Gap between sales and revenue bars
+        private readonly float _barDepth = 5;  // Depth effect for 3D bars
 
-        public SalesChartDrawable(ChartData data)
+        public SalesChart3DDrawable(ChartData data)
         {
             _data = data;
         }
@@ -364,122 +442,172 @@ namespace TrackPointV.View.DBView
             if (_data.Dates.Count == 0)
                 return;
 
-            float padding = 40;
+            float padding = 16;
             float chartWidth = dirtyRect.Width - (padding * 2);
             float chartHeight = dirtyRect.Height - (padding * 2);
             float xStart = padding;
             float yStart = dirtyRect.Height - padding;
-
-            // Draw grid lines
+            
+            // Background grid
+            DrawGrid(canvas, xStart, yStart, chartWidth, chartHeight);
+            
+            // Draw X-axis labels (dates)
+            DrawDateLabels(canvas, xStart, yStart, chartWidth);
+            
+            // Draw bars
+            DrawBars(canvas, xStart, yStart, chartWidth, chartHeight);
+        }
+        
+        private void DrawGrid(ICanvas canvas, float xStart, float yStart, float chartWidth, float chartHeight)
+        {
+            // Main horizontal lines for grid
             canvas.StrokeColor = _gridLineColor;
             canvas.StrokeSize = 1;
-
-            // Horizontal grid lines
-            int hGridLines = 5;
+            
+            int hGridLines = 4;
             for (int i = 0; i <= hGridLines; i++)
             {
                 float y = yStart - ((float)i / hGridLines * chartHeight);
                 canvas.DrawLine(xStart, y, xStart + chartWidth, y);
-                
-                // Draw y-axis labels (sales count)
-                int maxSales = _data.SalesCounts.Count > 0 ? _data.SalesCounts.Max() : 0;
-                int salesValue = (int)((float)i / hGridLines * maxSales);
-                canvas.DrawString(salesValue.ToString(), xStart - 25, y - 10, HorizontalAlignment.Center);
             }
-
-            // Vertical grid lines
-            int numPoints = _data.Dates.Count;
-            float xStep = chartWidth / (numPoints - 1 > 0 ? numPoints - 1 : 1);
+        }
+        
+        private void DrawDateLabels(ICanvas canvas, float xStart, float yStart, float chartWidth)
+        {
+            int numDates = _data.Dates.Count;
+            if (numDates <= 0) return;
             
-            for (int i = 0; i < numPoints; i++)
+            float dateStep = chartWidth / (numDates > 1 ? numDates : 1);
+            float totalBarWidth = (_barWidth * 2) + _barGap;
+            
+            // Only show labels for some dates if there are too many
+            int labelFrequency = numDates > 10 ? numDates / 6 : 1;
+            
+            canvas.FontColor = _textColor;
+            canvas.FontSize = 11;
+            
+            for (int i = 0; i < numDates; i++)
             {
-                float x = xStart + (i * xStep);
-                canvas.DrawLine(x, yStart, x, yStart - chartHeight);
-                
-                // Draw x-axis labels (dates)
-                string dateLabel = _data.Dates[i].ToString("MM/dd");
-                canvas.DrawString(dateLabel, x, yStart + 15, HorizontalAlignment.Center);
-            }
-
-            // Draw sales count line
-            if (_data.SalesCounts.Count > 0)
-            {
-                int maxSales = _data.SalesCounts.Max();
-                if (maxSales > 0)
+                // Show fewer labels if there are many dates
+                if (i % labelFrequency == 0 || i == numDates - 1)
                 {
-                    canvas.StrokeColor = _salesLineColor;
-                    canvas.StrokeSize = 3;
-                    
-                    PathF path = new PathF();
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        float x = xStart + (i * xStep);
-                        float normalizedValue = (float)_data.SalesCounts[i] / maxSales;
-                        float y = yStart - (normalizedValue * chartHeight);
-                        
-                        if (i == 0)
-                            path.MoveTo(x, y);
-                        else
-                            path.LineTo(x, y);
-                    }
-                    
-                    canvas.DrawPath(path);
-                    
-                    // Draw points on the line
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        float x = xStart + (i * xStep);
-                        float normalizedValue = (float)_data.SalesCounts[i] / maxSales;
-                        float y = yStart - (normalizedValue * chartHeight);
-                        
-                        canvas.FillColor = _salesLineColor;
-                        canvas.FillCircle(x, y, 5);
-                    }
+                    float x = xStart + (i * dateStep) + (totalBarWidth / 2);
+                    string dateLabel = _data.Dates[i].ToString("MM/dd");
+                    canvas.DrawString(dateLabel, x, yStart + 15, HorizontalAlignment.Center);
                 }
             }
-
-            // Draw revenue line
-            if (_data.Revenues.Count > 0)
+        }
+        
+        private void DrawBars(ICanvas canvas, float xStart, float yStart, float chartWidth, float chartHeight)
+        {
+            int numDates = _data.Dates.Count;
+            if (numDates <= 0) return;
+            
+            float dateStep = chartWidth / (numDates > 1 ? numDates : 1);
+            
+            // Find max values for scaling
+            int maxSales = _data.SalesCounts.Count > 0 ? _data.SalesCounts.Max() : 1;
+            float maxRevenue = _data.Revenues.Count > 0 ? _data.Revenues.Max() : 1;
+            
+            // Draw the bars for each date
+            for (int i = 0; i < numDates; i++)
             {
-                float maxRevenue = _data.Revenues.Max();
-                if (maxRevenue > 0)
+                float x = xStart + (i * dateStep);
+                
+                // Draw Sales Count Bar (3D effect)
+                if (i < _data.SalesCounts.Count)
                 {
-                    canvas.StrokeColor = _revenueLineColor;
-                    canvas.StrokeSize = 3;
+                    float salesValue = (float)_data.SalesCounts[i] / maxSales;
+                    float barHeight = salesValue * chartHeight;
                     
-                    PathF path = new PathF();
-                    for (int i = 0; i < numPoints; i++)
+                    // Only draw bars with non-zero values
+                    if (barHeight > 0)
                     {
-                        float x = xStart + (i * xStep);
-                        float normalizedValue = _data.Revenues[i] / maxRevenue;
-                        float y = yStart - (normalizedValue * chartHeight);
+                        // Draw 3D side of bar
+                        PathF side = new PathF();
+                        side.MoveTo(x + _barWidth, yStart);
+                        side.LineTo(x + _barWidth, yStart - barHeight);
+                        side.LineTo(x + _barWidth + _barDepth, yStart - barHeight + _barDepth);
+                        side.LineTo(x + _barWidth + _barDepth, yStart + _barDepth);
+                        side.Close();
                         
-                        if (i == 0)
-                            path.MoveTo(x, y);
-                        else
-                            path.LineTo(x, y);
-                    }
-                    
-                    canvas.DrawPath(path);
-                    
-                    // Draw points on the line
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        float x = xStart + (i * xStep);
-                        float normalizedValue = _data.Revenues[i] / maxRevenue;
-                        float y = yStart - (normalizedValue * chartHeight);
+                        canvas.FillColor = _salesBarShadowColor;
+                        canvas.FillPath(side);
                         
-                        canvas.FillColor = _revenueLineColor;
-                        canvas.FillCircle(x, y, 5);
+                        // Draw 3D top of bar
+                        PathF top = new PathF();
+                        top.MoveTo(x, yStart - barHeight);
+                        top.LineTo(x + _barWidth, yStart - barHeight);
+                        top.LineTo(x + _barWidth + _barDepth, yStart - barHeight + _barDepth);
+                        top.LineTo(x + _barDepth, yStart - barHeight + _barDepth);
+                        top.Close();
+                        
+                        canvas.FillColor = _salesBarShadowColor.WithAlpha(0.7f);
+                        canvas.FillPath(top);
+                        
+                        // Draw main front of bar
+                        canvas.FillColor = _salesBarColor;
+                        canvas.FillRectangle(x, yStart - barHeight, _barWidth, barHeight);
+                        
+                        // Draw value on top of bar if it's big enough
+                        if (barHeight > 25)
+                        {
+                            canvas.FontColor = Colors.White;
+                            canvas.FontSize = 10;
+                            canvas.DrawString(_data.SalesCounts[i].ToString(), 
+                                x + (_barWidth / 2), 
+                                yStart - barHeight - 10,
+                                HorizontalAlignment.Center);
+                        }
                     }
+                }
+                
+                // Draw Revenue Bar (3D effect)
+                if (i < _data.Revenues.Count)
+                {
+                    float revenueValue = _data.Revenues[i] / maxRevenue;
+                    float barHeight = revenueValue * chartHeight;
+                    float revX = x + _barWidth + _barGap;
                     
-                    // Draw revenue scale on right side
-                    canvas.FontColor = _revenueLineColor;
-                    for (int i = 0; i <= hGridLines; i++)
+                    // Only draw bars with non-zero values
+                    if (barHeight > 0)
                     {
-                        float y = yStart - ((float)i / hGridLines * chartHeight);
-                        float revenueValue = (float)i / hGridLines * maxRevenue;
-                        canvas.DrawString($"${revenueValue:N0}", xStart + chartWidth + 25, y - 10, HorizontalAlignment.Center);
+                        // Draw 3D side of bar
+                        PathF side = new PathF();
+                        side.MoveTo(revX + _barWidth, yStart);
+                        side.LineTo(revX + _barWidth, yStart - barHeight);
+                        side.LineTo(revX + _barWidth + _barDepth, yStart - barHeight + _barDepth);
+                        side.LineTo(revX + _barWidth + _barDepth, yStart + _barDepth);
+                        side.Close();
+                        
+                        canvas.FillColor = _revenueBarShadowColor;
+                        canvas.FillPath(side);
+                        
+                        // Draw 3D top of bar
+                        PathF top = new PathF();
+                        top.MoveTo(revX, yStart - barHeight);
+                        top.LineTo(revX + _barWidth, yStart - barHeight);
+                        top.LineTo(revX + _barWidth + _barDepth, yStart - barHeight + _barDepth);
+                        top.LineTo(revX + _barDepth, yStart - barHeight + _barDepth);
+                        top.Close();
+                        
+                        canvas.FillColor = _revenueBarShadowColor.WithAlpha(0.7f);
+                        canvas.FillPath(top);
+                        
+                        // Draw main front of bar
+                        canvas.FillColor = _revenueBarColor;
+                        canvas.FillRectangle(revX, yStart - barHeight, _barWidth, barHeight);
+                        
+                        // Draw value on top of bar if it's big enough
+                        if (barHeight > 25)
+                        {
+                            canvas.FontColor = Colors.White;
+                            canvas.FontSize = 10;
+                            canvas.DrawString($"${_data.Revenues[i]:N0}", 
+                                revX + (_barWidth / 2), 
+                                yStart - barHeight - 10,
+                                HorizontalAlignment.Center);
+                        }
                     }
                 }
             }

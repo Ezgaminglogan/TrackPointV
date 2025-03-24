@@ -258,30 +258,64 @@
                                        StrokeShape="RoundRectangle 10,10,10,10"
                                        Stroke="{StaticResource BorderColor}"
                                        StrokeThickness="1"
-                                       Padding="4">
-                                    <Picker x:Name="chartPeriodPicker" 
-                                            Title="Select Period" 
-                                            WidthRequest="140"
-                                            BackgroundColor="Transparent"
-                                            TextColor="{StaticResource TextDarkColor}"
-                                            SelectedIndexChanged="ChartPeriodPicker_SelectedIndexChanged">
-                                        <Picker.Items>
-                                            <x:String>Last 7 Days</x:String>
-                                            <x:String>Last 30 Days</x:String>
-                                            <x:String>Last 90 Days</x:String>
-                                            <x:String>This Year</x:String>
-                                        </Picker.Items>
-                                    </Picker>
+                                       Padding="8,6">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="Date Range" 
+                                               TextColor="{StaticResource TextMediumColor}" 
+                                               VerticalOptions="Center" 
+                                               FontSize="14"/>
+                                        <Button Text="Select" 
+                                                Clicked="DateRangeButton_Clicked"
+                                                BackgroundColor="{StaticResource PrimaryColor}" 
+                                                TextColor="White"
+                                                FontSize="12"
+                                                CornerRadius="8"
+                                                Padding="10,2"
+                                                Margin="0"/>
+                                    </HorizontalStackLayout>
                                 </Border>
                             </Grid>
 
-                            <!-- Chart Area -->
+                            <!-- Date Range Display -->
+                            <HorizontalStackLayout Spacing="8" HorizontalOptions="Start">
+                                <Label Text="&#xf073;" 
+                                       FontFamily="{StaticResource FontAwesomeSolid}" 
+                                       TextColor="{StaticResource TextMediumColor}" 
+                                       FontSize="16"
+                                       VerticalOptions="Center"/>
+                                <Label x:Name="dateRangeLabel" 
+                                       Text="Last 7 days" 
+                                       TextColor="{StaticResource TextMediumColor}" 
+                                       FontSize="14"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+
+                            <!-- Chart Area with Enhanced 3D Effect -->
                             <Border Background="#FCFCFF" 
                                    StrokeShape="RoundRectangle 16,16,16,16"
                                    Stroke="{StaticResource BorderColor}"
                                    StrokeThickness="1"
                                    Padding="16">
-                                <GraphicsView x:Name="salesChartView" HeightRequest="240" />
+                                <Grid>
+                                    <!-- Y-axis labels -->
+                                    <VerticalStackLayout Spacing="0" 
+                                                        Margin="0,0,8,0" 
+                                                        HorizontalOptions="Start" 
+                                                        VerticalOptions="FillAndExpand">
+                                        <Label Text="100%" FontSize="12" TextColor="{StaticResource TextLightColor}" HorizontalOptions="End"/>
+                                        <Rectangle HeightRequest="1" Fill="{StaticResource BorderColor}" Margin="0,4,0,35"/>
+                                        <Label Text="75%" FontSize="12" TextColor="{StaticResource TextLightColor}" HorizontalOptions="End"/>
+                                        <Rectangle HeightRequest="1" Fill="{StaticResource BorderColor}" Margin="0,4,0,35"/>
+                                        <Label Text="50%" FontSize="12" TextColor="{StaticResource TextLightColor}" HorizontalOptions="End"/>
+                                        <Rectangle HeightRequest="1" Fill="{StaticResource BorderColor}" Margin="0,4,0,35"/>
+                                        <Label Text="25%" FontSize="12" TextColor="{StaticResource TextLightColor}" HorizontalOptions="End"/>
+                                        <Rectangle HeightRequest="1" Fill="{StaticResource BorderColor}" Margin="0,4,0,35"/>
+                                        <Label Text="0%" FontSize="12" TextColor="{StaticResource TextLightColor}" HorizontalOptions="End"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- The chart itself -->
+                                    <GraphicsView x:Name="salesChartView" HeightRequest="280" Margin="40,0,20,20"/>
+                                </Grid>
                             </Border>
 
                             <!-- Chart Legend -->
