@@ -12,6 +12,8 @@ namespace TrackPointV.Service
         public string? Username { get; set; }
         public decimal? Amount { get; set; }
         public int? Quantity { get; set; }
+        public decimal? Price { get; set; }
+        public int? ProductId { get; set; }
         
         // Formatted display text for the UI
         public string DisplayText 
@@ -33,6 +35,9 @@ namespace TrackPointV.Service
         // Properties for enhanced UI display
         public bool HasAmount => Amount.HasValue && Amount.Value > 0;
         public bool HasQuantity => Quantity.HasValue && Quantity.Value > 0;
+        public bool HasPrice => Price.HasValue && Price.Value > 0;
         public string FormattedAmount => HasAmount ? $"${Amount:N2}" : string.Empty;
+        public string FormattedPrice => HasPrice ? $"${Price:N2}" : string.Empty;
+        public string FormattedQuantity => HasQuantity ? $"{Quantity} {(Quantity == 1 ? "unit" : "units")}" : string.Empty;
     }
 }

@@ -18,6 +18,8 @@ namespace TrackPointV.View.DBView
             InitializeComponent();
             _userService = new UserService();
             _users = new ObservableCollection<User>();
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         }
 
         protected override async void OnAppearing()

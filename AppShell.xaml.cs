@@ -19,7 +19,6 @@ namespace TrackPointV
             Routing.RegisterRoute(nameof(UserPage),typeof(UserPage));
             Routing.RegisterRoute(nameof(SalePage), typeof(SalePage));
             Routing.RegisterRoute(nameof(ProductPage), typeof(ProductPage));
-            Routing.RegisterRoute(nameof(NewSalePage), typeof(NewSalePage));
 
 
             //Crud

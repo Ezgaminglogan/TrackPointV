@@ -16,6 +16,8 @@ namespace TrackPointV.Converters
                     "Product" => "\uf466", // box-open
                     "Sale" => "\uf155",    // dollar-sign
                     "User" => "\uf007",    // user
+                    "Inventory" => "\uf07b", // folder
+                    "Purchase" => "\uf07a", // shopping-cart
                     _ => "\uf05a"          // info-circle
                 };
             }
@@ -36,13 +38,15 @@ namespace TrackPointV.Converters
             {
                 return type switch
                 {
-                    "Product" => Color.FromArgb("#4CAF50"), // Green
-                    "Sale" => Color.FromArgb("#1a73e8"),    // Blue
-                    "User" => Color.FromArgb("#9C27B0"),    // Purple
-                    _ => Color.FromArgb("#757575")          // Gray
+                    "Product" => Color.FromArgb("#22c55e"),  // Green
+                    "Sale" => Color.FromArgb("#6366f1"),     // Indigo/Purple (primary)
+                    "User" => Color.FromArgb("#9333ea"),     // Purple
+                    "Inventory" => Color.FromArgb("#14b8a6"), // Teal
+                    "Purchase" => Color.FromArgb("#0ea5e9"), // Sky blue
+                    _ => Color.FromArgb("#64748b")           // Slate
                 };
             }
-            return Color.FromArgb("#757575"); // Default color
+            return Color.FromArgb("#64748b"); // Default color
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

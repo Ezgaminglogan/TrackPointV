@@ -20,6 +20,8 @@ namespace TrackPointV.View.DBView
             _inventoryService = new InventoryService();
             _products = new ObservableCollection<Product>();
             _featuredProducts = new ObservableCollection<Product>();
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         }
 
         protected override async void OnAppearing()

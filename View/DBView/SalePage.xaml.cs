@@ -1,8 +1,6 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Controls.Shapes;
 using TrackPointV.Service;
 using TrackPointV.View.DBView.CrudView;
 
@@ -25,7 +23,7 @@ namespace TrackPointV.View.DBView
             _saleService = new SaleService();
             _sales = new ObservableCollection<SaleViewModel>();
             salesCollection.ItemsSource = _sales;
-            
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
             // Update date range label
             UpdateDateRangeLabel();
         }
@@ -255,74 +253,203 @@ namespace TrackPointV.View.DBView
 
         private async void DateRangeButton_Clicked(object sender, EventArgs e)
         {
-            // Show custom date range picker
-            await ShowCustomDateRangeForChartAsync();
-        }
-
-        private async Task ShowCustomDateRangeForChartAsync()
-        {
-            // Create a simple date range picker dialog
-            var startDatePicker = new DatePicker { Date = _startDate };
-            var endDatePicker = new DatePicker { Date = _endDate };
+            // Create a proper popup content for the date range picker
+            var startDatePicker = new DatePicker 
+            { 
+                Date = _startDate,
+                BackgroundColor = Colors.White,
+                TextColor = Colors.Black,
+                MinimumDate = DateTime.Now.AddYears(-1),
+                MaximumDate = DateTime.Now
+            };
             
-            var layout = new VerticalStackLayout
+            var endDatePicker = new DatePicker 
+            { 
+                Date = _endDate,
+                BackgroundColor = Colors.White,
+                TextColor = Colors.Black,
+                MinimumDate = DateTime.Now.AddYears(-1),
+                MaximumDate = DateTime.Now
+            };
+            
+            // Create dialog content with proper styling
+            var contentView = new VerticalStackLayout
             {
-                Spacing = 16,
                 Padding = new Thickness(20),
+                Spacing = 16,
+                BackgroundColor = Colors.White,
                 Children =
                 {
-                    new Label { Text = "Select Date Range", FontAttributes = FontAttributes.Bold, FontSize = 18, TextColor = Color.FromArgb("#1e293b") },
-                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 4) },
+                    new Label 
+                    { 
+                        Text = "Select Date Range",
+                        FontAttributes = FontAttributes.Bold,
+                        FontSize = 18,
+                        TextColor = Color.FromArgb("#1e293b"),
+                        HorizontalOptions = LayoutOptions.Center
+                    },
+                    
+                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1 },
+                    
                     new Label { Text = "Start Date:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b") },
                     startDatePicker,
-                    new Label { Text = "End Date:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b"), Margin = new Thickness(0, 16, 0, 0) },
+                    
+                    new Label { Text = "End Date:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b"), Margin = new Thickness(0, 8, 0, 0) },
                     endDatePicker,
-                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 16, 0, 16) },
-                    new Label { Text = "Preset Ranges:", FontAttributes = FontAttributes.Bold, TextColor = Color.FromArgb("#64748b") },
+                    
+                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 8) },
+                    
                     new HorizontalStackLayout
                     {
                         Spacing = 10,
+                        HorizontalOptions = LayoutOptions.Center,
                         Children =
                         {
-                            new Button { Text = "Last 7 Days", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) },
-                            new Button { Text = "Last 30 Days", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) },
-                            new Button { Text = "This Month", BackgroundColor = Color.FromArgb("#f1f5f9"), TextColor = Color.FromArgb("#1e293b"), FontSize = 12, CornerRadius = 8, Padding = new Thickness(8, 4) }
+                            new Button
+                            {
+                                Text = "Last 7 Days",
+                                BackgroundColor = Color.FromArgb("#f1f5f9"),
+                                TextColor = Color.FromArgb("#1e293b"),
+                                FontSize = 13,
+                                CornerRadius = 8,
+                                Padding = new Thickness(10, 5)
+                            },
+                            new Button
+                            {
+                                Text = "Last 30 Days",
+                                BackgroundColor = Color.FromArgb("#f1f5f9"),
+                                TextColor = Color.FromArgb("#1e293b"),
+                                FontSize = 13,
+                                CornerRadius = 8,
+                                Padding = new Thickness(10, 5)
+                            },
+                            new Button
+                            {
+                                Text = "This Month",
+                                BackgroundColor = Color.FromArgb("#f1f5f9"),
+                                TextColor = Color.FromArgb("#1e293b"),
+                                FontSize = 13,
+                                CornerRadius = 8,
+                                Padding = new Thickness(10, 5)
+                            }
+                        }
+                    },
+                    
+                    new BoxView { Color = Color.FromArgb("#e2e8f0"), HeightRequest = 1, Margin = new Thickness(0, 8) },
+                    
+                    new HorizontalStackLayout
+                    {
+                        Spacing = 10,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Children =
+                        {
+                            new Button
+                            {
+                                Text = "Cancel",
+                                BackgroundColor = Color.FromArgb("#f1f5f9"),
+                                TextColor = Color.FromArgb("#1e293b"),
+                                FontAttributes = FontAttributes.Bold,
+                                CornerRadius = 8,
+                                Padding = new Thickness(20, 10),
+                                WidthRequest = 100
+                            },
+                            new Button
+                            {
+                                Text = "Apply",
+                                BackgroundColor = Color.FromArgb("#6366f1"),
+                                TextColor = Colors.White,
+                                FontAttributes = FontAttributes.Bold,
+                                CornerRadius = 8,
+                                Padding = new Thickness(20, 10),
+                                WidthRequest = 100
+                            }
                         }
                     }
                 }
             };
             
-            // Add event handlers for preset buttons
-            if (layout.Children[8] is HorizontalStackLayout buttonStack)
+            // Set up event handlers for the preset buttons
+            if (contentView.Children[7] is HorizontalStackLayout presetButtons)
             {
-                if (buttonStack.Children[0] is Button btn7Days)
+                if (presetButtons.Children[0] is Button btn7Days)
                 {
-                    btn7Days.Clicked += (s, e) => {
+                    btn7Days.Clicked += (s, args) => {
                         startDatePicker.Date = DateTime.Now.AddDays(-7);
                         endDatePicker.Date = DateTime.Now;
                     };
                 }
                 
-                if (buttonStack.Children[1] is Button btn30Days)
+                if (presetButtons.Children[1] is Button btn30Days)
                 {
-                    btn30Days.Clicked += (s, e) => {
+                    btn30Days.Clicked += (s, args) => {
                         startDatePicker.Date = DateTime.Now.AddDays(-30);
                         endDatePicker.Date = DateTime.Now;
                     };
                 }
                 
-                if (buttonStack.Children[2] is Button btnThisMonth)
+                if (presetButtons.Children[2] is Button btnThisMonth)
                 {
-                    btnThisMonth.Clicked += (s, e) => {
+                    btnThisMonth.Clicked += (s, args) => {
                         startDatePicker.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                         endDatePicker.Date = DateTime.Now;
                     };
                 }
             }
             
-            // Show custom dialog
-            bool result = await Application.Current.MainPage.DisplayAlert("Custom Date Range", "Please select a date range for the chart:", "Apply", "Cancel");
-            if (result)
+            // Setup result tracking
+            bool? result = null;
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            
+            // Set up event handlers for the action buttons
+            if (contentView.Children[9] is HorizontalStackLayout actionButtons)
+            {
+                if (actionButtons.Children[0] is Button cancelBtn)
+                {
+                    cancelBtn.Clicked += (s, args) => {
+                        result = false;
+                        tcs.SetResult(false);
+                    };
+                }
+                
+                if (actionButtons.Children[1] is Button applyBtn)
+                {
+                    applyBtn.Clicked += (s, args) => {
+                        result = true;
+                        tcs.SetResult(true);
+                    };
+                }
+            }
+            
+            // Create a ContentPage to host our dialog
+            var dialogPage = new ContentPage
+            {
+                Content = new Border
+                {
+                    StrokeShape = new RoundRectangle { CornerRadius = 16 },
+                    Stroke = Color.FromArgb("#e2e8f0"),
+                    BackgroundColor = Colors.White,
+                    Margin = new Thickness(20),
+                    Padding = new Thickness(0),
+                    MaximumWidthRequest = 350,
+                    MaximumHeightRequest = 480,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = contentView
+                },
+                BackgroundColor = Color.FromArgb("#00000070")
+            };
+            
+            // Show the dialog
+            dialogPage.Disappearing += (s, args) => {
+                if (!result.HasValue)
+                    tcs.SetResult(false);
+            };
+            
+            await Navigation.PushModalAsync(dialogPage);
+            var userConfirmed = await tcs.Task;
+            await Navigation.PopModalAsync();
+            
+            if (userConfirmed)
             {
                 _startDate = startDatePicker.Date;
                 _endDate = endDatePicker.Date;
@@ -418,7 +545,7 @@ namespace TrackPointV.View.DBView
         public List<float> Revenues { get; set; } = new List<float>();
     }
 
-    // Enhanced 3D Bar Chart Implementation
+    // Enhanced 3D Bar Chart Implementation with improved sales visualization
     public class SalesChart3DDrawable : IDrawable
     {
         private readonly ChartData _data;
@@ -428,9 +555,10 @@ namespace TrackPointV.View.DBView
         private readonly Color _revenueBarShadowColor = Color.FromArgb("#0f766e"); // Darker SecondaryColor
         private readonly Color _gridLineColor = Color.FromArgb("#e2e8f0");    // BorderColor
         private readonly Color _textColor = Color.FromArgb("#64748b");        // TextMediumColor
-        private readonly float _barWidth = 12;  // Width of each bar
-        private readonly float _barGap = 8;    // Gap between sales and revenue bars
-        private readonly float _barDepth = 5;  // Depth effect for 3D bars
+        private readonly float _barWidth = 20;  // Width of each bar (increased for better visibility)
+        private readonly float _barGap = 10;    // Gap between sales and revenue bars
+        private readonly float _barDepth = 8;   // Depth effect for 3D bars (increased for more pronounced effect)
+        private readonly float _barSpacing = 30; // Space between date groups
 
         public SalesChart3DDrawable(ChartData data)
         {
@@ -442,20 +570,31 @@ namespace TrackPointV.View.DBView
             if (_data.Dates.Count == 0)
                 return;
 
-            float padding = 16;
+            float padding = 60; // Increased padding for labels
             float chartWidth = dirtyRect.Width - (padding * 2);
             float chartHeight = dirtyRect.Height - (padding * 2);
             float xStart = padding;
             float yStart = dirtyRect.Height - padding;
             
+            // Draw title
+            canvas.FontColor = Color.FromArgb("#1e293b");
+            canvas.FontSize = 16;
+            canvas.DrawString("Sales Performance", dirtyRect.Width / 2, 20, HorizontalAlignment.Center);
+            
             // Background grid
             DrawGrid(canvas, xStart, yStart, chartWidth, chartHeight);
+            
+            // Draw Y-axis labels
+            DrawYAxisLabels(canvas, xStart, yStart, chartHeight, chartWidth);
             
             // Draw X-axis labels (dates)
             DrawDateLabels(canvas, xStart, yStart, chartWidth);
             
             // Draw bars
             DrawBars(canvas, xStart, yStart, chartWidth, chartHeight);
+            
+            // Draw legend
+            DrawLegend(canvas, xStart, yStart, chartWidth);
         }
         
         private void DrawGrid(ICanvas canvas, float xStart, float yStart, float chartWidth, float chartHeight)
@@ -469,7 +608,71 @@ namespace TrackPointV.View.DBView
             {
                 float y = yStart - ((float)i / hGridLines * chartHeight);
                 canvas.DrawLine(xStart, y, xStart + chartWidth, y);
+                
+                // Draw subtle vertical grid lines
+                if (i == 0) // Only draw vertical lines from the base
+                {
+                    int numDates = _data.Dates.Count;
+                    float totalWidth = chartWidth - (_barSpacing * 2); // Subtract some spacing
+                    float dateWidth = totalWidth / numDates;
+                    
+                    for (int j = 0; j <= numDates; j++)
+                    {
+                        float x = xStart + (j * dateWidth);
+                        canvas.StrokeColor = _gridLineColor.WithAlpha(0.5f);
+                        canvas.DrawLine(x, yStart, x, yStart - chartHeight);
+                    }
+                    
+                    canvas.StrokeColor = _gridLineColor; // Reset stroke color
+                }
             }
+        }
+        
+        private void DrawYAxisLabels(ICanvas canvas, float xStart, float yStart, float chartHeight, float chartWidth)
+        {
+            // Find max values for scaling
+            int maxSales = _data.SalesCounts.Count > 0 ? _data.SalesCounts.Max() : 1;
+            float maxRevenue = _data.Revenues.Count > 0 ? _data.Revenues.Max() : 1;
+            
+            // Draw sales axis labels (left)
+            canvas.FontColor = _salesBarColor;
+            canvas.FontSize = 11; // Smaller font
+            
+            int hGridLines = 4;
+            for (int i = 0; i <= hGridLines; i++)
+            {
+                float y = yStart - ((float)i / hGridLines * chartHeight);
+                int salesValue = (int)((float)i / hGridLines * maxSales);
+                canvas.DrawString(salesValue.ToString(), xStart - 28, y - 6, HorizontalAlignment.Right);
+            }
+            
+            // Draw revenue axis labels (right) with improved formatting
+            canvas.FontColor = _revenueBarColor;
+            canvas.FontSize = 11; // Smaller font
+            
+            float xEnd = xStart + chartWidth;
+            for (int i = 0; i <= hGridLines; i++)
+            {
+                float y = yStart - ((float)i / hGridLines * chartHeight);
+                float revenueValue = ((float)i / hGridLines * maxRevenue);
+                
+                // Format large numbers more compactly
+                string formattedRevenue;
+                if (revenueValue >= 1000)
+                    formattedRevenue = $"${revenueValue/1000:N1}K";
+                else
+                    formattedRevenue = $"${revenueValue:N0}";
+                    
+                canvas.DrawString(formattedRevenue, xEnd + 30, y - 6, HorizontalAlignment.Left);
+            }
+            
+            // Draw axis titles with more spacing
+            canvas.FontColor = _salesBarColor;
+            canvas.FontSize = 12;
+            canvas.DrawString("Sales", xStart - 28, yStart - chartHeight - 20, HorizontalAlignment.Right);
+            
+            canvas.FontColor = _revenueBarColor;
+            canvas.DrawString("Revenue", xEnd + 30, yStart - chartHeight - 20, HorizontalAlignment.Left);
         }
         
         private void DrawDateLabels(ICanvas canvas, float xStart, float yStart, float chartWidth)
@@ -477,11 +680,11 @@ namespace TrackPointV.View.DBView
             int numDates = _data.Dates.Count;
             if (numDates <= 0) return;
             
-            float dateStep = chartWidth / (numDates > 1 ? numDates : 1);
-            float totalBarWidth = (_barWidth * 2) + _barGap;
+            float totalWidth = chartWidth - (_barSpacing * 2); // Subtract some spacing
+            float dateWidth = totalWidth / numDates;
             
             // Only show labels for some dates if there are too many
-            int labelFrequency = numDates > 10 ? numDates / 6 : 1;
+            int labelFrequency = numDates > 7 ? numDates / 5 : 1;
             
             canvas.FontColor = _textColor;
             canvas.FontSize = 11;
@@ -491,7 +694,7 @@ namespace TrackPointV.View.DBView
                 // Show fewer labels if there are many dates
                 if (i % labelFrequency == 0 || i == numDates - 1)
                 {
-                    float x = xStart + (i * dateStep) + (totalBarWidth / 2);
+                    float x = xStart + (i * dateWidth) + (dateWidth / 2);
                     string dateLabel = _data.Dates[i].ToString("MM/dd");
                     canvas.DrawString(dateLabel, x, yStart + 15, HorizontalAlignment.Center);
                 }
@@ -503,7 +706,8 @@ namespace TrackPointV.View.DBView
             int numDates = _data.Dates.Count;
             if (numDates <= 0) return;
             
-            float dateStep = chartWidth / (numDates > 1 ? numDates : 1);
+            float totalWidth = chartWidth - (_barSpacing * 2); // Subtract some spacing
+            float dateWidth = totalWidth / numDates;
             
             // Find max values for scaling
             int maxSales = _data.SalesCounts.Count > 0 ? _data.SalesCounts.Max() : 1;
@@ -512,7 +716,12 @@ namespace TrackPointV.View.DBView
             // Draw the bars for each date
             for (int i = 0; i < numDates; i++)
             {
-                float x = xStart + (i * dateStep);
+                float x = xStart + (i * dateWidth) + (_barSpacing / 2);
+                
+                // Calculate total bar width (including gap)
+                float totalBarWidth = (_barWidth * 2) + _barGap;
+                float centerOffset = (dateWidth - totalBarWidth) / 2;
+                x += centerOffset;
                 
                 // Draw Sales Count Bar (3D effect)
                 if (i < _data.SalesCounts.Count)
@@ -549,14 +758,14 @@ namespace TrackPointV.View.DBView
                         canvas.FillColor = _salesBarColor;
                         canvas.FillRectangle(x, yStart - barHeight, _barWidth, barHeight);
                         
-                        // Draw value on top of bar if it's big enough
+                        // Draw value on top of bar if it's tall enough
                         if (barHeight > 25)
                         {
                             canvas.FontColor = Colors.White;
                             canvas.FontSize = 10;
                             canvas.DrawString(_data.SalesCounts[i].ToString(), 
                                 x + (_barWidth / 2), 
-                                yStart - barHeight - 10,
+                                yStart - barHeight - 15,
                                 HorizontalAlignment.Center);
                         }
                     }
@@ -598,19 +807,42 @@ namespace TrackPointV.View.DBView
                         canvas.FillColor = _revenueBarColor;
                         canvas.FillRectangle(revX, yStart - barHeight, _barWidth, barHeight);
                         
-                        // Draw value on top of bar if it's big enough
+                        // Draw value on top of bar if it's tall enough
                         if (barHeight > 25)
                         {
                             canvas.FontColor = Colors.White;
                             canvas.FontSize = 10;
                             canvas.DrawString($"${_data.Revenues[i]:N0}", 
                                 revX + (_barWidth / 2), 
-                                yStart - barHeight - 10,
+                                yStart - barHeight - 15,
                                 HorizontalAlignment.Center);
                         }
                     }
                 }
             }
+        }
+        
+        private void DrawLegend(ICanvas canvas, float xStart, float yStart, float chartWidth)
+        {
+            float legendY = yStart + 30;
+            float legendX = xStart + (chartWidth / 2);
+            float boxSize = 16;
+            float textOffset = 20;
+            
+            // Sales legend
+            canvas.FillColor = _salesBarColor;
+            canvas.FillRectangle(legendX - 80, legendY, boxSize, boxSize);
+            
+            canvas.FontColor = _textColor;
+            canvas.FontSize = 12;
+            canvas.DrawString("Sales Count", legendX - 80 + textOffset, legendY + (boxSize / 2), HorizontalAlignment.Left);
+            
+            // Revenue legend
+            canvas.FillColor = _revenueBarColor;
+            canvas.FillRectangle(legendX + 60, legendY, boxSize, boxSize);
+            
+            canvas.FontColor = _textColor;
+            canvas.DrawString("Revenue ($)", legendX + 60 + textOffset, legendY + (boxSize / 2), HorizontalAlignment.Left);
         }
     }
 }

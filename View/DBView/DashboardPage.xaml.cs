@@ -14,6 +14,7 @@ namespace TrackPointV.View.DBView
         private readonly InventoryService _inventoryService;
         private readonly SaleService _saleService;
         private readonly UserService _userService;
+
         private System.Timers.Timer? _timer;
         private string? _currentUsername;
 
@@ -24,6 +25,7 @@ namespace TrackPointV.View.DBView
             _inventoryService = new InventoryService();
             _saleService = new SaleService();
             _userService = new UserService();
+
 
             // Initialize timer for updating date/time
             _timer = new System.Timers.Timer(1000);
@@ -177,6 +179,13 @@ namespace TrackPointV.View.DBView
                 // Update sales today display
                 salesTodayAmountLabel.Text = $"${totalSalesAmount:N2}";
                 salesTodayCountLabel.Text = $"{salesCount} {(salesCount == 1 ? "sale" : "sales")}";
+                
+                // Get all sales for total revenue (matching SalesPage)
+                var allSales = await _saleService.GetAllSalesAsync();
+                decimal totalRevenue = allSales.Sum(s => s.TotalAmount);
+                
+                // Update total revenue label
+                totalRevenueLabel.Text = $"Total: ${totalRevenue:N2}";
                 
                 // Get user information
                 var users = await _userService.GetAllUsersAsync();

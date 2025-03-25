@@ -230,6 +230,8 @@
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label x:Name="salesTodayAmountLabel" Text="$0.00" Style="{StaticResource CardValueStyle}" TextColor="#3b78e7" />
                                     <Label x:Name="salesTodayCountLabel" Text="0 sales" FontSize="14" TextColor="#5e87ca" HorizontalOptions="Center" />
+                                    <Label x:Name="totalRevenueLabel" Text="Total: $0.00" FontSize="12" TextColor="#6366f1" HorizontalOptions="Center"
+                                          Margin="0,4,0,0" FontAttributes="Bold" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -252,7 +254,7 @@
                                     </Frame.Shadow>
                                     <Grid>
                                         <Ellipse Fill="#fff4e5" WidthRequest="60" HeightRequest="60" />
-                                        <Label Text="&#xf06a;" Style="{StaticResource IconStyle}" TextColor="#ff9800" />
+                                    <Label Text="&#xf06a;" Style="{StaticResource IconStyle}" TextColor="#ff9800" />
                                     </Grid>
                                 </Frame>
                                 <Label Text="Low Stock Items" Style="{StaticResource CardTitleStyle}" TextColor="#e67e00" />
@@ -329,9 +331,9 @@
                                    TextColor="#666666" FontSize="15" IsVisible="False" Margin="0,20,0,20"/>
 
                             <ListView x:Name="recentActivityList" Grid.Row="1" 
-                                      SelectionMode="None" HasUnevenRows="True" 
-                                      SeparatorVisibility="Default" SeparatorColor="#e0e0e0"
-                                      Margin="0,0,5,0">
+                                       SelectionMode="None" HasUnevenRows="True" 
+                                       SeparatorVisibility="Default" SeparatorColor="#e0e0e0"
+                                       Margin="0,0,5,0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
@@ -340,8 +342,8 @@
                                                 <!-- Activity type icon with enhanced frame -->
                                                 <Frame Grid.RowSpan="3" Style="{StaticResource ActivityIconContainer}">
                                                     <Label HorizontalOptions="Center" VerticalOptions="Center"
-                                                          FontFamily="{StaticResource FontAwesomeSolid}"
-                                                          FontSize="18">
+                                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                                           FontSize="18">
                                                         <Label.Text>
                                                             <MultiBinding Converter="{StaticResource ActivityTypeToIconConverter}">
                                                                 <Binding Path="Type" />
@@ -371,8 +373,8 @@
 
                                                 <!-- Activity date with improved styling -->
                                                 <Label Grid.Column="1" Grid.Row="2" Text="{Binding FormattedDate}" 
-                                                      FontSize="13" TextColor="#666666" Opacity="0.8"
-                                                      VerticalOptions="Start"/>
+                                                       FontSize="13" TextColor="#666666" Opacity="0.8"
+                                                       VerticalOptions="Start"/>
 
                                                 <!-- Amount (if available) -->
                                                 <Label Grid.Column="2" Grid.RowSpan="3" 
