@@ -46,8 +46,8 @@ namespace TrackPointV.View.DBView.CrudView
             
             // Populate fields with user data
             usernameEntry.Text = user.Username;
-            passwordEntry.Text = "••••••••"; // Placeholder, we don't show actual password
-            confirmPasswordEntry.Text = "••••••••"; // Placeholder
+            passwordEntry.Text = ""; // Placeholder, we don't show actual password
+            confirmPasswordEntry.Text = ""; // Placeholder
             
             // Show read-only fields in Edit mode
             createdDateLabel.IsVisible = true;
@@ -101,7 +101,7 @@ namespace TrackPointV.View.DBView.CrudView
                     _user.Username = usernameEntry.Text.Trim();
                     
                     // Only update password if it's been changed (not the placeholder)
-                    if (passwordEntry.Text != "••••••••")
+                    if (passwordEntry.Text != "")
                     {
                         _user.Password = passwordEntry.Text;
                     }
@@ -198,7 +198,7 @@ namespace TrackPointV.View.DBView.CrudView
                     return false;
                 }
             }
-            else if (passwordEntry.Text != "••••••••")
+            else if (passwordEntry.Text != "")
             {
                 // In edit mode, only validate password if it's been changed
                 
