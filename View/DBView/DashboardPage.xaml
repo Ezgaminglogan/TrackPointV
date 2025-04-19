@@ -13,9 +13,9 @@
 
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Regular" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="Assets/Fonts/fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
 
         <!-- Glass Card Style with enhanced shadow and depth -->
@@ -84,21 +84,23 @@
 
         <!-- Style for Activity Item Container -->
         <Style x:Key="ActivityItemContainer" TargetType="Grid">
-            <Setter Property="Padding" Value="12,10" />
-            <Setter Property="Margin" Value="0,2,0,2" />
+            <Setter Property="Padding" Value="14,12" />
+            <Setter Property="Margin" Value="0,3,0,3" />
         </Style>
 
         <!-- Style for Activity Icon Container -->
         <Style x:Key="ActivityIconContainer" TargetType="Frame">
-            <Setter Property="WidthRequest" Value="40" />
-            <Setter Property="HeightRequest" Value="40" />
-            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="WidthRequest" Value="42" />
+            <Setter Property="HeightRequest" Value="42" />
+            <Setter Property="CornerRadius" Value="21" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="0,0,12,0" />
-            <Setter Property="BackgroundColor" Value="#f5f5f5" />
-            <Setter Property="BorderColor" Value="Transparent" />
+            <Setter Property="Margin" Value="0,0,14,0" />
+            <Setter Property="BackgroundColor" Value="#f5f9ff" />
+            <Setter Property="BorderColor" Value="#e0e9f8" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
             <Setter Property="Shadow">
-                <Shadow Brush="#30000000" Offset="0,2" Radius="3" />
+                <Shadow Brush="#302b5797" Offset="0,2" Radius="4" />
             </Setter>
         </Style>
     </ContentPage.Resources>
@@ -153,7 +155,7 @@
                                     VerticalOptions="Center"
                                     x:Name="btnLogout">
                                 <Button.ImageSource>
-                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                    <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
                                                      Glyph="&#xf2f5;"
                                                      Color="White"
                                                      Size="16" />
@@ -162,17 +164,45 @@
                         </Grid>
                     </Border>
 
+                    <!-- Login Notification Banner -->
+                    <Border Style="{StaticResource GlassCard}" BackgroundColor="#f0f7ff" Padding="12,8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Image WidthRequest="22" HeightRequest="22" 
+                                   HorizontalOptions="Center" VerticalOptions="Center"
+                                   Margin="0,0,12,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf2f6;"
+                                                     Color="#1a73e8"
+                                                     Size="18" />
+                                </Image.Source>
+                            </Image>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label x:Name="loginUserLabel" 
+                                       Text="Logged in User: admins by admins" 
+                                       FontSize="14" FontAttributes="Bold"
+                                       TextColor="#0d47a1" />
+                                <Label x:Name="loginTimeLabel" 
+                                       Text="Apr 19, 2025 12:51 pm" 
+                                       FontSize="12" TextColor="#666666" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
                     <!-- Enhanced Date and Time Display with subtle background -->
                     <Border Style="{StaticResource GlassCard}">
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" Padding="8,5">
-                            <Frame WidthRequest="36" HeightRequest="36" 
-                                   CornerRadius="18" Padding="0" Margin="0,0,12,0"
-                                   BackgroundColor="#e6f0ff" BorderColor="Transparent"
-                                   HorizontalOptions="Center" VerticalOptions="Center">
-                                <Label Text="&#xf017;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                       TextColor="#1a73e8" FontSize="18" 
-                                       HorizontalOptions="Center" VerticalOptions="Center" />
-                            </Frame>
+                            <Image WidthRequest="30" HeightRequest="30"
+                                   HorizontalOptions="Center" VerticalOptions="Center"
+                                   Margin="0,0,12,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf017;"
+                                                     Color="#1a73e8"
+                                                     Size="20" />
+                                </Image.Source>
+                            </Image>
 
                             <Label Grid.Column="1" x:Name="dateTimeLabel" 
                                    Text="Monday, January 1, 2023 - 12:00 PM" 
@@ -194,12 +224,15 @@
                         <!-- Total Inventory Card with subtle animation prep -->
                         <Border Grid.Column="0" Style="{StaticResource GlassCard}">
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                                <Frame WidthRequest="60" HeightRequest="60" 
-                                       CornerRadius="30" Padding="0" 
-                                       BackgroundColor="#e6f0ff" BorderColor="Transparent"
-                                       HorizontalOptions="Center" Margin="0,0,0,5">
-                                    <Label Text="&#xf466;" Style="{StaticResource IconStyle}" />
-                                </Frame>
+                                <Image WidthRequest="60" HeightRequest="60" 
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                         Glyph="&#xf466;" 
+                                                         Color="#1a73e8"
+                                                         Size="30" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Total Inventory" Style="{StaticResource CardTitleStyle}" />
                                 <Label x:Name="totalInventoryLabel" Text="0" Style="{StaticResource CardValueStyle}" />
                             </VerticalStackLayout>
@@ -214,18 +247,15 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                                <Frame WidthRequest="60" HeightRequest="60" 
-                                       CornerRadius="30" Padding="0" 
-                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
-                                       HorizontalOptions="Center" Margin="0,0,0,5">
-                                    <Frame.Shadow>
-                                        <Shadow Brush="#305c93eb" Offset="0,4" Radius="8" />
-                                    </Frame.Shadow>
-                                    <Grid>
-                                        <Ellipse Fill="#eef5ff" WidthRequest="60" HeightRequest="60" />
-                                        <Label Text="&#xf54e;" Style="{StaticResource IconStyle}" TextColor="#5c93eb" />
-                                    </Grid>
-                                </Frame>
+                                <Image WidthRequest="60" HeightRequest="60" 
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                         Glyph="&#xf54e;" 
+                                                         Color="#5c93eb"
+                                                         Size="30" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Today's Sales" Style="{StaticResource CardTitleStyle}" TextColor="#3b78e7" />
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label x:Name="salesTodayAmountLabel" Text="$0.00" Style="{StaticResource CardValueStyle}" TextColor="#3b78e7" />
@@ -245,18 +275,15 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                                <Frame WidthRequest="60" HeightRequest="60" 
-                                       CornerRadius="30" Padding="0" 
-                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
-                                       HorizontalOptions="Center" Margin="0,0,0,5">
-                                    <Frame.Shadow>
-                                        <Shadow Brush="#40ff9800" Offset="0,4" Radius="8" />
-                                    </Frame.Shadow>
-                                    <Grid>
-                                        <Ellipse Fill="#fff4e5" WidthRequest="60" HeightRequest="60" />
-                                    <Label Text="&#xf06a;" Style="{StaticResource IconStyle}" TextColor="#ff9800" />
-                                    </Grid>
-                                </Frame>
+                                <Image WidthRequest="60" HeightRequest="60" 
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                         Glyph="&#xf06a;" 
+                                                         Color="#ff9800"
+                                                         Size="30" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Low Stock Items" Style="{StaticResource CardTitleStyle}" TextColor="#e67e00" />
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label x:Name="lowStockLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#ff9800" />
@@ -274,18 +301,15 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                                <Frame WidthRequest="60" HeightRequest="60" 
-                                       CornerRadius="30" Padding="0" 
-                                       Background="{StaticResource CardBackgroundColor}" BorderColor="Transparent"
-                                       HorizontalOptions="Center" Margin="0,0,0,5">
-                                    <Frame.Shadow>
-                                        <Shadow Brush="#404caf50" Offset="0,4" Radius="8" />
-                                    </Frame.Shadow>
-                                    <Grid>
-                                        <Ellipse Fill="#e6f5e6" WidthRequest="60" HeightRequest="60" />
-                                        <Label Text="&#xf007;" Style="{StaticResource IconStyle}" TextColor="#4caf50" />
-                                    </Grid>
-                                </Frame>
+                                <Image WidthRequest="60" HeightRequest="60" 
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                         Glyph="&#xf007;" 
+                                                         Color="#4caf50"
+                                                         Size="30" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Active Users" Style="{StaticResource CardTitleStyle}" TextColor="#3d8c40" />
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label x:Name="userCountLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#4caf50" />
@@ -298,31 +322,35 @@
                     <!-- Enhanced Recent Activity Section with improved visual hierarchy and product details -->
                     <Border Style="{StaticResource GlassCard}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
                         <Grid RowDefinitions="Auto,*">
+                            <!-- Improved Header with better styling -->
                             <Border BackgroundColor="#f5f9ff" 
                                     StrokeShape="RoundRectangle 12,12,12,12"
                                     Stroke="#20a1d6ff" 
                                     Padding="15,10" Margin="0,0,0,15">
                                 <Grid ColumnDefinitions="Auto,*,Auto">
-                                    <Frame WidthRequest="32" HeightRequest="32" 
-                                           CornerRadius="16" Padding="0" Margin="0,0,10,0"
-                                           BackgroundColor="#e6f0ff" BorderColor="Transparent"
-                                           HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="&#xf017;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                               TextColor="#1a73e8" FontSize="16" 
-                                               HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Frame>
+                                    <Image WidthRequest="24" HeightRequest="24"
+                                           HorizontalOptions="Center" VerticalOptions="Center"
+                                           Margin="0,0,10,0">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                           Glyph="&#xf017;"
+                                                           Color="#1a73e8"
+                                                           Size="18" />
+                                        </Image.Source>
+                                    </Image>
 
                                     <Label Grid.Column="1" Text="Recent Activity" FontSize="18" FontAttributes="Bold" 
                                            TextColor="#0d47a1" VerticalOptions="Center" CharacterSpacing="0.5"/>
 
-                                    <Frame Grid.Column="2" WidthRequest="32" HeightRequest="32" 
-                                           CornerRadius="16" Padding="0"
-                                           BackgroundColor="#e6f0ff" BorderColor="Transparent"
+                                    <Image Grid.Column="2" WidthRequest="24" HeightRequest="24"
                                            HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="&#xf0a2;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                               TextColor="#1a73e8" FontSize="16" 
-                                               HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Frame>
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                           Glyph="&#xf0a2;"
+                                                           Color="#1a73e8"
+                                                           Size="18" />
+                                        </Image.Source>
+                                    </Image>
                                 </Grid>
                             </Border>
 
@@ -332,39 +360,112 @@
 
                             <ListView x:Name="recentActivityList" Grid.Row="1" 
                                        SelectionMode="None" HasUnevenRows="True" 
-                                       SeparatorVisibility="Default" SeparatorColor="#e0e0e0"
+                                       SeparatorVisibility="Default" SeparatorColor="#e5e9f2"
                                        Margin="0,0,5,0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
                                             <Grid Style="{StaticResource ActivityItemContainer}" 
                                                  ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                                
                                                 <!-- Activity type icon with enhanced frame -->
                                                 <Frame Grid.RowSpan="3" Style="{StaticResource ActivityIconContainer}">
-                                                    <Label HorizontalOptions="Center" VerticalOptions="Center"
-                                                           FontFamily="{StaticResource FontAwesomeSolid}"
-                                                           FontSize="18">
-                                                        <Label.Text>
-                                                            <MultiBinding Converter="{StaticResource ActivityTypeToIconConverter}">
-                                                                <Binding Path="Type" />
-                                                            </MultiBinding>
-                                                        </Label.Text>
-                                                        <Label.TextColor>
-                                                            <MultiBinding Converter="{StaticResource ActivityTypeToColorConverter}">
-                                                                <Binding Path="Type" />
-                                                            </MultiBinding>
-                                                        </Label.TextColor>
-                                                    </Label>
+                                                    <Image HorizontalOptions="Center" VerticalOptions="Center" 
+                                                           WidthRequest="22" HeightRequest="22">
+                                                        <Image.Triggers>
+                                                            <!-- Login icon -->
+                                                            <DataTrigger TargetType="Image" 
+                                                                         Binding="{Binding Type}" 
+                                                                         Value="Login">
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                                       Glyph="&#xf2f6;"
+                                                                                       Color="#1a73e8"
+                                                                                       Size="22" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            
+                                                            <!-- Product icon -->
+                                                            <DataTrigger TargetType="Image" 
+                                                                         Binding="{Binding Type}" 
+                                                                         Value="Product">
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                                       Glyph="&#xf466;"
+                                                                                       Color="#22c55e"
+                                                                                       Size="22" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            
+                                                            <!-- Sale icon -->
+                                                            <DataTrigger TargetType="Image" 
+                                                                         Binding="{Binding Type}" 
+                                                                         Value="Sale">
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                                       Glyph="&#xf155;"
+                                                                                       Color="#6366f1"
+                                                                                       Size="22" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            
+                                                            <!-- User icon -->
+                                                            <DataTrigger TargetType="Image" 
+                                                                         Binding="{Binding Type}" 
+                                                                         Value="User">
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                                       Glyph="&#xf007;"
+                                                                                       Color="#9333ea"
+                                                                                       Size="22" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            
+                                                            <!-- Default/fallback icon -->
+                                                            <DataTrigger TargetType="Image" 
+                                                                         Binding="{Binding Type}" 
+                                                                         Value="Inventory">
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                                       Glyph="&#xf07b;"
+                                                                                       Color="#14b8a6"
+                                                                                       Size="22" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                        </Image.Triggers>
+                                                        
+                                                        <!-- Default icon if no trigger matches -->
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                           Glyph="&#xf05a;"
+                                                                           Color="#64748b"
+                                                                           Size="22" />
+                                                        </Image.Source>
+                                                        <Image.Shadow>
+                                                            <Shadow Brush="#30000000" Offset="0,1" Radius="1" />
+                                                        </Image.Shadow>
+                                                    </Image>
                                                 </Frame>
 
                                                 <!-- Enhanced Activity text with improved typography -->
                                                 <Label Grid.Column="1" Text="{Binding DisplayText}" 
                                                       FontSize="15" TextColor="#333333" FontAttributes="Bold"
-                                                      LineBreakMode="TailTruncation" VerticalOptions="End"/>
+                                                      LineBreakMode="TailTruncation" VerticalOptions="End"
+                                                      Margin="0,0,0,2"/>
 
                                                 <!-- Product Details (if available) -->
                                                 <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="5"
-                                                           IsVisible="{Binding HasQuantity}">
+                                                           IsVisible="{Binding HasQuantity}" Margin="0,2,0,2">
                                                     <Label Text="Quantity:" FontSize="13" TextColor="#666666" 
                                                          Opacity="0.9" VerticalOptions="Center"/>
                                                     <Label Text="{Binding Quantity}" FontSize="13" TextColor="#4285f4" 

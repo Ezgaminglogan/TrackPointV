@@ -15,7 +15,7 @@ namespace TrackPointV
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("fa-solid-900.ttf", "Font Awesome 5 Free Solid");
+                    fonts.AddFont("fa-solid-900.ttf", "Font Awesome 6 Free Solid");
                 });
 
 #if DEBUG

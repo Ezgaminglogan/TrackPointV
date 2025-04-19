@@ -48,6 +48,10 @@ namespace TrackPointV.View.DBView
             _currentUsername = Preferences.Get("CurrentUser", "User");
             greetingLabel.Text = $"Welcome, {_currentUsername}!";
 
+            // Update login information
+            loginUserLabel.Text = $"Logged in User: {_currentUsername} by {_currentUsername}";
+            loginTimeLabel.Text = DateTime.Now.ToString("MMM dd, yyyy h:mm tt");
+
             // Ensure flyout is enabled when page appears
             Shell.SetFlyoutBehavior(Shell.Current, FlyoutBehavior.Flyout);
 

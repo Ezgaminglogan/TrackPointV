@@ -8,9 +8,9 @@
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
 
         <!-- Core styles -->
@@ -174,9 +174,15 @@
                                    StrokeShape="RoundRectangle 16,16,16,16"
                                    Padding="16" Margin="0,0,16,0"
                                    WidthRequest="60" HeightRequest="60">
-                                <Label Text="&#xf07a;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                       FontSize="26" TextColor="{StaticResource PrimaryColor}" 
-                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Image WidthRequest="26" HeightRequest="26" 
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf07a;"
+                                                      Color="{StaticResource PrimaryColor}"
+                                                      Size="26" />
+                                    </Image.Source>
+                                </Image>
                             </Border>
 
                             <!-- Title and Subtitle -->
@@ -193,7 +199,14 @@
                     <Border Style="{StaticResource MainCardStyle}">
                         <VerticalStackLayout Spacing="16">
                             <HorizontalStackLayout Spacing="10">
-                                <Label Text="&#xf007;" Style="{StaticResource IconStyle}" />
+                                <Image WidthRequest="22" HeightRequest="22" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf007;"
+                                                      Color="{StaticResource PrimaryColor}"
+                                                      Size="22" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="User Information" Style="{StaticResource SectionTitleStyle}" VerticalOptions="Center" Margin="0" />
                             </HorizontalStackLayout>
 
@@ -227,7 +240,14 @@
                     <Border Style="{StaticResource MainCardStyle}">
                         <VerticalStackLayout Spacing="16">
                             <HorizontalStackLayout Spacing="10">
-                                <Label Text="&#xf466;" Style="{StaticResource IconStyle}" />
+                                <Image WidthRequest="22" HeightRequest="22" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf466;"
+                                                      Color="{StaticResource PrimaryColor}"
+                                                      Size="22" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Add Products" Style="{StaticResource SectionTitleStyle}" VerticalOptions="Center" Margin="0" />
                             </HorizontalStackLayout>
 
@@ -299,7 +319,14 @@
                     <Border Style="{StaticResource MainCardStyle}">
                         <VerticalStackLayout Spacing="16">
                             <HorizontalStackLayout Spacing="10">
-                                <Label Text="&#xf07a;" Style="{StaticResource IconStyle}" />
+                                <Image WidthRequest="22" HeightRequest="22" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf07a;"
+                                                      Color="{StaticResource PrimaryColor}"
+                                                      Size="22" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Shopping Cart" Style="{StaticResource SectionTitleStyle}" 
                                        VerticalOptions="Center" Margin="0" />
                             </HorizontalStackLayout>
@@ -330,10 +357,18 @@
                                                            TextColor="{StaticResource SecondaryColor}" FontAttributes="Bold"
                                                            VerticalOptions="Center" FontSize="16" />
 
-                                                    <Button Text="&#xf1f8;" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                            BackgroundColor="Transparent" TextColor="{StaticResource DangerColor}"
+                                                    <Button BackgroundColor="Transparent"
                                                             CommandParameter="{Binding .}"
-                                                            Clicked="RemoveCartItem_Clicked" />
+                                                            Clicked="RemoveCartItem_Clicked"
+                                                            WidthRequest="32" HeightRequest="32"
+                                                            Padding="0" Margin="0">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                         Glyph="&#xf1f8;"
+                                                                         Color="{StaticResource DangerColor}"
+                                                                         Size="18" />
+                                                        </Button.ImageSource>
+                                                    </Button>
                                                 </HorizontalStackLayout>
                                             </Grid>
                                         </Border>
@@ -350,12 +385,15 @@
                                                StrokeShape="RoundRectangle 40,40,40,40"
                                                Padding="16"
                                                WidthRequest="80" HeightRequest="80">
-                                            <Label Text="&#xf07a;" 
-                                                   FontFamily="{StaticResource FontAwesomeSolid}" 
-                                                   FontSize="36" 
-                                                   TextColor="{StaticResource TextLightColor}"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center" />
+                                            <Image WidthRequest="36" HeightRequest="36" 
+                                                   HorizontalOptions="Center" VerticalOptions="Center">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                  Glyph="&#xf07a;"
+                                                                  Color="{StaticResource TextLightColor}"
+                                                                  Size="36" />
+                                                </Image.Source>
+                                            </Image>
                                         </Border>
                                         <Label Grid.Row="1"
                                                Text="Your cart is empty" 

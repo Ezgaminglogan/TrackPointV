@@ -8,9 +8,9 @@
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
 
         <Style x:Key="GlassCard" TargetType="Border">
@@ -86,8 +86,15 @@
                     <!-- Header with Add User Button -->
                     <Border Style="{StaticResource GlassCard}">
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Padding="10">
-                            <Label Grid.RowSpan="2" Text="&#xf007;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                   FontSize="40" TextColor="#1a73e8" Margin="0,0,15,0" VerticalOptions="Center"/>
+                            <Image Grid.RowSpan="2" WidthRequest="42" HeightRequest="42" 
+                                   Margin="0,0,15,0" VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                    Glyph="&#xf007;"
+                                                    Color="#1a73e8"
+                                                    Size="32" />
+                                </Image.Source>
+                            </Image>
 
                             <Label Grid.Column="1" Text="USER MANAGEMENT" 
                                    FontSize="22" FontAttributes="Bold" 
@@ -124,7 +131,14 @@
                         <!-- Total Users Card -->
                         <Border Grid.Column="0" Style="{StaticResource GlassCard}">
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
-                                <Label Text="&#xf0c0;" Style="{StaticResource IconStyle}" />
+                                <Image WidthRequest="32" HeightRequest="32" Margin="0,0,0,5">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf0c0;"
+                                                      Color="#1a73e8"
+                                                      Size="28" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Total Users" Style="{StaticResource CardTitleStyle}" />
                                 <Label x:Name="totalUsersLabel" Text="0" Style="{StaticResource CardValueStyle}" />
                             </VerticalStackLayout>
@@ -133,7 +147,14 @@
                         <!-- Active Users Card -->
                         <Border Grid.Column="1" Style="{StaticResource GlassCard}">
                             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
-                                <Label Text="&#xf2f6;" Style="{StaticResource IconStyle}" TextColor="#4caf50" />
+                                <Image WidthRequest="32" HeightRequest="32" Margin="0,0,0,5">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf2f6;"
+                                                      Color="#4caf50"
+                                                      Size="28" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Active Today" Style="{StaticResource CardTitleStyle}" />
                                 <Label x:Name="activeUsersLabel" Text="0" Style="{StaticResource CardValueStyle}" TextColor="#4caf50" />
                             </VerticalStackLayout>
@@ -149,14 +170,17 @@
                                        CancelButtonColor="#1a73e8" 
                                        TextColor="Black"/>
                             
-                            <Button Grid.Column="1" Text="&#xf0b0;" 
-                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                            <Button Grid.Column="1" BackgroundColor="Transparent"
                                     Clicked="FilterButton_Clicked"
-                                    BackgroundColor="Transparent"
-                                    TextColor="#1a73e8"
-                                    FontSize="18"
                                     WidthRequest="50"
-                                    Margin="0,0,5,0" />
+                                    Margin="0,0,5,0">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                  Glyph="&#xf0b0;"
+                                                  Color="#1a73e8"
+                                                  Size="18" />
+                                </Button.ImageSource>
+                            </Button>
                         </Grid>
                     </Border>
 
@@ -164,12 +188,24 @@
                     <Border Style="{StaticResource GlassCard}">
                         <Grid RowDefinitions="Auto,*">
                             <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
-                                <Label Text="&#xf0c0;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                       TextColor="#1a73e8" FontSize="18" VerticalOptions="Center" Margin="0,0,10,0" />
+                                <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Margin="0,0,10,0">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf0c0;"
+                                                      Color="#1a73e8"
+                                                      Size="18" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Grid.Column="1" Text="User Accounts" FontSize="18" FontAttributes="Bold" 
                                        TextColor="#0d47a1" VerticalOptions="Center"/>
-                                <Label Grid.Column="2" Text="&#xf0ae;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                       TextColor="#1a73e8" FontSize="18" VerticalOptions="Center" />
+                                <Image Grid.Column="2" WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                      Glyph="&#xf0ae;"
+                                                      Color="#1a73e8"
+                                                      Size="18" />
+                                    </Image.Source>
+                                </Image>
                             </Grid>
                                 
                             <Label x:Name="noUsersLabel" Text="No users found" 
@@ -194,10 +230,14 @@
                                                        StrokeShape="RoundRectangle 25,25,25,25" Padding="0" Margin="0,0,15,0"
                                                        BackgroundColor="#e3f2fd" Stroke="#bbdefb"
                                                        HorizontalOptions="Center" VerticalOptions="Center">
-                                                    <Label Text="&#xf007;" 
-                                                           FontFamily="{StaticResource FontAwesomeSolid}"
-                                                           FontSize="24" TextColor="#1a73e8"
-                                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                                    <Image WidthRequest="28" HeightRequest="28">
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                         Glyph="&#xf007;"
+                                                                         Color="#1a73e8"
+                                                                         Size="22" />
+                                                        </Image.Source>
+                                                    </Image>
                                                 </Border>
                                                 
                                                 <!-- Username -->
@@ -222,22 +262,32 @@
                                                              Orientation="Horizontal" Spacing="10"
                                                              VerticalOptions="Center">
                                                     <!-- Edit Button -->
-                                                    <Button Text="&#xf044;" 
-                                                            FontFamily="{StaticResource FontAwesomeSolid}"
-                                                            BackgroundColor="Transparent" TextColor="#1a73e8"
-                                                            FontSize="18" WidthRequest="40" HeightRequest="40"
+                                                    <Button BackgroundColor="Transparent"
+                                                            WidthRequest="40" HeightRequest="40"
                                                             Padding="0" CornerRadius="20"
                                                             CommandParameter="{Binding Id}"
-                                                            Clicked="EditUser_Clicked" />
+                                                            Clicked="EditUser_Clicked">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                         Glyph="&#xf044;"
+                                                                         Color="#1a73e8"
+                                                                         Size="18" />
+                                                        </Button.ImageSource>
+                                                    </Button>
                                                     
                                                     <!-- Delete Button -->
-                                                    <Button Text="&#xf2ed;" 
-                                                            FontFamily="{StaticResource FontAwesomeSolid}"
-                                                            BackgroundColor="Transparent" TextColor="#f44336"
-                                                            FontSize="18" WidthRequest="40" HeightRequest="40"
+                                                    <Button BackgroundColor="Transparent"
+                                                            WidthRequest="40" HeightRequest="40"
                                                             Padding="0" CornerRadius="20"
                                                             CommandParameter="{Binding Id}"
-                                                            Clicked="DeleteUser_Clicked" />
+                                                            Clicked="DeleteUser_Clicked">
+                                                        <Button.ImageSource>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                         Glyph="&#xf2ed;"
+                                                                         Color="#f44336"
+                                                                         Size="18" />
+                                                        </Button.ImageSource>
+                                                    </Button>
                                                 </StackLayout>
                                             </Grid>
                                         </Border>

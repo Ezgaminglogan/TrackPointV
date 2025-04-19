@@ -7,9 +7,9 @@
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Regular" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="Assets/Fonts/fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
         
         <Style x:Key="GlassCard" TargetType="Border">
@@ -120,15 +120,29 @@
                             </Grid.RowDefinitions>
                             
                             <!-- Username -->
-                            <HorizontalStackLayout Grid.Row="0">
-                                <Label Text="&#xf007;" Style="{StaticResource IconStyle}" />
+                            <HorizontalStackLayout Grid.Row="0" Spacing="10">
+                                <Image WidthRequest="18" HeightRequest="18" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                        Glyph="&#xf007;"
+                                                        Color="#1a73e8"
+                                                        Size="18" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Username" FontSize="16" TextColor="#1a73e8" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                             <Entry Grid.Row="1" Placeholder="Choose a username" Style="{StaticResource EntryStyle}" x:Name="usernameEntry" />
 
                             <!-- Password -->
-                            <HorizontalStackLayout Grid.Row="2">
-                                <Label Text="&#xf023;" Style="{StaticResource IconStyle}" />
+                            <HorizontalStackLayout Grid.Row="2" Spacing="10">
+                                <Image WidthRequest="18" HeightRequest="18" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                        Glyph="&#xf023;"
+                                                        Color="#1a73e8"
+                                                        Size="18" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Password" FontSize="16" TextColor="#1a73e8" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                             <Grid Grid.Row="3">
@@ -145,7 +159,7 @@
                                         Clicked="OnPasswordVisibilityToggle_Clicked">
                                     <Button.ImageSource>
                                         <FontImageSource x:Name="passwordVisibilityIcon"
-                                                        FontFamily="{StaticResource FontAwesomeSolid}"
+                                                        FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
                                                         Glyph="&#xf06e;"
                                                         Color="#8eadd4"
                                                         Size="18" />
@@ -154,8 +168,15 @@
                             </Grid>
 
                             <!-- Confirm Password -->
-                            <HorizontalStackLayout Grid.Row="4">
-                                <Label Text="&#xf023;" Style="{StaticResource IconStyle}" />
+                            <HorizontalStackLayout Grid.Row="4" Spacing="10">
+                                <Image WidthRequest="18" HeightRequest="18" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                        Glyph="&#xf023;"
+                                                        Color="#1a73e8"
+                                                        Size="18" />
+                                    </Image.Source>
+                                </Image>
                                 <Label Text="Confirm Password" FontSize="16" TextColor="#1a73e8" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                             <Grid Grid.Row="5">
@@ -172,7 +193,7 @@
                                         Clicked="OnConfirmPasswordVisibilityToggle_Clicked">
                                     <Button.ImageSource>
                                         <FontImageSource x:Name="confirmPasswordVisibilityIcon"
-                                                        FontFamily="{StaticResource FontAwesomeSolid}"
+                                                        FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
                                                         Glyph="&#xf06e;"
                                                         Color="#8eadd4"
                                                         Size="18" />
@@ -188,7 +209,7 @@
                                 Margin="0,15,0,0"
                                 HeightRequest="45">
                             <Button.ImageSource>
-                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
                                              Glyph="&#xf234;"
                                              Color="White"
                                              Size="18" />

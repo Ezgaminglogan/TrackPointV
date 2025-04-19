@@ -5,11 +5,11 @@ using Microsoft.Maui.Graphics;
 
 namespace TrackPointV.Converters
 {
-    public class ActivityTypeToIconConverter : IMultiValueConverter
+    public class ActivityTypeToIconConverter : IValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] is string type)
+            if (value is string type)
             {
                 return type switch
                 {
@@ -18,38 +18,40 @@ namespace TrackPointV.Converters
                     "User" => "\uf007",    // user
                     "Inventory" => "\uf07b", // folder
                     "Purchase" => "\uf07a", // shopping-cart
+                    "Login" => "\uf2f6",    // sign-in
                     _ => "\uf05a"          // info-circle
                 };
             }
             return "\uf05a"; // Default icon
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class ActivityTypeToColorConverter : IMultiValueConverter
+    public class ActivityTypeToColorConverter : IValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] is string type)
+            if (value is string type)
             {
                 return type switch
                 {
-                    "Product" => Color.FromArgb("#22c55e"),  // Green
-                    "Sale" => Color.FromArgb("#6366f1"),     // Indigo/Purple (primary)
-                    "User" => Color.FromArgb("#9333ea"),     // Purple
-                    "Inventory" => Color.FromArgb("#14b8a6"), // Teal
-                    "Purchase" => Color.FromArgb("#0ea5e9"), // Sky blue
-                    _ => Color.FromArgb("#64748b")           // Slate
+                    "Product" => Colors.Green,  
+                    "Sale" => Colors.Purple,
+                    "User" => Colors.Purple,
+                    "Inventory" => Colors.Teal,
+                    "Purchase" => Colors.Blue,
+                    "Login" => Colors.Blue,
+                    _ => Colors.Gray
                 };
             }
-            return Color.FromArgb("#64748b"); // Default color
+            return Colors.Gray;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

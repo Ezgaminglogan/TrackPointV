@@ -310,7 +310,7 @@ namespace TrackPointV.Service
                     -- Get recent user logins
                     SELECT 
                         u.Id AS ItemId,
-                        'User' AS ActivityType,
+                        'Login' AS ActivityType,
                         'Logged in' AS Action,
                         u.Username AS ItemName,
                         u.LastLoginDate AS ActivityDate,

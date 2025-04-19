@@ -8,9 +8,9 @@
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
 
         <Style x:Key="GlassCard" TargetType="Border">
@@ -70,8 +70,15 @@
                 <!-- Header -->
                 <Border Style="{StaticResource GlassCard}">
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Padding="10">
-                        <Label Grid.RowSpan="2" Text="&#xf007;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                               FontSize="40" TextColor="#1a73e8" Margin="0,0,15,0" VerticalOptions="Center"/>
+                        <Image Grid.RowSpan="2" WidthRequest="42" HeightRequest="42" 
+                               Margin="0,0,15,0" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                Glyph="&#xf007;"
+                                                Color="#1a73e8"
+                                                Size="32" />
+                            </Image.Source>
+                        </Image>
 
                         <Label Grid.Column="1" x:Name="headerLabel" Text="ADD NEW USER" 
                                FontSize="22" FontAttributes="Bold" 
@@ -100,12 +107,18 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <Entry x:Name="passwordEntry" Placeholder="Enter password" 
                                    IsPassword="True" Style="{StaticResource FormEntryStyle}" />
-                            <Button Grid.Column="1" Text="&#xf06e;" 
-                                    FontFamily="{StaticResource FontAwesomeSolid}"
-                                    BackgroundColor="Transparent" TextColor="#1a73e8"
-                                    FontSize="18" WidthRequest="40" HeightRequest="40"
+                            <Button Grid.Column="1" 
+                                    BackgroundColor="Transparent"
+                                    WidthRequest="40" HeightRequest="40"
                                     Padding="0" CornerRadius="20"
-                                    Clicked="TogglePassword_Clicked" />
+                                    Clicked="TogglePassword_Clicked">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                  Glyph="&#xf06e;"
+                                                  Color="#1a73e8"
+                                                  Size="18" />
+                                </Button.ImageSource>
+                            </Button>
                         </Grid>
 
                         <!-- Confirm Password Field -->
@@ -113,12 +126,18 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <Entry x:Name="confirmPasswordEntry" Placeholder="Confirm password" 
                                    IsPassword="True" Style="{StaticResource FormEntryStyle}" />
-                            <Button Grid.Column="1" Text="&#xf06e;" 
-                                    FontFamily="{StaticResource FontAwesomeSolid}"
-                                    BackgroundColor="Transparent" TextColor="#1a73e8"
-                                    FontSize="18" WidthRequest="40" HeightRequest="40"
+                            <Button Grid.Column="1"
+                                    BackgroundColor="Transparent" 
+                                    WidthRequest="40" HeightRequest="40"
                                     Padding="0" CornerRadius="20"
-                                    Clicked="ToggleConfirmPassword_Clicked" />
+                                    Clicked="ToggleConfirmPassword_Clicked">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                  Glyph="&#xf06e;"
+                                                  Color="#1a73e8"
+                                                  Size="18" />
+                                </Button.ImageSource>
+                            </Button>
                         </Grid>
 
                         <!-- Created Date (Read-only in Edit mode) -->

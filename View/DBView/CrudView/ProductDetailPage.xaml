@@ -8,9 +8,9 @@
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
         <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
-            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
-            <On Platform="iOS" Value="Font Awesome 5 Free" />
-            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 5 Free Solid" />
+            <On Platform="Android" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
+            <On Platform="iOS" Value="fa-solid-900" />
+            <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
 
         <Style x:Key="GlassCard" TargetType="Border">
@@ -25,10 +25,9 @@
             <Setter Property="Margin" Value="10,8"/>
         </Style>
 
-        <Style x:Key="IconStyle" TargetType="Label">
-            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
-            <Setter Property="TextColor" Value="#1a73e8" />
-            <Setter Property="FontSize" Value="24" />
+        <Style x:Key="IconStyle" TargetType="Image">
+            <Setter Property="HeightRequest" Value="26" />
+            <Setter Property="WidthRequest" Value="26" />
             <Setter Property="HorizontalOptions" Value="Center" />
             <Setter Property="VerticalOptions" Value="Center" />
         </Style>
@@ -134,9 +133,14 @@
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Padding="10">
                         <Border StrokeShape="RoundRectangle 15" BackgroundColor="#E6F0FF" Padding="12" 
                                 Margin="0,0,15,0">
-                            <Label Text="&#xf466;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                   TextColor="#1a73e8" FontSize="40" 
-                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                            <Image WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf466;"
+                                                     Color="#1a73e8"
+                                                     Size="40" />
+                                </Image.Source>
+                            </Image>
                         </Border>
 
                         <VerticalStackLayout Grid.Column="1">
@@ -159,8 +163,14 @@
                     <VerticalStackLayout Padding="10">
                         <!-- Product Name -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="&#xf02b;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
-                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf02b;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Product Name" Style="{StaticResource LabelStyle}" />
                                 <Border Style="{StaticResource InputBorderStyle}">
@@ -172,8 +182,14 @@
 
                         <!-- Product Price -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="&#xf155;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
-                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf155;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Price" Style="{StaticResource LabelStyle}" />
                                 <Border Style="{StaticResource InputBorderStyle}">
@@ -189,8 +205,14 @@
 
                         <!-- Product Stock -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="&#xf49e;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
-                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf49e;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Stock Quantity" Style="{StaticResource LabelStyle}" />
                                 <Border Style="{StaticResource InputBorderStyle}">
@@ -202,8 +224,14 @@
 
                         <!-- Product Description -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="&#xf15c;" Style="{StaticResource IconStyle}" VerticalOptions="Start" 
-                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Start" Margin="0,12,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf15c;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Description" Style="{StaticResource LabelStyle}" />
                                 <Border Style="{StaticResource InputBorderStyle}">
@@ -215,8 +243,14 @@
 
                         <!-- Date Uploaded (Read-only for edit mode) -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" IsVisible="False" x:Name="dateUploadedGrid">
-                            <Label Text="&#xf073;" Style="{StaticResource IconStyle}" VerticalOptions="End" 
-                                   Margin="0,12,0,0" Grid.Row="0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf073;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Date Uploaded" Style="{StaticResource LabelStyle}" 
                                        x:Name="dateUploadedLabel" />
@@ -229,8 +263,14 @@
 
                         <!-- Validation Message -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" IsVisible="False" x:Name="validationGrid">
-                            <Label Text="&#xf071;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                   TextColor="#f44336" FontSize="24" VerticalOptions="Center" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf071;"
+                                                     Color="#f44336"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <Label x:Name="validationLabel" TextColor="#f44336" Grid.Column="1"
                                    FontSize="14" VerticalOptions="Center" />
                         </Grid>
@@ -241,8 +281,8 @@
                                     Style="{StaticResource CancelButton}" 
                                     Clicked="CancelButton_Clicked">
                                 <Button.ImageSource>
-                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
-                                                     Glyph="&#xf00d;" Color="White" />
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid" 
+                                                     Glyph="&#xf00d;" Color="White" Size="16" />
                                 </Button.ImageSource>
                             </Button>
 
@@ -250,8 +290,8 @@
                                     Grid.Column="1" Style="{StaticResource ActionButton}" 
                                     Clicked="SaveButton_Clicked">
                                 <Button.ImageSource>
-                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
-                                                     Glyph="&#xf0c7;" Color="White" />
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid" 
+                                                     Glyph="&#xf0c7;" Color="White" Size="16" />
                                 </Button.ImageSource>
                             </Button>
                         </Grid>
@@ -262,8 +302,14 @@
                 <Border Style="{StaticResource GlassCard}" x:Name="viewModeSection" IsVisible="False">
                     <VerticalStackLayout Spacing="15">
                         <Grid ColumnDefinitions="Auto,*">
-                            <Label Text="&#xf080;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                   TextColor="#1a73e8" FontSize="24" VerticalOptions="Center" Margin="0,0,10,0" />
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf080;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
                             <Label Text="Product Statistics" Grid.Column="1" FontSize="18" FontAttributes="Bold" 
                                    TextColor="#0d47a1" VerticalOptions="Center" />
                         </Grid>
@@ -272,8 +318,14 @@
                             <!-- Date Added -->
                             <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource StatCardStyle}">
                                 <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
-                                    <Label Text="&#xf073;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Image WidthRequest="22" HeightRequest="22" HorizontalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf073;"
+                                                             Color="#1a73e8"
+                                                             Size="22" />
+                                        </Image.Source>
+                                    </Image>
                                     <Label Text="Date Added" Grid.Row="1" FontSize="14" TextColor="#666666" 
                                            HorizontalOptions="Center" />
                                     <Label x:Name="dateAddedValue" Grid.Row="2" Text="Jan 1, 2023" FontSize="16" 
@@ -284,8 +336,14 @@
                             <!-- Last Updated -->
                             <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource StatCardStyle}">
                                 <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
-                                    <Label Text="&#xf044;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Image WidthRequest="22" HeightRequest="22" HorizontalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf044;"
+                                                             Color="#1a73e8"
+                                                             Size="22" />
+                                        </Image.Source>
+                                    </Image>
                                     <Label Text="Last Updated" Grid.Row="1" FontSize="14" TextColor="#666666" 
                                            HorizontalOptions="Center" />
                                     <Label x:Name="lastUpdatedValue" Grid.Row="2" Text="Jan 1, 2023" FontSize="16" 
@@ -296,8 +354,14 @@
                             <!-- Sales Count -->
                             <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource StatCardStyle}">
                                 <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
-                                    <Label Text="&#xf07a;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Image WidthRequest="22" HeightRequest="22" HorizontalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf07a;"
+                                                             Color="#1a73e8"
+                                                             Size="22" />
+                                        </Image.Source>
+                                    </Image>
                                     <Label Text="Total Sales" Grid.Row="1" FontSize="14" TextColor="#666666" 
                                            HorizontalOptions="Center" />
                                     <Label x:Name="salesCountValue" Grid.Row="2" Text="0" FontSize="16" 
@@ -308,8 +372,14 @@
                             <!-- Revenue -->
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource StatCardStyle}">
                                 <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
-                                    <Label Text="&#xf0d6;" FontFamily="{StaticResource FontAwesomeSolid}" 
-                                           TextColor="#1a73e8" FontSize="22" HorizontalOptions="Center" />
+                                    <Image WidthRequest="22" HeightRequest="22" HorizontalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf0d6;"
+                                                             Color="#1a73e8"
+                                                             Size="22" />
+                                        </Image.Source>
+                                    </Image>
                                     <Label Text="Total Revenue" Grid.Row="1" FontSize="14" TextColor="#666666" 
                                            HorizontalOptions="Center" />
                                     <Label x:Name="revenueValue" Grid.Row="2" Text="$0.00" FontSize="16" 
@@ -322,8 +392,8 @@
                         <Button Text="Edit Product" Style="{StaticResource ActionButton}" 
                                 Clicked="EditButton_Clicked" Margin="0,15,0,0">
                             <Button.ImageSource>
-                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" 
-                                                 Glyph="&#xf044;" Color="White" />
+                                <FontImageSource FontFamily="Font Awesome 6 Free Solid" 
+                                                 Glyph="&#xf044;" Color="White" Size="16" />
                             </Button.ImageSource>
                         </Button>
                     </VerticalStackLayout>
