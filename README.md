@@ -1,7 +1,7 @@
 # TrackPointV
 
 <div align="center">
-  <img src="Screenshots/logo.png" alt="TrackPointV Logo" width="200">
+  <img src="Resources/Images/inventory.png" alt="TrackPointV Logo" width="200">
   <h3>Comprehensive Inventory and Sales Management System</h3>
 </div>
 
@@ -80,14 +80,32 @@ The default admin credentials are:
 ## Screenshots
 
 <div align="center">
-  <img src="Screenshots/dashboard.png" alt="Dashboard" width="800">
-  <p><em>Dashboard with sales analytics and quick access to core functions</em></p>
+  <img src="Screenshots/Screenshot_1.png" alt="Login Screen" width="800">
+  <p><em>Secure login interface for user authentication</em></p>
   
-  <img src="Screenshots/inventory.png" alt="Inventory Management" width="800">
-  <p><em>Product inventory with stock monitoring and management tools</em></p>
+  <img src="Screenshots/Screenshot_2.png" alt="Registration Screen" width="800">
+  <p><em>User registration form for creating new system accounts</em></p>
   
-  <img src="Screenshots/sales.png" alt="Sales Processing" width="800">
-  <p><em>Sales interface for processing customer transactions</em></p>
+  <img src="Screenshots/Screenshot_3.png" alt="Dashboard" width="800">
+  <p><em>Main dashboard with key metrics and navigation options</em></p>
+  
+  <img src="Screenshots/Screenshot_4.png" alt="Dashboard Details" width="800">
+  <p><em>Extended dashboard view with additional analytics</em></p>
+  
+  <img src="Screenshots/Screenshot_5.png" alt="User Management" width="800">
+  <p><em>User management interface for controlling access and permissions</em></p>
+  
+  <img src="Screenshots/Screenshot_6.png" alt="Sales Dashboard" width="800">
+  <p><em>Sales dashboard showing revenue metrics and transaction history</em></p>
+  
+  <img src="Screenshots/Screenshot_7.png" alt="Sales Details" width="800">
+  <p><em>Detailed sales analytics and transaction processing tools</em></p>
+  
+  <img src="Screenshots/Screenshot_8.png" alt="Product Dashboard" width="800">
+  <p><em>Product inventory management with stock levels and categories</em></p>
+  
+  <img src="Screenshots/Screenshot_9.png" alt="Product Details" width="800">
+  <p><em>Detailed product information and inventory controls</em></p>
 </div>
 
 ## Architecture
