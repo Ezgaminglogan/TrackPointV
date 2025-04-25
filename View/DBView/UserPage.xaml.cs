@@ -12,6 +12,8 @@ namespace TrackPointV.View.DBView
         private readonly UserService _userService;
         private ObservableCollection<User> _users;
         private string _searchText = string.Empty;
+        private bool _showGoogleUsersOnly = false;
+        private bool _showRegularUsersOnly = false;
 
         public UserPage()
         {
@@ -38,8 +40,19 @@ namespace TrackPointV.View.DBView
                 _users.Clear();
                 foreach (var user in users)
                 {
-                    if (string.IsNullOrEmpty(_searchText) || 
-                        user.Username.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
+                    // Filter by search text
+                    bool matchesSearch = string.IsNullOrEmpty(_searchText) || 
+                        user.Username.Contains(_searchText, StringComparison.OrdinalIgnoreCase) ||
+                        (user.DisplayName != null && user.DisplayName.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
+                    
+                    // Filter by user type (Google or Regular)
+                    bool matchesType = true;
+                    if (_showGoogleUsersOnly && !user.IsGoogleUser)
+                        matchesType = false;
+                    if (_showRegularUsersOnly && user.IsGoogleUser)
+                        matchesType = false;
+                    
+                    if (matchesSearch && matchesType)
                     {
                         _users.Add(user);
                     }
@@ -75,6 +88,10 @@ namespace TrackPointV.View.DBView
                     u.LastLoginDate.Value.Date == today);
                 
                 activeUsersLabel.Text = activeToday.ToString();
+                
+                // Calculate Google vs regular users
+                int googleUsers = allUsers.Count(u => u.IsGoogleUser);
+                Debug.WriteLine($"Google Users: {googleUsers}, Regular Users: {allUsers.Count - googleUsers}");
             }
             catch (Exception ex)
             {
@@ -94,10 +111,30 @@ namespace TrackPointV.View.DBView
             await LoadUsersAsync();
         }
 
-        private void FilterButton_Clicked(object sender, EventArgs e)
+        private async void FilterButton_Clicked(object sender, EventArgs e)
         {
-            // Implement filter functionality (e.g., show a popup with filter options)
-            DisplayAlert("Filter", "Filter functionality will be implemented here", "OK");
+            string action = await DisplayActionSheet("Filter Users", "Cancel", null, 
+                "All Users", "Google Users Only", "Regular Users Only");
+                
+            switch (action)
+            {
+                case "All Users":
+                    _showGoogleUsersOnly = false;
+                    _showRegularUsersOnly = false;
+                    break;
+                case "Google Users Only":
+                    _showGoogleUsersOnly = true;
+                    _showRegularUsersOnly = false;
+                    break;
+                case "Regular Users Only":
+                    _showGoogleUsersOnly = false;
+                    _showRegularUsersOnly = true;
+                    break;
+                default:
+                    return; // Cancel was selected or back button pressed
+            }
+            
+            await LoadUsersAsync();
         }
 
         private async void AddUserButton_Clicked(object sender, EventArgs e)
@@ -121,9 +158,16 @@ namespace TrackPointV.View.DBView
         {
             if (sender is Button button && button.CommandParameter is int userId)
             {
-                bool confirm = await DisplayAlert("Confirm Delete", 
-                    "Are you sure you want to delete this user? This action cannot be undone.", 
-                    "Delete", "Cancel");
+                // Get the user to check if it's a Google user
+                var user = await _userService.GetUserByIdAsync(userId);
+                if (user == null) return;
+                
+                // Add additional warning for Google users
+                string message = user.IsGoogleUser
+                    ? "Are you sure you want to delete this Google user? They will need to reconnect their Google account. This action cannot be undone."
+                    : "Are you sure you want to delete this user? This action cannot be undone.";
+                
+                bool confirm = await DisplayAlert("Confirm Delete", message, "Delete", "Cancel");
                 
                 if (confirm)
                 {

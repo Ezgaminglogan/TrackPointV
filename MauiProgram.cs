@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using TrackPointV.Service;
 using TrackPointV.View.DBView;
+using TrackPointV.View;
 
 namespace TrackPointV
 {
@@ -22,9 +23,16 @@ namespace TrackPointV
     		builder.Logging.AddDebug();
 #endif
 
-            // Add this to your builder.Services section
+            // Register services
             builder.Services.AddSingleton<IUserAuthentication, UserAuthentication>();
             builder.Services.AddTransient<DashboardPage>();
+            builder.Services.AddTransient<GoogleSignInPage>();
+
+            // Register Google authentication service
+            builder.Services.AddSingleton(new GoogleAuthWindowsService(
+                "16120070774-tjfv13ssju0f6e1ftrqk2av06713g9q1.apps.googleusercontent.com",
+                "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"));
+            
             return builder.Build();
         }
     }

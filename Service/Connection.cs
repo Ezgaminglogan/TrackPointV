@@ -5,7 +5,8 @@ namespace TrackPointV.Service
 {
     public class Connection
     {
-        private readonly string ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=E:\\Programming\\TrackPointV\\Database\\TrackPoints.mdf;Integrated Security=True";
+        // Use a connection string with the correct format for both direct database operations and SQL commands
+        private readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\logan\source\repos\TrackPointV\Database\TrackPoints.mdf;Integrated Security=True";
 
         // Get a new SQL connection
         public SqlConnection GetConnection()

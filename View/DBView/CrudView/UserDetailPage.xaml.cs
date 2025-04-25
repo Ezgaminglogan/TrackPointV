@@ -11,6 +11,7 @@ namespace TrackPointV.View.DBView.CrudView
         private bool _isEditMode;
         private bool _isPasswordVisible = false;
         private bool _isConfirmPasswordVisible = false;
+        private bool _isGoogleUser = false;
 
         // Constructor for Add mode
         public UserDetailPage()
@@ -29,6 +30,10 @@ namespace TrackPointV.View.DBView.CrudView
             createdDateEntry.IsVisible = false;
             lastLoginDateLabel.IsVisible = false;
             lastLoginDateEntry.IsVisible = false;
+            
+            // Show display name field in Add mode for potential Google users
+            displayNameLabel.IsVisible = true;
+            displayNameEntry.IsVisible = true;
         }
 
         // Constructor for Edit mode
@@ -38,6 +43,7 @@ namespace TrackPointV.View.DBView.CrudView
             _userService = new UserService();
             _user = user;
             _isEditMode = true;
+            _isGoogleUser = user.IsGoogleUser;
             
             // Set up UI for Edit mode
             headerLabel.Text = "EDIT USER";
@@ -46,8 +52,28 @@ namespace TrackPointV.View.DBView.CrudView
             
             // Populate fields with user data
             usernameEntry.Text = user.Username;
-            passwordEntry.Text = ""; // Placeholder, we don't show actual password
-            confirmPasswordEntry.Text = ""; // Placeholder
+            
+            // For Google users, show appropriate UI
+            if (user.IsGoogleUser)
+            {
+                // Show Google indicator and display name
+                googleUserIndicator.IsVisible = true;
+                displayNameLabel.IsVisible = true;
+                displayNameEntry.IsVisible = true;
+                displayNameEntry.Text = user.DisplayName;
+                
+                // Hide password fields for Google users - they use Google auth
+                passwordLabel.IsVisible = false;
+                passwordEntry.IsVisible = false;
+                confirmPasswordEntry.IsVisible = false;
+                confirmPasswordLabel.IsVisible = false;
+            }
+            else
+            {
+                // For regular users, handle password fields
+                passwordEntry.Text = ""; // Placeholder, we don't show actual password
+                confirmPasswordEntry.Text = ""; // Placeholder
+            }
             
             // Show read-only fields in Edit mode
             createdDateLabel.IsVisible = true;
@@ -100,8 +126,13 @@ namespace TrackPointV.View.DBView.CrudView
                     // Update existing user
                     _user.Username = usernameEntry.Text.Trim();
                     
-                    // Only update password if it's been changed (not the placeholder)
-                    if (passwordEntry.Text != "")
+                    // Handle Google user fields
+                    if (_user.IsGoogleUser)
+                    {
+                        _user.DisplayName = displayNameEntry.Text?.Trim();
+                    }
+                    // Only update password for regular users if it's been changed
+                    else if (passwordEntry.Text != "")
                     {
                         _user.Password = passwordEntry.Text;
                     }
@@ -125,7 +156,9 @@ namespace TrackPointV.View.DBView.CrudView
                     {
                         Username = usernameEntry.Text.Trim(),
                         Password = passwordEntry.Text,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = DateTime.Now,
+                        DisplayName = displayNameEntry.Text?.Trim(),
+                        IsGoogleUser = false // New users created in UI are not Google users
                     };
                     
                     bool success = await _userService.AddUserAsync(newUser);
@@ -169,6 +202,12 @@ namespace TrackPointV.View.DBView.CrudView
                 validationLabel.Text = "Username is required.";
                 validationLabel.IsVisible = true;
                 return false;
+            }
+            
+            // Skip password validation for Google users
+            if (_isGoogleUser)
+            {
+                return true;
             }
             
             // In add mode, validate password

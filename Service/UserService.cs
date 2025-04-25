@@ -13,6 +13,8 @@ namespace TrackPointV.Service
         public string Password { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime? LastLoginDate { get; set; }
+        public bool IsGoogleUser { get; set; } = false;
+        public string? DisplayName { get; set; }
     }
 
     public class UserService
@@ -30,7 +32,7 @@ namespace TrackPointV.Service
             
             try
             {
-                string query = "SELECT Id, Username, Password, CreatedDate, LastLoginDate FROM [User]";
+                string query = "SELECT Id, Username, Password, CreatedDate, LastLoginDate, IsGoogleUser, DisplayName FROM [User]";
                 var dataTable = await _connection.ExecuteQueryAsync(query, CommandType.Text);
                 
                 foreach (DataRow row in dataTable.Rows)
@@ -43,7 +45,9 @@ namespace TrackPointV.Service
                         CreatedDate = Convert.ToDateTime(row["CreatedDate"]),
                         LastLoginDate = row["LastLoginDate"] != DBNull.Value 
                             ? Convert.ToDateTime(row["LastLoginDate"]) 
-                            : null
+                            : null,
+                        IsGoogleUser = row["IsGoogleUser"] != DBNull.Value && Convert.ToBoolean(row["IsGoogleUser"]),
+                        DisplayName = row["DisplayName"] != DBNull.Value ? row["DisplayName"].ToString() : null
                     });
                 }
             }
@@ -60,7 +64,7 @@ namespace TrackPointV.Service
         {
             try
             {
-                string query = "SELECT Id, Username, Password, CreatedDate, LastLoginDate FROM [User] WHERE Id = @Id";
+                string query = "SELECT Id, Username, Password, CreatedDate, LastLoginDate, IsGoogleUser, DisplayName FROM [User] WHERE Id = @Id";
                 var parameters = new[]
                 {
                     _connection.CreateParameter("@Id", id)
@@ -79,7 +83,9 @@ namespace TrackPointV.Service
                         CreatedDate = Convert.ToDateTime(row["CreatedDate"]),
                         LastLoginDate = row["LastLoginDate"] != DBNull.Value 
                             ? Convert.ToDateTime(row["LastLoginDate"]) 
-                            : null
+                            : null,
+                        IsGoogleUser = row["IsGoogleUser"] != DBNull.Value && Convert.ToBoolean(row["IsGoogleUser"]),
+                        DisplayName = row["DisplayName"] != DBNull.Value ? row["DisplayName"].ToString() : null
                     };
                 }
             }
@@ -100,15 +106,17 @@ namespace TrackPointV.Service
                 string hashedPassword = PasswordHashService.HashPassword(user.Password);
                 
                 string query = @"
-                    INSERT INTO [User] (Username, Password, CreatedDate)
-                    VALUES (@Username, @Password, @CreatedDate);
+                    INSERT INTO [User] (Username, Password, CreatedDate, IsGoogleUser, DisplayName)
+                    VALUES (@Username, @Password, @CreatedDate, @IsGoogleUser, @DisplayName);
                 ";
                 
                 var parameters = new[]
                 {
                     _connection.CreateParameter("@Username", user.Username),
                     _connection.CreateParameter("@Password", hashedPassword),
-                    _connection.CreateParameter("@CreatedDate", user.CreatedDate)
+                    _connection.CreateParameter("@CreatedDate", user.CreatedDate),
+                    _connection.CreateParameter("@IsGoogleUser", user.IsGoogleUser),
+                    _connection.CreateParameter("@DisplayName", (object?)user.DisplayName ?? DBNull.Value)
                 };
                 
                 int rowsAffected = await _connection.ExecuteNonQueryAsync(query, CommandType.Text, parameters);
@@ -135,7 +143,9 @@ namespace TrackPointV.Service
                 string query = @"
                     UPDATE [User]
                     SET Username = @Username, 
-                        Password = @Password
+                        Password = @Password,
+                        IsGoogleUser = @IsGoogleUser,
+                        DisplayName = @DisplayName
                     WHERE Id = @Id;
                 ";
                 
@@ -143,7 +153,9 @@ namespace TrackPointV.Service
                 {
                     _connection.CreateParameter("@Id", user.Id),
                     _connection.CreateParameter("@Username", user.Username),
-                    _connection.CreateParameter("@Password", passwordToUse)
+                    _connection.CreateParameter("@Password", passwordToUse),
+                    _connection.CreateParameter("@IsGoogleUser", user.IsGoogleUser),
+                    _connection.CreateParameter("@DisplayName", (object?)user.DisplayName ?? DBNull.Value)
                 };
                 
                 int rowsAffected = await _connection.ExecuteNonQueryAsync(query, CommandType.Text, parameters);

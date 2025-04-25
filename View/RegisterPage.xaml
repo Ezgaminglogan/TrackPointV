@@ -219,6 +219,44 @@
                             </Button.Shadow>
                         </Button>
 
+                        <!-- Separator or text -->
+                        <Label Text="OR" 
+                               FontSize="14" 
+                               TextColor="#5f6368" 
+                               HorizontalOptions="Center" 
+                               Margin="0,15,0,15" />
+
+                        <!-- Google Sign-Up Button -->
+                        <Button x:Name="googleSignUpButton"
+                                Text="Sign up with Google"
+                                BackgroundColor="White"
+                                TextColor="#757575"
+                                BorderColor="#DADCE0"
+                                BorderWidth="1"
+                                CornerRadius="4"
+                                HeightRequest="50"
+                                Clicked="OnGoogleSignUp_Clicked"
+                                ContentLayout="Left,12"
+                                Padding="12,0"
+                                Margin="0,0,0,5">
+                            <Button.ImageSource>
+                                <FileImageSource File="google_logo.png" />
+                            </Button.ImageSource>
+                            <Button.Shadow>
+                                <Shadow Brush="#20000000" Offset="0,2" Radius="4" />
+                            </Button.Shadow>
+                        </Button>
+
+                        <!-- Activity Indicator -->
+                        <ActivityIndicator x:Name="registerActivityIndicator" 
+                                         IsRunning="False" 
+                                         IsVisible="False"
+                                         Color="#1a73e8"
+                                         HeightRequest="40"
+                                         WidthRequest="40"
+                                         HorizontalOptions="Center"
+                                         Margin="0,10,0,0" />
+
                         <!-- Login Link -->
                         <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,15,0,0">
                             <Label Text="Already have an account?" TextColor="#5f6368" />

@@ -102,8 +102,27 @@
                         <Entry x:Name="usernameEntry" Placeholder="Enter username" 
                                Style="{StaticResource FormEntryStyle}" />
 
+                        <!-- Display Name Field (for Google users) -->
+                        <Label Text="Display Name" x:Name="displayNameLabel" Style="{StaticResource FormLabelStyle}" IsVisible="False" />
+                        <Entry x:Name="displayNameEntry" Placeholder="Display name (for Google users)" 
+                               Style="{StaticResource FormEntryStyle}" IsVisible="False" />
+                             
+                        <!-- Google User Indicator -->
+                        <StackLayout Orientation="Horizontal" x:Name="googleUserIndicator" 
+                                     IsVisible="False" Margin="0,5,0,10">
+                            <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                  Glyph="&#xf1a0;"
+                                                  Color="#4285f4"
+                                                  Size="16" />
+                                </Image.Source>
+                            </Image>
+                            <Label Text="Google Account" TextColor="#4285f4" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                        </StackLayout>
+
                         <!-- Password Field -->
-                        <Label Text="Password" Style="{StaticResource FormLabelStyle}" />
+                        <Label Text="Password" x:Name="passwordLabel" Style="{StaticResource FormLabelStyle}" />
                         <Grid ColumnDefinitions="*,Auto">
                             <Entry x:Name="passwordEntry" Placeholder="Enter password" 
                                    IsPassword="True" Style="{StaticResource FormEntryStyle}" />
@@ -122,7 +141,7 @@
                         </Grid>
 
                         <!-- Confirm Password Field -->
-                        <Label Text="Confirm Password" Style="{StaticResource FormLabelStyle}" />
+                        <Label Text="Confirm Password" x:Name="confirmPasswordLabel" Style="{StaticResource FormLabelStyle}" />
                         <Grid ColumnDefinitions="*,Auto">
                             <Entry x:Name="confirmPasswordEntry" Placeholder="Confirm password" 
                                    IsPassword="True" Style="{StaticResource FormEntryStyle}" />

@@ -64,6 +64,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
 	</ItemGroup>
 
 	<ItemGroup>

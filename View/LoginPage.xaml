@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:TrackPointV.Converters"
              x:Class="TrackPointV.MainPage"
-             BackgroundColor="#e6f2ff">
+             BackgroundColor="#f0f7ff">
 
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
@@ -16,55 +16,68 @@
 
         <Style x:Key="GlassCard" TargetType="Border">
             <Setter Property="Background" Value="#ffffff"/>
-            <Setter Property="Opacity" Value="0.9"/>
-            <Setter Property="StrokeShape" Value="RoundRectangle 24,24,24,24"/>
-            <Setter Property="Stroke" Value="#40a1d6ff"/>
+            <Setter Property="Opacity" Value="0.98"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 16,16,16,16"/>
+            <Setter Property="Stroke" Value="#15a1d6ff"/>
             <Setter Property="Shadow">
-                <Shadow Brush="#402b5797" Offset="0,6" Radius="16" />
+                <Shadow Brush="#252b5797" Offset="0,3" Radius="12" />
             </Setter>
-            <Setter Property="Padding" Value="28"/>
-            <Setter Property="Margin" Value="22"/>
-        </Style>
-
-        <!-- Style for FontAwesome icons -->
-        <Style x:Key="IconStyle" TargetType="Label">
-            <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
-            <Setter Property="TextColor" Value="#1a73e8" />
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Padding" Value="50,20,50,20"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="MaximumWidthRequest" Value="600"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
         </Style>
 
         <Style x:Key="LoginButton" TargetType="Button">
             <Setter Property="TextColor" Value="White"/>
-            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontAttributes" Value="Bold"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,10"/>
             <Setter Property="Margin" Value="0,15,0,0"/>
+            <Setter Property="HeightRequest" Value="45"/>
             <Setter Property="Background">
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#1a73e8" Offset="0.0" />
-                    <GradientStop Color="#0d47a1" Offset="1.0" />
+                    <GradientStop Color="#2c7be5" Offset="0.0" />
+                    <GradientStop Color="#1a56b0" Offset="1.0" />
                 </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Shadow">
+                <Shadow Brush="#302c7be5" Offset="0,3" Radius="6" />
             </Setter>
         </Style>
 
-        <Style x:Key="EntryStyle" TargetType="Entry">
-            <Setter Property="BackgroundColor" Value="#f5f9ff"/>
-            <Setter Property="TextColor" Value="#333333"/>
-            <Setter Property="PlaceholderColor" Value="#8eadd4"/>
+        <Style x:Key="GoogleButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="TextColor" Value="#444444"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="HeightRequest" Value="54"/>
+            <Setter Property="BorderColor" Value="#E0E0E0"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="ContentLayout" Value="Left,12"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#15000000" Offset="0,2" Radius="4" />
+            </Setter>
         </Style>
 
-        <Style x:Key="InputFieldContainer" TargetType="Border">
-            <Setter Property="StrokeShape" Value="RoundRectangle 12,12,12,12"/>
-            <Setter Property="Stroke" Value="#e0e0ff"/>
-            <Setter Property="BackgroundColor" Value="#f5f9ff"/>
+        <Style x:Key="InputField" TargetType="Border">
+            <Setter Property="Stroke" Value="#E0E0FF"/>
+            <Setter Property="BackgroundColor" Value="#f9faff"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 8,8,8,8"/>
+            <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="Margin" Value="0,4,0,12"/>
             <Setter Property="Padding" Value="8,0"/>
-            <Setter Property="Margin" Value="0,5,0,10"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="#08000000" Offset="0,1" Radius="2" />
+            </Setter>
+        </Style>
+
+        <Style x:Key="FieldLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#2c7be5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="4,0,0,2"/>
         </Style>
 
         <!-- Boolean Inverter Converter -->
@@ -72,125 +85,96 @@
     </ContentPage.Resources>
 
     <Grid>
-        <!-- Background with enhanced gradient -->
+        <!-- Background with subtle gradient -->
         <Rectangle>
             <Rectangle.Fill>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#e6f2ff" Offset="0.0" />
-                    <GradientStop Color="#c7e1ff" Offset="0.3" />
-                    <GradientStop Color="#1a73e8" Offset="1.0" />
+                    <GradientStop Color="#f0f7ff" Offset="0.0" />
+                    <GradientStop Color="#2c7be5" Offset="1.0" />
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-
-        <!-- Background pattern -->
-        <Image Source="dotpattern.png" Aspect="AspectFill" Opacity="0.1" />
-
-        <ScrollView Orientation="Both">
-            <Grid VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="480">
+        
+        <ScrollView>
+            <VerticalStackLayout VerticalOptions="Center">
                 <Border Style="{StaticResource GlassCard}">
-                    <VerticalStackLayout Spacing="24">
+                    <VerticalStackLayout Spacing="20">
                         <!-- Logo and Title Section -->
-                        <Grid RowSpacing="8" Margin="0,0,0,15">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <Image Grid.Row="0" Source="inventory.png" 
-                                   HeightRequest="110" WidthRequest="110"
+                        <VerticalStackLayout Spacing="4" Margin="0,0,0,12" HorizontalOptions="Center">
+                            <Image Source="inventory.png" 
+                                   HeightRequest="70" WidthRequest="70"
                                    HorizontalOptions="Center">
                                 <Image.Shadow>
-                                    <Shadow Brush="#402b5797" Offset="0,3" Radius="6" />
+                                    <Shadow Brush="#202b5797" Offset="0,2" Radius="4" />
                                 </Image.Shadow>
                             </Image>
-
-                            <Label Grid.Row="1" Text="TRACKPOINT" 
-                                   FontSize="32" FontAttributes="Bold" 
-                                   TextColor="#0d47a1" HorizontalOptions="Center"
-                                   Margin="0,5,0,0">
+                            
+                            <Label Text="TRACKPOINT" 
+                                   FontSize="26" FontAttributes="Bold" 
+                                   TextColor="#1a56b0" HorizontalOptions="Center">
                                 <Label.Shadow>
-                                    <Shadow Brush="#40000000" Offset="0,1" Radius="2" />
+                                    <Shadow Brush="#20000000" Offset="0,1" Radius="1" />
                                 </Label.Shadow>
                             </Label>
-
-                            <Label Grid.Row="2" Text="Tracking Inventory and Sales" 
-                                   FontSize="17" TextColor="#4285f4" 
+                            
+                            <Label Text="Tracking Inventory and Sales" 
+                                   FontSize="14" TextColor="#4285f4" 
                                    HorizontalOptions="Center" />
-                        </Grid>
+                        </VerticalStackLayout>
 
-                        <!-- Divider with animation potential -->
-                        <Border HeightRequest="2" HorizontalOptions="Fill">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="1" />
-                            </Border.StrokeShape>
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                    <GradientStop Color="#e0e0ff" Offset="0.0" />
-                                    <GradientStop Color="#4285f4" Offset="0.5" />
-                                    <GradientStop Color="#e0e0ff" Offset="1.0" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
+                        <!-- Divider -->
+                        <BoxView HeightRequest="1" BackgroundColor="#E0E0FF" Opacity="0.6" Margin="0,0,0,8" />
 
                         <!-- Login Form -->
-                        <Grid RowSpacing="10" Margin="0,15,0,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Username label -->
-                            <HorizontalStackLayout Grid.Row="0" Spacing="12">
-                                <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
-                                    <Image.Source>
-                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
-                                                         Glyph="&#xf007;"
-                                                         Color="#1a73e8"
-                                                         Size="20" />
-                                    </Image.Source>
-                                </Image>
-                                <Label Text="Username" FontSize="16" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-
-                            <!-- Username input with styled container -->
-                            <Border Grid.Row="1" Style="{StaticResource InputFieldContainer}">
-                                <Entry Placeholder="Enter your username" x:Name="usernameEntry" 
-                                       TextColor="#333333" PlaceholderColor="#8eadd4" 
-                                       FontSize="16" BackgroundColor="Transparent" 
-                                       Margin="10,0" VerticalOptions="Center" />
+                        <VerticalStackLayout Spacing="4" Margin="0,0,0,0">
+                            <!-- Username field -->
+                            <Label Text="Username" Style="{StaticResource FieldLabel}" Margin="4,0,0,2" />
+                            <Border Style="{StaticResource InputField}" Margin="0,0,0,8">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Image Grid.Column="0" WidthRequest="22" HeightRequest="22" VerticalOptions="Center" Margin="8,0,4,0">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf007;"
+                                                             Color="#2c7be5"
+                                                             Size="20" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Entry Grid.Column="1" x:Name="usernameEntry" 
+                                           Placeholder="Enter your username" 
+                                           TextColor="#333333" 
+                                           PlaceholderColor="#8eadd4"
+                                           BackgroundColor="Transparent"
+                                           FontSize="16" 
+                                           Margin="4,0" 
+                                           VerticalOptions="Center" />
+                                </Grid>
                             </Border>
 
-                            <!-- Password label -->
-                            <HorizontalStackLayout Grid.Row="2" Spacing="12">
-                                <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
-                                    <Image.Source>
-                                        <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
-                                                         Glyph="&#xf023;"
-                                                         Color="#1a73e8"
-                                                         Size="20" />
-                                    </Image.Source>
-                                </Image>
-                                <Label Text="Password" FontSize="16" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-
-                            <!-- Password input with styled container -->
-                            <Border Grid.Row="3" Style="{StaticResource InputFieldContainer}">
-                                <Grid>
-                                    <Entry x:Name="passwordEntry" Placeholder="Enter your password" 
-                                         IsPassword="True" BackgroundColor="Transparent"
-                                         TextColor="#333333" PlaceholderColor="#8eadd4" 
-                                         FontSize="16" Margin="10,0" VerticalOptions="Center" />
-
-                                    <Button x:Name="passwordVisibilityButton" 
-                                            HorizontalOptions="End"
-                                            VerticalOptions="Center"
+                            <!-- Password field -->
+                            <Label Text="Password" Style="{StaticResource FieldLabel}" Margin="4,0,0,2" />
+                            <Border Style="{StaticResource InputField}" Margin="0,0,0,10">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Image Grid.Column="0" WidthRequest="22" HeightRequest="22" VerticalOptions="Center" Margin="8,0,4,0">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
+                                                             Glyph="&#xf023;"
+                                                             Color="#2c7be5"
+                                                             Size="20" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Entry Grid.Column="1" x:Name="passwordEntry" 
+                                           Placeholder="Enter your password" 
+                                           IsPassword="True" 
+                                           TextColor="#333333" 
+                                           PlaceholderColor="#8eadd4"
+                                           BackgroundColor="Transparent"
+                                           FontSize="16" 
+                                           Margin="4,0" 
+                                           VerticalOptions="Center" />
+                                    <Button Grid.Column="2" x:Name="passwordVisibilityButton" 
                                             WidthRequest="40"
                                             HeightRequest="40"
-                                            Margin="0,0,5,0"
+                                            Margin="0,0,4,0"
                                             Padding="0"
                                             BackgroundColor="Transparent"
                                             BorderColor="Transparent"
@@ -205,51 +189,69 @@
                                     </Button>
                                 </Grid>
                             </Border>
-                        </Grid>
+                        </VerticalStackLayout>
 
-                        <!-- Login Button with enhanced design -->
+                        <!-- Login Button -->
                         <Button Style="{StaticResource LoginButton}" 
                                 Clicked="OnLogin_Clicked" 
                                 x:Name="OnLogin"
                                 Text="LOGIN"
-                                Margin="0,20,0,0"
-                                HeightRequest="50">
+                                Margin="0,8,0,8">
                             <Button.ImageSource>
                                 <FontImageSource FontFamily="fa-solid-900.ttf#Font Awesome 6 Free Solid"
                                                Glyph="&#xf2f6;"
                                                Color="White"
                                                Size="20" />
                             </Button.ImageSource>
-                            <Button.Shadow>
-                                <Shadow Brush="#40000000" Offset="0,4" Radius="10" />
-                            </Button.Shadow>
+                        </Button>
+
+                        <!-- Simple OR divider -->
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,10,0,10">
+                            <BoxView HeightRequest="1" WidthRequest="80" BackgroundColor="#E0E0FF" VerticalOptions="Center" />
+                            <Label Text="OR" 
+                                   FontSize="14" 
+                                   TextColor="#767676" 
+                                   HorizontalOptions="Center"
+                                   Margin="10,0" />
+                            <BoxView HeightRequest="1" WidthRequest="80" BackgroundColor="#E0E0FF" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <!-- Google Sign-In Button -->
+                        <Button x:Name="googleSignInButton"
+                                Text="Sign in with Google"
+                                Style="{StaticResource GoogleButton}"
+                                Margin="0,0,0,10"
+                                Clicked="OnGoogleSignIn_Clicked">
+                            <Button.ImageSource>
+                                <FileImageSource File="google_logo.png" />
+                            </Button.ImageSource>
                         </Button>
 
                         <!-- Activity Indicator -->
                         <ActivityIndicator x:Name="loginActivityIndicator" 
                                          IsRunning="False" 
                                          IsVisible="False"
-                                         Color="#1a73e8"
+                                         Color="#2c7be5"
                                          HeightRequest="40"
                                          WidthRequest="40"
                                          HorizontalOptions="Center"
                                          Margin="0,10,0,0" />
 
-                        <!-- Register Link with enhanced styling -->
-                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,0,0">
-                            <Label Text="Don't have an account? " TextColor="#5f6368" VerticalOptions="Center" FontSize="15" />
-                            <Label Text="Register" TextColor="#1a73e8" FontAttributes="Bold" VerticalOptions="Center" x:Name="registerLabel" FontSize="15">
+                        <!-- Register Link -->
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,12,0,0">
+                            <Label Text="Don't have an account? " TextColor="#767676" VerticalOptions="Center" FontSize="14" />
+                            <Label Text="Register" TextColor="#2c7be5" FontAttributes="Bold" VerticalOptions="Center" x:Name="registerLabel" FontSize="14">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnRegister_Tapped" x:Name="OnRegister"/>
                                 </Label.GestureRecognizers>
                             </Label>
                         </HorizontalStackLayout>
 
-                        <!-- Version info or copyright -->
-                        <Label Text="TrackPoint v1.0" TextColor="#8eadd4" FontSize="12" HorizontalOptions="Center" Margin="0,15,0,0" Opacity="0.7" />
+                        <!-- Version info -->
+                        <Label Text="TrackPoint v1.0" TextColor="#97aacf" FontSize="12" HorizontalOptions="Center" Margin="0,5,0,0" Opacity="0.7" />
                     </VerticalStackLayout>
                 </Border>
-            </Grid>
+            </VerticalStackLayout>
         </ScrollView>
     </Grid>
 </ContentPage>

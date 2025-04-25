@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrackPointV.View.GoogleSignInPage"
+             Title="Sign in with Google">
+    
+    <Grid>
+        <!-- WebView2 container for Google sign-in -->
+        <ContentView x:Name="webViewContainer" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Fill" />
+        
+        <!-- Loading indicator while the auth page loads -->
+        <ActivityIndicator x:Name="loadingIndicator" 
+                          IsRunning="True" 
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"
+                          Color="#4285F4"
+                          HeightRequest="48"
+                          WidthRequest="48" />
+        
+        <!-- Close button -->
+        <Button x:Name="closeButton"
+                Text="Cancel"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="10"
+                BackgroundColor="#80000000"
+                TextColor="White"
+                FontSize="14"
+                CornerRadius="20"
+                Padding="10,5"
+                Clicked="OnCloseButton_Clicked" />
+    </Grid>
+</ContentPage> 

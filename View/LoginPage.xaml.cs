@@ -2,13 +2,18 @@
 using TrackPointV.Service;
 using TrackPointV.View;
 using TrackPointV.View.DBView;
+
 namespace TrackPointV
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        private readonly GoogleAuthWindowsService _googleAuthService;
+
+        public MainPage(GoogleAuthWindowsService googleAuthService = null)
         {
             InitializeComponent();
+            _googleAuthService = googleAuthService;
+            
             registerLabel.Loaded += (s, e) =>
             {
                 registerLabel.ScaleTo(1.1, 300)
@@ -105,6 +110,75 @@ namespace TrackPointV
             else
             {
                 passwordVisibilityIcon.Glyph = "\uf06e"; // Eye icon (visible)
+            }
+        }
+
+        private async void OnGoogleSignIn_Clicked(object sender, EventArgs e)
+        {
+            if (_googleAuthService == null)
+            {
+                await DisplayAlert("Error", "Google Sign-In service is not available.", "OK");
+                return;
+            }
+
+            try
+            {
+                // Show loading state
+                googleSignInButton.IsEnabled = false;
+                loginActivityIndicator.IsVisible = true;
+                loginActivityIndicator.IsRunning = true;
+                
+                // Launch the Google Sign-in page
+                var signInPage = new GoogleSignInPage(_googleAuthService);
+                await Navigation.PushModalAsync(signInPage);
+                
+                // Wait for authentication to complete
+                var user = await signInPage.AuthenticationCompletedTask;
+                
+                if (user != null)
+                {
+                    try
+                    {
+                        // Store user info
+                        Preferences.Set("CurrentUser", user.Email);
+                        Preferences.Set("UserDisplayName", user.Name);
+                        Preferences.Set("UserLogin", "Google");
+                        
+                        // Add the Google user to the database or update if exists
+                        await _userAuth.AddOrUpdateGoogleUserAsync(user.Email, user.Name);
+                        
+                        // Update last login timestamp
+                        await _userAuth.UpdateLastLoginAsync(user.Email);
+                        
+                        // Navigate to main app
+                        await Shell.Current.GoToAsync("//DashboardPage");
+                    }
+                    catch (Exception dbEx)
+                    {
+                        await DisplayAlert("Database Error", 
+                            "Successfully authenticated with Google, but failed to update user database: " + dbEx.Message, 
+                            "OK");
+                        
+                        // We can still proceed to dashboard even if DB update fails
+                        await Shell.Current.GoToAsync("//DashboardPage");
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // User canceled the sign-in process
+                // Just reset the UI
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Authentication Error", ex.Message, "OK");
+            }
+            finally
+            {
+                // Reset UI state
+                googleSignInButton.IsEnabled = true;
+                loginActivityIndicator.IsVisible = false;
+                loginActivityIndicator.IsRunning = false;
             }
         }
     }

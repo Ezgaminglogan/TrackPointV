@@ -19,5 +19,9 @@
         void Login(string username);
         Task LogoutAsync(string username);
         void Logout(string username);
+        
+        // Google Authentication
+        Task<bool> AddOrUpdateGoogleUserAsync(string email, string displayName);
+        Task<bool> IsGoogleUserAsync(string email);
     }
 }

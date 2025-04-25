@@ -267,10 +267,28 @@ namespace TrackPointV.View.DBView
                         // Store username before logout for navigation
                         string username = _currentUsername;
                         
+                        // Check if this was a Google login
+                        bool wasGoogleLogin = Preferences.Get("UserLogin", "") == "Google";
+                        
                         // Call logout method and Clear Sessions
                         await _userAuth.LogoutAsync(username);
+                        
+                        // Clear all preference data
                         Preferences.Remove("CurrentUser");
+                        Preferences.Remove("UserDisplayName");
+                        Preferences.Remove("UserLogin");
                         Preferences.Clear();
+                        
+                        // Clear secure storage (for Google tokens)
+                        try 
+                        {
+                            SecureStorage.Default.Remove("id_token");
+                            SecureStorage.Default.Remove("access_token");
+                        }
+                        catch (Exception) 
+                        {
+                            // Ignore exceptions from SecureStorage - already handled in UserAuthentication
+                        }
 
                         // Disable flyout before navigation
                         Shell.SetFlyoutBehavior(Shell.Current, FlyoutBehavior.Disabled);
@@ -279,22 +297,36 @@ namespace TrackPointV.View.DBView
                         await Shell.Current.GoToAsync("//MainPage", true);
                         
                         // Replace the current page with a new AppShell using the recommended approach
-                        if (Application.Current != null && Application.Current.Windows.Count > 0)
+                        if (Microsoft.Maui.Controls.Application.Current != null && Microsoft.Maui.Controls.Application.Current.Windows.Count > 0)
                         {
-                            Application.Current.Windows[0].Page = new AppShell();
+                            Microsoft.Maui.Controls.Application.Current.Windows[0].Page = new AppShell();
                         }
                     }
                     else
                     {
+                        // Clear all preferences anyway to be safe
+                        Preferences.Clear();
+                        
+                        // Try to clear secure storage too
+                        try 
+                        {
+                            SecureStorage.Default.Remove("id_token");
+                            SecureStorage.Default.Remove("access_token");
+                        }
+                        catch (Exception) 
+                        {
+                            // Ignore exceptions from SecureStorage
+                        }
+                        
                         // Disable flyout before navigation
                         Shell.SetFlyoutBehavior(Shell.Current, FlyoutBehavior.Disabled);
 
                         await Shell.Current.GoToAsync("//MainPage", true);
                         
                         // Replace the current page with a new AppShell using the recommended approach
-                        if (Application.Current != null && Application.Current.Windows.Count > 0)
+                        if (Microsoft.Maui.Controls.Application.Current != null && Microsoft.Maui.Controls.Application.Current.Windows.Count > 0)
                         {
-                            Application.Current.Windows[0].Page = new AppShell();
+                            Microsoft.Maui.Controls.Application.Current.Windows[0].Page = new AppShell();
                         }
                     }
                 }

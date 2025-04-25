@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TrackPointV.Converters"
              x:Class="TrackPointV.View.DBView.UserPage"
              BackgroundColor="#e6f2ff"
              Title="User Management">
@@ -12,6 +13,9 @@
             <On Platform="iOS" Value="fa-solid-900" />
             <On Platform="WinUI" Value="fa-solid-900.ttf#Font Awesome 6 Free Solid" />
         </OnPlatform>
+
+        <!-- Boolean converters -->
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
 
         <Style x:Key="GlassCard" TargetType="Border">
             <Setter Property="Background" Value="#ffffff"/>
@@ -173,7 +177,8 @@
                             <Button Grid.Column="1" BackgroundColor="Transparent"
                                     Clicked="FilterButton_Clicked"
                                     WidthRequest="50"
-                                    Margin="0,0,5,0">
+                                    Margin="0,0,5,0"
+                                    ToolTipProperties.Text="Filter by user type">
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="Font Awesome 6 Free Solid"
                                                   Glyph="&#xf0b0;"
@@ -245,10 +250,33 @@
                                                        FontSize="16" FontAttributes="Bold" TextColor="#333333"
                                                        VerticalOptions="Start"/>
                                                 
+                                                <!-- Display Name (for Google users) -->
+                                                <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="5">
+                                                    <!-- Google icon for Google users -->
+                                                    <Image IsVisible="{Binding IsGoogleUser}" WidthRequest="16" HeightRequest="16" VerticalOptions="Center">
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                                         Glyph="&#xf1a0;"
+                                                                         Color="#4285f4"
+                                                                         Size="14" />
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <!-- Display name or created date -->
+                                                    <Label Text="{Binding DisplayName, StringFormat='Display Name: {0}'}" 
+                                                           IsVisible="{Binding IsGoogleUser}"
+                                                           FontSize="12" TextColor="#666666"
+                                                           VerticalOptions="Center"/>
+                                                    <Label Text="{Binding CreatedDate, StringFormat='Created: {0:MMM dd, yyyy}'}" 
+                                                           IsVisible="{Binding IsGoogleUser, Converter={StaticResource InverseBoolConverter}}"
+                                                           FontSize="12" TextColor="#666666"
+                                                           VerticalOptions="Center"/>
+                                                </StackLayout>
+                                                
                                                 <!-- Created Date -->
                                                 <Label Grid.Column="1" Grid.Row="1" 
                                                        Text="{Binding CreatedDate, StringFormat='Created: {0:MMM dd, yyyy}'}" 
                                                        FontSize="12" TextColor="#666666"
+                                                       IsVisible="false"
                                                        VerticalOptions="Center"/>
                                                 
                                                 <!-- Last Login -->

@@ -101,29 +101,64 @@ namespace TrackPointV.Service
         // Optional: Keep sync methods that internally use async methods
         public bool ValidateUser(string username, string password)
         {
-            return ValidateUserAsync(username, password).GetAwaiter().GetResult();
+            try
+            {
+                return Task.Run(async () => await ValidateUserAsync(username, password)).Result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to validate user", ex);
+            }
         }
 
         public bool RegisterUser(string username, string password)
         {
-            return RegisterUserAsync(username, password).GetAwaiter().GetResult();
+            try
+            {
+                return Task.Run(async () => await RegisterUserAsync(username, password)).Result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to register user", ex);
+            }
         }
 
         public void UpdateLastLogin(string username)
         {
-            UpdateLastLoginAsync(username).GetAwaiter().GetResult();
+            try
+            {
+                Task.Run(async () => await UpdateLastLoginAsync(username)).Wait();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to update last login", ex);
+            }
         }
 
         public bool UserExists(string username)
         {
-            return UserExistsAsync(username).GetAwaiter().GetResult();
+            try
+            {
+                return Task.Run(async () => await UserExistsAsync(username)).Result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to check if user exists", ex);
+            }
         }
 
         // Add these methods to the UserAuthentication class
         
         public bool IsUserLoggedIn(string username)
         {
-            return IsUserLoggedInAsync(username).GetAwaiter().GetResult();
+            try
+            {
+                return Task.Run(async () => await IsUserLoggedInAsync(username)).Result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to check user login status", ex);
+            }
         }
         
         public async Task<bool> IsUserLoggedInAsync(string username)
@@ -140,7 +175,6 @@ namespace TrackPointV.Service
                     _connection.CreateParameter("@Username", username)
                 };
 
-                // Change this line
                 var result = await _connection.ExecuteScalarAsync(query, CommandType.Text, parameters);
                 return Convert.ToInt32(result) > 0;
             }
@@ -185,6 +219,9 @@ namespace TrackPointV.Service
                     throw new Exception($"User '{username}' not found");
                 }
 
+                // Check if this is a Google user (for logging purposes)
+                bool isGoogleUser = await IsGoogleUserAsync(username);
+
                 // Update the logout date
                 string query = "UPDATE [User] SET LastLoginDate = GETDATE() WHERE Username = @Username";
                 
@@ -199,6 +236,19 @@ namespace TrackPointV.Service
                 if (rowsAffected == 0)
                 {
                     throw new Exception($"Failed to update logout status for user '{username}'");
+                }
+
+                // If on a platform that supports SecureStorage, clean up any stored tokens
+                try
+                {
+                    // Remove Google tokens if they exist - Remove() returns bool, not Task<bool>
+                    SecureStorage.Default.Remove("id_token");
+                    SecureStorage.Default.Remove("access_token");
+                }
+                catch (Exception tokenEx)
+                {
+                    // Just log the exception but don't fail the logout process
+                    Console.WriteLine($"Failed to remove tokens: {tokenEx.Message}");
                 }
             }
             catch (SqlException sqlEx)
@@ -221,7 +271,90 @@ namespace TrackPointV.Service
         // Add the sync version for completeness
         public void Logout(string username)
         {
-            LogoutAsync(username).GetAwaiter().GetResult();
+            try
+            {
+                // Call the async method and wait for it to complete
+                Task.Run(async () => await LogoutAsync(username)).Wait();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to logout user", ex);
+            }
+        }
+
+        // Google Authentication Methods
+        public async Task<bool> AddOrUpdateGoogleUserAsync(string email, string displayName)
+        {
+            try
+            {
+                // Check if the Google user already exists
+                bool userExists = await IsGoogleUserAsync(email);
+                
+                if (userExists)
+                {
+                    // Update the existing Google user
+                    string updateQuery = @"
+                        UPDATE [User]
+                        SET DisplayName = @DisplayName, 
+                            LastLoginDate = GETDATE(),
+                            IsGoogleUser = 1
+                        WHERE Username = @Email AND IsGoogleUser = 1";
+                    
+                    var updateParameters = new[]
+                    {
+                        _connection.CreateParameter("@Email", email),
+                        _connection.CreateParameter("@DisplayName", displayName)
+                    };
+
+                    int updateResult = await _connection.ExecuteNonQueryAsync(updateQuery, CommandType.Text, updateParameters);
+                    return updateResult > 0;
+                }
+                else
+                {
+                    // Create a new Google user
+                    // The password is not used for Google authentication, but we set a random one
+                    string randomPassword = Guid.NewGuid().ToString();
+                    string hashedPassword = PasswordHashService.HashPassword(randomPassword);
+                    
+                    string insertQuery = @"
+                        INSERT INTO [User] (Username, Password, DisplayName, IsGoogleUser, LastLoginDate)
+                        VALUES (@Email, @Password, @DisplayName, 1, GETDATE())";
+                    
+                    var insertParameters = new[]
+                    {
+                        _connection.CreateParameter("@Email", email),
+                        _connection.CreateParameter("@Password", hashedPassword),
+                        _connection.CreateParameter("@DisplayName", displayName)
+                    };
+
+                    int insertResult = await _connection.ExecuteNonQueryAsync(insertQuery, CommandType.Text, insertParameters);
+                    return insertResult > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to add or update Google user", ex);
+            }
+        }
+
+        public async Task<bool> IsGoogleUserAsync(string email)
+        {
+            try
+            {
+                string query = "SELECT COUNT(*) FROM [User] WHERE Username = @Email AND IsGoogleUser = 1";
+                
+                var parameters = new[]
+                {
+                    _connection.CreateParameter("@Email", email)
+                };
+
+                var result = await _connection.ExecuteScalarAsync(query, CommandType.Text, parameters);
+                return Convert.ToInt32(result) > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to check if Google user exists", ex);
+            }
         }
     }
 }
