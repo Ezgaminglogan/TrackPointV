@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Maui.Controls.Shapes;
 using TrackPointV.Service;
@@ -107,7 +107,7 @@ namespace TrackPointV.View.DBView
             
             // Total revenue
             decimal totalRevenue = sales.Sum(s => s.TotalAmount);
-            totalRevenueLabel.Text = $"${totalRevenue:N2}";
+            totalRevenueLabel.Text = $"{totalRevenue.ToString("C2" , System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}";
             
             // Today's sales
             var today = DateTime.Today;
@@ -479,7 +479,7 @@ namespace TrackPointV.View.DBView
                 // Navigate to sale details
                 // Fix: Use Id instead of SaleId and remove reference to User property
                 await DisplayAlert("Sale Details", 
-                    $"Sale #{selectedSale.Id}\nDate: {selectedSale.SaleDate}\nCustomer: {selectedSale.Username}\nAmount: ${selectedSale.TotalAmount:N2}", 
+                    $"Sale #{selectedSale.Id}\nDate: {selectedSale.SaleDate}\nCustomer: {selectedSale.Username}\nAmount: {selectedSale.TotalAmount.ToString("C2" , System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}",
                     "OK");
             }
         }
@@ -525,7 +525,7 @@ namespace TrackPointV.View.DBView
         public string SaleIdDisplay => $"Sale #{Id}";
         public string SaleDateDisplay => $"Date: {SaleDate:MMM d, yyyy h:mm tt}";
         public string UserDisplay => $"Customer: {Username}";
-        public string TotalAmountDisplay => $"${TotalAmount:N2}";
+        public string TotalAmountDisplay => $"₱{TotalAmount:N2}";
         
         public SaleViewModel(Sale sale)
         {
@@ -659,9 +659,9 @@ namespace TrackPointV.View.DBView
                 // Format large numbers more compactly
                 string formattedRevenue;
                 if (revenueValue >= 1000)
-                    formattedRevenue = $"${revenueValue/1000:N1}K";
+                    formattedRevenue = $"{(revenueValue/1000).ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}K";
                 else
-                    formattedRevenue = $"${revenueValue:N0}";
+                    formattedRevenue = $"{revenueValue.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}";
                     
                 canvas.DrawString(formattedRevenue, xEnd + 30, y - 6, HorizontalAlignment.Left);
             }
@@ -812,7 +812,7 @@ namespace TrackPointV.View.DBView
                         {
                             canvas.FontColor = Colors.White;
                             canvas.FontSize = 10;
-                            canvas.DrawString($"${_data.Revenues[i]:N0}", 
+                            canvas.DrawString($"₱{_data.Revenues[i]:N0}", 
                                 revX + (_barWidth / 2), 
                                 yStart - barHeight - 15,
                                 HorizontalAlignment.Center);
@@ -842,7 +842,7 @@ namespace TrackPointV.View.DBView
             canvas.FillRectangle(legendX + 60, legendY, boxSize, boxSize);
             
             canvas.FontColor = _textColor;
-            canvas.DrawString("Revenue ($)", legendX + 60 + textOffset, legendY + (boxSize / 2), HorizontalAlignment.Left);
+            canvas.DrawString("Revenue (₱)", legendX + 60 + textOffset, legendY + (boxSize / 2), HorizontalAlignment.Left);
         }
     }
 }

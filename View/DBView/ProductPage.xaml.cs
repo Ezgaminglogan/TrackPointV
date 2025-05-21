@@ -5,6 +5,7 @@ using System.Linq;
 using TrackPointV.Service;
 using TrackPointV.View.DBView.CrudView;
 using System.Diagnostics;
+using ZXing.Net.Maui;
 
 namespace TrackPointV.View.DBView
 {
@@ -151,6 +152,8 @@ namespace TrackPointV.View.DBView
             {
                 Id = serviceProduct.Id,
                 Name = serviceProduct.Name,
+                SKU = serviceProduct.SKU,
+                Barcode = serviceProduct.Barcode,
                 Price = serviceProduct.Price,
                 Description = serviceProduct.Description,
                 Stock = serviceProduct.Stock,
@@ -270,6 +273,13 @@ namespace TrackPointV.View.DBView
                 featuredProductsCarousel.Position = index;
             }
         }
+
+        private void ScanPage_BarcodeDetected(object sender, string barcode)
+        {
+            // Search for the product with the scanned barcode
+            searchBar.Text = barcode;
+            SearchBar_TextChanged(searchBar, new TextChangedEventArgs(null, barcode));
+        }
     }
 
     // Simple Product class to match your database schema
@@ -277,6 +287,8 @@ namespace TrackPointV.View.DBView
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string? SKU { get; set; }
+        public string? Barcode { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public int Stock { get; set; }

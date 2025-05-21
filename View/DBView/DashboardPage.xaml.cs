@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Timers;
 using TrackPointV.Service;
 using Microsoft.Maui.Controls;
@@ -181,7 +181,7 @@ namespace TrackPointV.View.DBView
                 int salesCount = todaySales.Count;
                 
                 // Update sales today display
-                salesTodayAmountLabel.Text = $"${totalSalesAmount:N2}";
+                salesTodayAmountLabel.Text = $"₱{totalSalesAmount:N2}";
                 salesTodayCountLabel.Text = $"{salesCount} {(salesCount == 1 ? "sale" : "sales")}";
                 
                 // Get all sales for total revenue (matching SalesPage)
@@ -189,7 +189,7 @@ namespace TrackPointV.View.DBView
                 decimal totalRevenue = allSales.Sum(s => s.TotalAmount);
                 
                 // Update total revenue label
-                totalRevenueLabel.Text = $"Total: ${totalRevenue:N2}";
+                totalRevenueLabel.Text = $"Total: ₱{totalRevenue:N2}";
                 
                 // Get user information
                 var users = await _userService.GetAllUsersAsync();

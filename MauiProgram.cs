@@ -2,6 +2,8 @@
 using TrackPointV.Service;
 using TrackPointV.View.DBView;
 using TrackPointV.View;
+using ZXing.Net.Maui;
+using ZXing.Net.Maui.Controls;
 
 namespace TrackPointV
 {
@@ -17,6 +19,12 @@ namespace TrackPointV
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("fa-solid-900.ttf", "Font Awesome 6 Free Solid");
+                })
+                .ConfigureMauiHandlers(handlers =>
+                {
+                    // Register ZXing.Net.MAUI handlers
+                    handlers.AddHandler(typeof(CameraBarcodeReaderView), typeof(CameraBarcodeReaderViewHandler));
+                    handlers.AddHandler(typeof(BarcodeGeneratorView), typeof(BarcodeGeneratorViewHandler));
                 });
 
 #if DEBUG

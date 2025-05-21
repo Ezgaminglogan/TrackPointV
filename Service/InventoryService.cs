@@ -93,6 +93,8 @@ namespace TrackPointV.Service
                     {
                         Id = Convert.ToInt32(row["Id"]),
                         Name = row["Name"].ToString(),
+                        SKU = row["SKU"].ToString(),
+                        Barcode = row["Barcode"].ToString(),
                         Price = Convert.ToDecimal(row["Price"]),
                         Description = row["Description"].ToString(),
                         Stock = Convert.ToInt32(row["Stock"]),
@@ -129,6 +131,8 @@ namespace TrackPointV.Service
                 {
                     Id = Convert.ToInt32(row["Id"]),
                     Name = row["Name"].ToString(),
+                    SKU = row["SKU"].ToString(),
+                    Barcode = row["Barcode"].ToString(),
                     Price = Convert.ToDecimal(row["Price"]),
                     Description = row["Description"].ToString(),
                     Stock = Convert.ToInt32(row["Stock"]),
@@ -145,12 +149,14 @@ namespace TrackPointV.Service
         {
             try
             {
-                string query = @"INSERT INTO [Product] (Name, Price, Description, Stock, DateUploaded) 
-                                VALUES (@Name, @Price, @Description, @Stock, @DateUploaded)";
+                string query = @"INSERT INTO [Product] (Name, SKU, Barcode, Price, Description, Stock, DateUploaded) 
+                                VALUES (@Name, @SKU, @Barcode, @Price, @Description, @Stock, @DateUploaded)";
 
                 var parameters = new[]
                 {
                     _connection.CreateParameter("@Name", product.Name ?? string.Empty),
+                    _connection.CreateParameter("@SKU", product.SKU ?? string.Empty),
+                    _connection.CreateParameter("@Barcode", product.Barcode ?? string.Empty),
                     _connection.CreateParameter("@Price", product.Price),
                     _connection.CreateParameter("@Description", product.Description ?? string.Empty),
                     _connection.CreateParameter("@Stock", product.Stock),
@@ -172,6 +178,8 @@ namespace TrackPointV.Service
             {
                 string query = @"UPDATE [Product] 
                                 SET Name = @Name, 
+                                    SKU = @SKU,
+                                    Barcode = @Barcode,
                                     Price = @Price, 
                                     Description = @Description, 
                                     Stock = @Stock 
@@ -181,6 +189,8 @@ namespace TrackPointV.Service
                 {
                     _connection.CreateParameter("@Id", product.Id),
                     _connection.CreateParameter("@Name", product.Name ?? string.Empty),
+                    _connection.CreateParameter("@SKU", product.SKU ?? string.Empty),
+                    _connection.CreateParameter("@Barcode", product.Barcode ?? string.Empty),
                     _connection.CreateParameter("@Price", product.Price),
                     _connection.CreateParameter("@Description", product.Description ?? string.Empty),
                     _connection.CreateParameter("@Stock", product.Stock)
@@ -362,6 +372,8 @@ namespace TrackPointV.Service
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string? SKU { get; set; }
+        public string? Barcode { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public int Stock { get; set; }

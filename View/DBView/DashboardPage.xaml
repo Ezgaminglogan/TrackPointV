@@ -258,9 +258,9 @@
                                 </Image>
                                 <Label Text="Today's Sales" Style="{StaticResource CardTitleStyle}" TextColor="#3b78e7" />
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                    <Label x:Name="salesTodayAmountLabel" Text="$0.00" Style="{StaticResource CardValueStyle}" TextColor="#3b78e7" />
+                                    <Label x:Name="salesTodayAmountLabel" Text="₱0.00" Style="{StaticResource CardValueStyle}" TextColor="#3b78e7" />
                                     <Label x:Name="salesTodayCountLabel" Text="0 sales" FontSize="14" TextColor="#5e87ca" HorizontalOptions="Center" />
-                                    <Label x:Name="totalRevenueLabel" Text="Total: $0.00" FontSize="12" TextColor="#6366f1" HorizontalOptions="Center"
+                                    <Label x:Name="totalRevenueLabel" Text="Total: ₱0.00" FontSize="12" TextColor="#6366f1" HorizontalOptions="Center"
                                           Margin="0,4,0,0" FontAttributes="Bold" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>

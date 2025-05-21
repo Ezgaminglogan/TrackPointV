@@ -14,7 +14,7 @@ namespace TrackPointV.Converters
                 return type switch
                 {
                     "Product" => "\uf466", // box-open
-                    "Sale" => "\uf155",    // dollar-sign
+                    "Sale" => "\u20b1",    // ph-sign
                     "User" => "\uf007",    // user
                     "Inventory" => "\uf07b", // folder
                     "Purchase" => "\uf07a", // shopping-cart

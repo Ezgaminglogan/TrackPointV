@@ -36,8 +36,8 @@ namespace TrackPointV.Service
         public bool HasAmount => Amount.HasValue && Amount.Value > 0;
         public bool HasQuantity => Quantity.HasValue && Quantity.Value > 0;
         public bool HasPrice => Price.HasValue && Price.Value > 0;
-        public string FormattedAmount => HasAmount ? $"${Amount:N2}" : string.Empty;
-        public string FormattedPrice => HasPrice ? $"${Price:N2}" : string.Empty;
+        public string FormattedAmount => HasAmount ? $"₱{Amount:N2}" : string.Empty;
+        public string FormattedPrice => HasPrice ? $"₱{Price:N2}" : string.Empty;
         public string FormattedQuantity => HasQuantity ? $"{Quantity} {(Quantity == 1 ? "unit" : "units")}" : string.Empty;
     }
 }

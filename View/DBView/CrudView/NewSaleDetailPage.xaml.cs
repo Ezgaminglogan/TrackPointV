@@ -75,7 +75,11 @@ namespace TrackPointV.View.DBView.CrudView
                 productPicker.ItemsSource = _availableProducts;
                 
                 // Load users
-                _users = await _userService.GetAllUsersAsync();
+                var allUsers = await _userService.GetAllUsersAsync();
+                // Filter out any username containing admin (case-insensitive)
+                _users = allUsers
+                    .Where(u => !u.Username.Contains("admin", StringComparison.OrdinalIgnoreCase) || u.Username.Contains("admins", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
                 userPicker.ItemsSource = _users;
                 
                 // Update UI
@@ -102,7 +106,7 @@ namespace TrackPointV.View.DBView.CrudView
                 _totalAmount += item.TotalPrice;
             }
             
-            totalAmountLabel.Text = $"${_totalAmount:N2}";
+            totalAmountLabel.Text = $"{_totalAmount.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}";
             
             // Enable/disable save button based on cart items
             saveButton.IsEnabled = _cartItems.Count > 0 && _selectedUserId > 0;
@@ -189,7 +193,7 @@ namespace TrackPointV.View.DBView.CrudView
             if (productPicker.SelectedItem is Product selectedProduct)
             {
                 decimal totalPrice = selectedProduct.Price * (decimal)e.NewValue;
-                totalPriceLabel.Text = $"${totalPrice:N2}";
+                totalPriceLabel.Text = $"{totalPrice.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-PH"))}";
                 
                 // Update quantity label to match stepper value
                 quantityLabel.Text = e.NewValue.ToString();
@@ -265,7 +269,7 @@ namespace TrackPointV.View.DBView.CrudView
                 stockLabel.TextColor = Color.FromArgb("#64748b"); // TextMediumColor
                 quantityStepper.Value = 1;
                 quantityLabel.Text = "1";
-                totalPriceLabel.Text = "$0.00";
+                totalPriceLabel.Text = "₱0.00";
                 addToCartButton.IsEnabled = false;
                 selectedProductLabel.Text = "No product selected";
                 selectedProductLabel.TextColor = Color.FromArgb("#94a3b8"); // TextLightColor
@@ -304,7 +308,7 @@ namespace TrackPointV.View.DBView.CrudView
                 
                 // Confirm the transaction
                 bool confirm = await DisplayAlert("Confirm Sale", 
-                    $"Complete this sale for ${_totalAmount:N2}?\n\nThis will reduce product stock accordingly.", 
+                    $"Complete this sale for ₱{_totalAmount:N2}?\n\nThis will reduce product stock accordingly.", 
                     "Complete Sale", "Cancel");
                 
                 if (!confirm)
@@ -408,7 +412,7 @@ namespace TrackPointV.View.DBView.CrudView
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         
-        public string PriceDisplay => $"${PricePerUnit:N2}";
-        public string TotalPriceDisplay => $"${TotalPrice:N2}";
+        public string PriceDisplay => $"₱{PricePerUnit:N2}";
+        public string TotalPriceDisplay => $"₱{TotalPrice:N2}";
     }
 }

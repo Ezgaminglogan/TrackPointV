@@ -299,7 +299,7 @@
                                        TextColor="{StaticResource TextMediumColor}" Grid.Row="1" Grid.Column="0" 
                                        Margin="6,6,0,0" />
 
-                                <Label x:Name="totalPriceLabel" Text="$0.00" 
+                                <Label x:Name="totalPriceLabel" Text="₱0.00" 
                                        TextColor="{StaticResource SecondaryColor}" FontAttributes="Bold" FontSize="18"
                                        Grid.Row="1" Grid.Column="1" HorizontalOptions="End"
                                        Margin="0,6,6,0" />

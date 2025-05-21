@@ -235,7 +235,7 @@
                                     </Image>
                                 </Border>
                                 <Label Text="Revenue" Style="{StaticResource StatTitleStyle}"/>
-                                <Label x:Name="totalRevenueLabel" Text="$0" Style="{StaticResource StatValueStyle}"/>
+                                <Label x:Name="totalRevenueLabel" Text="₱0" Style="{StaticResource StatValueStyle}"/>
                             </VerticalStackLayout>
                         </Border>
 

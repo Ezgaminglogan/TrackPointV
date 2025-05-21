@@ -291,7 +291,7 @@
                                                        LineBreakMode="TailTruncation" MaxLines="2" 
                                                        TextColor="#475569" FontSize="15" />
 
-                                                <Label Grid.Row="3" Text="{Binding Price, StringFormat='${0:N2}'}" 
+                                                <Label Grid.Row="3" Text="{Binding Price, StringFormat='₱{0:N2}'}" 
                                                        Style="{StaticResource PriceStyle}" Margin="0,8,0,0" />
 
                                                 <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Margin="0,5,0,0">
@@ -378,8 +378,12 @@
                                 <Border Style="{StaticResource GlassCard}" Margin="0,2,0,2">
                                     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="10">
                                         <Grid ColumnDefinitions="*,Auto">
-                                            <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" 
-                                                TextColor="#1e3a8a" />
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" 
+                                                    TextColor="#1e3a8a" />
+                                                <Label Text="{Binding SKU, StringFormat='SKU: {0}'}" FontSize="12"
+                                                    TextColor="#64748b" Margin="0,2,0,0" />
+                                            </VerticalStackLayout>
 
                                             <!-- Low stock badge -->
                                             <Border Grid.Column="1" IsVisible="{Binding Stock, Converter={StaticResource LowStockConverter}}"
@@ -396,7 +400,7 @@
                                         <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*">
                                             <Frame BackgroundColor="#f0fdf4" CornerRadius="8" Padding="10,5"
                                                    HasShadow="False" BorderColor="Transparent">
-                                                <Label Text="{Binding Price, StringFormat='${0:N2}'}" 
+                                                <Label Text="{Binding Price, StringFormat='₱{0:N2}'}" 
                                                        Style="{StaticResource PriceStyle}" FontSize="18" />
                                             </Frame>
 

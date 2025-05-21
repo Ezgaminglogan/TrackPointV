@@ -1,6 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using TrackPointV.Service;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using Microsoft.Maui.Graphics;
 using ServiceProduct = TrackPointV.Service.Product; // Alias for clarity
 
 namespace TrackPointV.View.DBView.CrudView
@@ -11,12 +15,14 @@ namespace TrackPointV.View.DBView.CrudView
         private int? _productId;
         private bool _isViewMode;
         private ServiceProduct? _currentProduct; // Changed to ServiceProduct
+        private readonly HttpClient _httpClient; // For barcode generation API calls
 
         // Constructor for adding a new product
         public ProductDetailPage()
         {
             InitializeComponent();
             _inventoryService = new InventoryService();
+            _httpClient = new HttpClient();
             _isViewMode = false;
             
             // Set up UI for Add mode
@@ -26,6 +32,7 @@ namespace TrackPointV.View.DBView.CrudView
             
             // Hide view-only section
             viewModeSection.IsVisible = false;
+            barcodeDisplaySection.IsVisible = false;
         }
 
         // Constructor for editing or viewing an existing product
@@ -33,6 +40,7 @@ namespace TrackPointV.View.DBView.CrudView
         {
             InitializeComponent();
             _inventoryService = new InventoryService();
+            _httpClient = new HttpClient();
             _productId = productId;
             _isViewMode = isViewMode;
             
@@ -44,9 +52,12 @@ namespace TrackPointV.View.DBView.CrudView
                 
                 // Hide edit form and show view-only section
                 viewModeSection.IsVisible = true;
+                barcodeDisplaySection.IsVisible = true;
                 
                 // Make form read-only
                 nameEntry.IsReadOnly = true;
+                skuEntry.IsReadOnly = true;
+                barcodeEntry.IsReadOnly = true;
                 priceEntry.IsReadOnly = true;
                 stockEntry.IsReadOnly = true;
                 descriptionEditor.IsReadOnly = true;
@@ -68,6 +79,7 @@ namespace TrackPointV.View.DBView.CrudView
                 
                 // Hide view-only section
                 viewModeSection.IsVisible = false;
+                barcodeDisplaySection.IsVisible = false;
             }
         }
 
@@ -95,6 +107,8 @@ namespace TrackPointV.View.DBView.CrudView
                 {
                     // Populate form fields
                     nameEntry.Text = _currentProduct.Name;
+                    skuEntry.Text = _currentProduct.SKU;
+                    barcodeEntry.Text = _currentProduct.Barcode;
                     priceEntry.Text = _currentProduct.Price.ToString("F2");
                     stockEntry.Text = _currentProduct.Stock.ToString();
                     descriptionEditor.Text = _currentProduct.Description;
@@ -115,13 +129,20 @@ namespace TrackPointV.View.DBView.CrudView
                         {
                             var salesStats = await _inventoryService.GetProductSalesStatisticsAsync(productId);
                             salesCountValue.Text = salesStats.SalesCount.ToString();
-                            revenueValue.Text = $"${salesStats.TotalRevenue:N2}";
+                            revenueValue.Text = $"₱{salesStats.TotalRevenue:N2}";
                         }
                         catch
                         {
                             // If statistics aren't available, keep defaults
                             salesCountValue.Text = "0";
-                            revenueValue.Text = "$0.00";
+                            revenueValue.Text = "₱0.00";
+                        }
+                        
+                        // Generate and display barcode
+                        if (!string.IsNullOrEmpty(_currentProduct.Barcode))
+                        {
+                            barcodeValueLabel.Text = _currentProduct.Barcode;
+                            await GenerateAndDisplayBarcodeAsync(_currentProduct.Barcode);
                         }
                     }
                 }
@@ -142,6 +163,127 @@ namespace TrackPointV.View.DBView.CrudView
             }
         }
 
+        private async Task GenerateAndDisplayBarcodeAsync(string barcodeValue)
+        {
+            try
+            {
+                // Use a free barcode API to generate a real, scannable barcode
+                string barcodeUrl = $"https://barcodeapi.org/api/128/{Uri.EscapeDataString(barcodeValue)}";
+                
+                // Display the barcode image
+                barcodeImage.Source = barcodeUrl;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Barcode Error", $"Could not generate barcode: {ex.Message}", "OK");
+            }
+        }
+
+        private void GenerateBarcode_Clicked(object sender, EventArgs e)
+        {
+            // Generate a unique EAN-13 barcode
+            string barcode = GenerateEan13Barcode();
+            barcodeEntry.Text = barcode;
+        }
+
+        /// <summary>
+        /// Generates a valid EAN-13 barcode with proper check digit
+        /// </summary>
+        private string GenerateEan13Barcode()
+        {
+            // EAN-13 structure:
+            // - First 2-3 digits: Country code (e.g., 608 for Philippines)
+            // - Next digits: Manufacturer code + product code (total 9-10 digits)
+            // - Last digit: Check digit calculated according to EAN-13 algorithm
+
+            // For Philippines, use 608 as the country code
+            StringBuilder ean = new StringBuilder("608"); 
+
+            // Add timestamp-based portion to ensure uniqueness
+            string timestamp = DateTime.Now.ToString("yyMMddHHmm"); // 10 digits from year, month, day, hour, minute
+            ean.Append(timestamp);
+
+            // At this point, we have 13 digits: 3 for country code + 10 for timestamp
+            // Now calculate the check digit according to EAN-13 algorithm
+            string barcodeWithoutCheck = ean.ToString();
+            int checkDigit = CalculateEan13CheckDigit(barcodeWithoutCheck);
+            
+            // Return the complete EAN-13 (12 digits + check digit)
+            return barcodeWithoutCheck.Substring(0, 12) + checkDigit.ToString();
+        }
+
+        /// <summary>
+        /// Calculates the EAN-13 check digit for a 12-digit barcode
+        /// </summary>
+        private int CalculateEan13CheckDigit(string barcode)
+        {
+            // Ensure we have the first 12 digits of the barcode
+            string code = barcode.Substring(0, 12);
+            
+            int sum = 0;
+            for (int i = 0; i < 12; i++)
+            {
+                int digit = int.Parse(code[i].ToString());
+                // EAN-13 algorithm: multiply by 1 for even positions, by 3 for odd positions
+                sum += digit * (i % 2 == 0 ? 1 : 3);
+            }
+            
+            // The check digit is the number needed to bring the sum to a multiple of 10
+            int checkDigit = (10 - (sum % 10)) % 10; // The %10 at the end handles the case where sum % 10 = 0
+            
+            return checkDigit;
+        }
+
+        private void GenerateSku_Clicked(object sender, EventArgs e)
+        {
+            // Generate a unique SKU code
+            string sku = GenerateSkuCode();
+            skuEntry.Text = sku;
+        }
+
+        /// <summary>
+        /// Generates a unique SKU code based on product information and date
+        /// </summary>
+        private string GenerateSkuCode()
+        {
+            // Format: [Category Code][Sequential Number][Year Code]
+            
+            // Category prefix (first 2 characters)
+            string categoryPrefix = "PR"; // Default for "Product"
+            
+            // Try to determine a better category from product name if available
+            if (!string.IsNullOrEmpty(nameEntry.Text))
+            {
+                string name = nameEntry.Text.ToUpper();
+                if (name.Contains("ELEC") || name.Contains("GADGET") || name.Contains("PHONE"))
+                    categoryPrefix = "EL";
+                else if (name.Contains("CLOTH") || name.Contains("APPAREL") || name.Contains("WEAR"))
+                    categoryPrefix = "CL";
+                else if (name.Contains("FOOD") || name.Contains("DRINK") || name.Contains("GROCERY"))
+                    categoryPrefix = "FD";
+                else if (name.Contains("TOY") || name.Contains("GAME"))
+                    categoryPrefix = "TY";
+                else if (name.Contains("FURNITURE") || name.Contains("HOME"))
+                    categoryPrefix = "HM";
+                else if (name.Contains("BOOK") || name.Contains("STATIONERY"))
+                    categoryPrefix = "BK";
+            }
+            
+            // Sequential number (4 digits) - using last 4 digits of timestamp
+            string sequentialNumber = DateTime.Now.ToString("mmss");
+            
+            // Year code (2 digits) - using year's last 2 digits
+            string yearCode = DateTime.Now.ToString("yy");
+            
+            // Random suffix to ensure uniqueness (2 characters)
+            string randomSuffix = new Random().Next(10, 99).ToString();
+            
+            // Combine all parts to create the SKU
+            string sku = $"{categoryPrefix}{sequentialNumber}{yearCode}{randomSuffix}";
+            
+            return sku;
+        }
+
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
             try
@@ -151,6 +293,18 @@ namespace TrackPointV.View.DBView.CrudView
                 {
                     ShowValidationError("Product name is required");
                     return;
+                }
+                
+                // Make SKU optional if not provided, generate it automatically
+                if (string.IsNullOrWhiteSpace(skuEntry.Text))
+                {
+                    skuEntry.Text = GenerateSkuCode();
+                }
+                
+                // Make barcode optional if not provided, generate it automatically
+                if (string.IsNullOrWhiteSpace(barcodeEntry.Text))
+                {
+                    barcodeEntry.Text = GenerateEan13Barcode();
                 }
                 
                 if (string.IsNullOrWhiteSpace(priceEntry.Text) || !decimal.TryParse(priceEntry.Text, out decimal price) || price < 0)
@@ -178,6 +332,8 @@ namespace TrackPointV.View.DBView.CrudView
                 var product = new ServiceProduct
                 {
                     Name = nameEntry.Text,
+                    SKU = skuEntry.Text,
+                    Barcode = barcodeEntry.Text,
                     Price = price,
                     Stock = stock,
                     Description = descriptionEditor.Text,
@@ -215,8 +371,8 @@ namespace TrackPointV.View.DBView.CrudView
 
         private void ShowValidationError(string message)
         {
+            validationGrid.IsVisible = true;
             validationLabel.Text = message;
-            validationLabel.IsVisible = true;
         }
 
         private async void CancelButton_Clicked(object sender, EventArgs e)
@@ -235,6 +391,8 @@ namespace TrackPointV.View.DBView.CrudView
             
             // Make form editable
             nameEntry.IsReadOnly = false;
+            skuEntry.IsReadOnly = false;
+            barcodeEntry.IsReadOnly = false;
             priceEntry.IsReadOnly = false;
             stockEntry.IsReadOnly = false;
             descriptionEditor.IsReadOnly = false;
@@ -250,6 +408,7 @@ namespace TrackPointV.View.DBView.CrudView
             
             // Hide view-only section
             viewModeSection.IsVisible = false;
+            barcodeDisplaySection.IsVisible = false;
         }
     }
 }

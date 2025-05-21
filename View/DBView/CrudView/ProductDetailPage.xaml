@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TrackPointV.View.DBView.CrudView.ProductDetailPage"
              BackgroundColor="#f5f9ff"
-             Title="Product Details">
+             Title="Stock In">
 
     <ContentPage.Resources>
         <!-- FontAwesome font resource -->
@@ -163,7 +163,7 @@
                     <VerticalStackLayout Padding="10">
                         <!-- Product Name -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,24,0,0">
                                 <Image.Source>
                                     <FontImageSource FontFamily="Font Awesome 6 Free Solid"
                                                      Glyph="&#xf02b;"
@@ -180,12 +180,64 @@
                             </VerticalStackLayout>
                         </Grid>
 
-                        <!-- Product Price -->
+                        <!-- SKU -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,24,0,0">
                                 <Image.Source>
                                     <FontImageSource FontFamily="Font Awesome 6 Free Solid"
-                                                     Glyph="&#xf155;"
+                                                     Glyph="&#xf02a;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="SKU (Stock Keeping Unit)" Style="{StaticResource LabelStyle}" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border Style="{StaticResource InputBorderStyle}" Grid.Column="0">
+                                        <Entry x:Name="skuEntry" Placeholder="Enter product SKU code" 
+                                               Style="{StaticResource EntryStyle}" />
+                                    </Border>
+                                    <Button Text="Generate" Grid.Column="1" Margin="8,0,0,0"
+                                            Style="{StaticResource ActionButton}" HeightRequest="50"
+                                            Clicked="GenerateSku_Clicked" />
+                                </Grid>
+                                <Label Text="A unique identifier for tracking inventory" 
+                                       TextColor="#64748b" FontSize="12" Margin="4,2,0,0"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                        
+                        <!-- Barcode -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,24,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf02a;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Barcode" Style="{StaticResource LabelStyle}" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border Style="{StaticResource InputBorderStyle}" Grid.Column="0">
+                                        <Entry x:Name="barcodeEntry" Placeholder="Enter product barcode" 
+                                               Style="{StaticResource EntryStyle}" />
+                                    </Border>
+                                    <Button Text="Generate" Grid.Column="1" Margin="8,0,0,0"
+                                            Style="{StaticResource ActionButton}" HeightRequest="50"
+                                            Clicked="GenerateBarcode_Clicked" />
+                                </Grid>
+                                <Label Text="Enter a valid barcode or click 'Generate' for an automatic one" 
+                                       TextColor="#64748b" FontSize="12" Margin="4,2,0,0"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Product Price -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,24,0,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#x20b1;"
                                                      Color="#1a73e8"
                                                      Size="24" />
                                 </Image.Source>
@@ -194,10 +246,11 @@
                                 <Label Text="Price" Style="{StaticResource LabelStyle}" />
                                 <Border Style="{StaticResource InputBorderStyle}">
                                     <Grid ColumnDefinitions="Auto,*">
-                                        <Label Text="$" FontSize="20" VerticalOptions="Center" 
+                                        <Label Text="₱" FontSize="20" VerticalOptions="Center" 
                                                TextColor="#333333" Margin="10,0,0,0" />
                                         <Entry x:Name="priceEntry" Grid.Column="1" Placeholder="0.00" 
-                                               Keyboard="Numeric" Style="{StaticResource EntryStyle}" />
+                                               Keyboard="Numeric" Style="{StaticResource EntryStyle}" 
+                                               Margin="2,8,0,8" />
                                     </Grid>
                                 </Border>
                             </VerticalStackLayout>
@@ -205,7 +258,7 @@
 
                         <!-- Product Stock -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="End" Margin="0,12,0,0">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,24,0,0">
                                 <Image.Source>
                                     <FontImageSource FontFamily="Font Awesome 6 Free Solid"
                                                      Glyph="&#xf49e;"
@@ -224,7 +277,7 @@
 
                         <!-- Product Description -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Start" Margin="0,12,0,0">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,50,0,0">
                                 <Image.Source>
                                     <FontImageSource FontFamily="Font Awesome 6 Free Solid"
                                                      Glyph="&#xf15c;"
@@ -382,7 +435,7 @@
                                     </Image>
                                     <Label Text="Total Revenue" Grid.Row="1" FontSize="14" TextColor="#666666" 
                                            HorizontalOptions="Center" />
-                                    <Label x:Name="revenueValue" Grid.Row="2" Text="$0.00" FontSize="16" 
+                                    <Label x:Name="revenueValue" Grid.Row="2" Text="₱0.00" FontSize="16" 
                                            TextColor="#333333" FontAttributes="Bold" HorizontalOptions="Center" />
                                 </Grid>
                             </Border>
@@ -396,6 +449,35 @@
                                                  Glyph="&#xf044;" Color="White" Size="16" />
                             </Button.ImageSource>
                         </Button>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Barcode Display (View Mode Only) -->
+                <Border Style="{StaticResource GlassCard}" x:Name="barcodeDisplaySection" IsVisible="False">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Image WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                     Glyph="&#xf02a;"
+                                                     Color="#1a73e8"
+                                                     Size="24" />
+                                </Image.Source>
+                            </Image>
+                            <Label Text="Product Barcode" Grid.Column="1" FontSize="18" FontAttributes="Bold" 
+                                   TextColor="#0d47a1" VerticalOptions="Center" />
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label x:Name="barcodeValueLabel" Text="" FontSize="16" 
+                                   TextColor="#333333" HorizontalOptions="Center" />
+                            
+                            <Image x:Name="barcodeImage" HeightRequest="100" Aspect="AspectFit"
+                                   HorizontalOptions="Center" Margin="0,10,0,15" />
+                            
+                            <Label Text="Scan with a barcode scanner to view product details" 
+                                   TextColor="#64748b" FontSize="14" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
