@@ -15,7 +15,8 @@ namespace TrackPointV.View.DBView.CrudView
         private int? _productId;
         private bool _isViewMode;
         private ServiceProduct? _currentProduct; // Changed to ServiceProduct
-        private readonly HttpClient _httpClient; // For barcode generation API calls
+        private readonly HttpClient _httpClient; // For API calls
+        private string _productLookupUrl; // URL for online product lookup
 
         // Constructor for adding a new product
         public ProductDetailPage()
@@ -138,11 +139,11 @@ namespace TrackPointV.View.DBView.CrudView
                             revenueValue.Text = "₱0.00";
                         }
                         
-                        // Generate and display barcode
+                        // Generate and display barcode & QR code
                         if (!string.IsNullOrEmpty(_currentProduct.Barcode))
                         {
                             barcodeValueLabel.Text = _currentProduct.Barcode;
-                            await GenerateAndDisplayBarcodeAsync(_currentProduct.Barcode);
+                            await GenerateAndDisplayCodesAsync(_currentProduct.Name, _currentProduct.Barcode);
                         }
                     }
                 }
@@ -163,19 +164,69 @@ namespace TrackPointV.View.DBView.CrudView
             }
         }
 
-        private async Task GenerateAndDisplayBarcodeAsync(string barcodeValue)
+        private async Task GenerateAndDisplayCodesAsync(string productName, string barcodeValue)
         {
             try
             {
-                // Use a free barcode API to generate a real, scannable barcode
+                // Generate a regular barcode
                 string barcodeUrl = $"https://barcodeapi.org/api/128/{Uri.EscapeDataString(barcodeValue)}";
-                
-                // Display the barcode image
                 barcodeImage.Source = barcodeUrl;
+                
+                // Always use the product name for the search URL
+                string searchUrl = $"https://www.google.com/search?q={Uri.EscapeDataString(productName)}";
+                _productLookupUrl = searchUrl;
+                
+                // Generate QR code that directly links to Google search
+                string qrCodeUrl = $"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={Uri.EscapeDataString(searchUrl)}";
+                qrCodeImage.Source = qrCodeUrl;
+                
+                // Make the online lookup button visible
+                openProductLinkButton.IsVisible = true;
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Barcode Error", $"Could not generate barcode: {ex.Message}", "OK");
+                await DisplayAlert("Code Generation Error", $"Could not generate product codes: {ex.Message}", "OK");
+            }
+        }
+
+        // Simplified barcode search that opens browser directly
+        private async void SearchBarcode_Clicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(barcodeEntry.Text))
+            {
+                ShowValidationError("Please enter a barcode to search");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(nameEntry.Text))
+            {
+                await DisplayAlert("Product Search", "Please enter a product name first to search online.", "OK");
+                return;
+            }
+
+            try
+            {
+                // Open browser directly with the product name search
+                string searchUrl = $"https://www.google.com/search?q={Uri.EscapeDataString(nameEntry.Text)}";
+                await Launcher.OpenAsync(new Uri(searchUrl));
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Could not open browser: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OpenProductLink_Clicked(object sender, EventArgs e)
+        {
+            // Always open a search with the current product name
+            try
+            {
+                string searchUrl = $"https://www.google.com/search?q={Uri.EscapeDataString(nameEntry.Text)}";
+                await Launcher.OpenAsync(new Uri(searchUrl));
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Could not open product search: {ex.Message}", "OK");
             }
         }
 
@@ -267,6 +318,8 @@ namespace TrackPointV.View.DBView.CrudView
                     categoryPrefix = "HM";
                 else if (name.Contains("BOOK") || name.Contains("STATIONERY"))
                     categoryPrefix = "BK";
+                else if (name.Contains("ALCOHOL") || name.Contains("SANITIZER"))
+                    categoryPrefix = "AL"; // For products like "Green Cross Isopropyl Alcohol"
             }
             
             // Sequential number (4 digits) - using last 4 digits of timestamp

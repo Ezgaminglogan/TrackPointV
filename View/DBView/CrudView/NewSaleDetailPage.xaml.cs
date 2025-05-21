@@ -45,7 +45,7 @@ namespace TrackPointV.View.DBView.CrudView
             // Set current date
             saleDate.Date = DateTime.Now;
         }
-
+        
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -144,7 +144,7 @@ namespace TrackPointV.View.DBView.CrudView
                 quantityLabel.Text = "1";
                 
                 // Update total price label
-                totalPriceLabel.Text = $"${selectedProduct.Price:N2}";
+                totalPriceLabel.Text = $"₱{selectedProduct.Price:N2}";
                 
                 // Update visual feedback
                 selectedProductLabel.Text = $"Selected: {selectedProduct.Name}";

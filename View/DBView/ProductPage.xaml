@@ -148,7 +148,7 @@
                             <!-- Add Product Button -->
                             <Button Grid.Column="2" Grid.RowSpan="2"
                                     Style="{StaticResource ActionButton}"
-                                    Text="Add Product"
+                                    Text="Stock In"
                                     Clicked="AddProduct_Clicked"
                                     HorizontalOptions="End"
                                     VerticalOptions="Center"

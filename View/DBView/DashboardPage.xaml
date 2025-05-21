@@ -408,7 +408,7 @@
                                                                 <Setter Property="Source">
                                                                     <Setter.Value>
                                                                         <FontImageSource FontFamily="Font Awesome 6 Free Solid"
-                                                                                       Glyph="&#xf155;"
+                                                                                       Glyph="₱"
                                                                                        Color="#6366f1"
                                                                                        Size="22" />
                                                                     </Setter.Value>

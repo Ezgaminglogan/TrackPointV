@@ -218,7 +218,7 @@
                             </Image>
                             <VerticalStackLayout Grid.Column="1">
                                 <Label Text="Barcode" Style="{StaticResource LabelStyle}" />
-                                <Grid ColumnDefinitions="*,Auto">
+                                <Grid ColumnDefinitions="*,Auto,Auto">
                                     <Border Style="{StaticResource InputBorderStyle}" Grid.Column="0">
                                         <Entry x:Name="barcodeEntry" Placeholder="Enter product barcode" 
                                                Style="{StaticResource EntryStyle}" />
@@ -226,8 +226,11 @@
                                     <Button Text="Generate" Grid.Column="1" Margin="8,0,0,0"
                                             Style="{StaticResource ActionButton}" HeightRequest="50"
                                             Clicked="GenerateBarcode_Clicked" />
+                                    <Button Text="Search" Grid.Column="2" Margin="8,0,0,0"
+                                            Style="{StaticResource ActionButton}" HeightRequest="50"
+                                            Clicked="SearchBarcode_Clicked" />
                                 </Grid>
-                                <Label Text="Enter a valid barcode or click 'Generate' for an automatic one" 
+                                <Label Text="Enter a valid barcode, search for a real product, or click 'Generate'" 
                                        TextColor="#64748b" FontSize="12" Margin="4,2,0,0"/>
                             </VerticalStackLayout>
                         </Grid>
@@ -464,20 +467,47 @@
                                                      Size="24" />
                                 </Image.Source>
                             </Image>
-                            <Label Text="Product Barcode" Grid.Column="1" FontSize="18" FontAttributes="Bold" 
+                            <Label Text="Product Identification" Grid.Column="1" FontSize="18" FontAttributes="Bold" 
                                    TextColor="#0d47a1" VerticalOptions="Center" />
                         </Grid>
 
-                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label x:Name="barcodeValueLabel" Text="" FontSize="16" 
-                                   TextColor="#333333" HorizontalOptions="Center" />
-                            
-                            <Image x:Name="barcodeImage" HeightRequest="100" Aspect="AspectFit"
-                                   HorizontalOptions="Center" Margin="0,10,0,15" />
-                            
-                            <Label Text="Scan with a barcode scanner to view product details" 
-                                   TextColor="#64748b" FontSize="14" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <!-- Barcode Section -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="10" HorizontalOptions="Center">
+                                <Label Text="Barcode" FontSize="16" FontAttributes="Bold" 
+                                       TextColor="#333333" HorizontalOptions="Center" />
+                                <Label x:Name="barcodeValueLabel" Text="" FontSize="16" 
+                                       TextColor="#333333" HorizontalOptions="Center" />
+                                
+                                <Image x:Name="barcodeImage" HeightRequest="100" Aspect="AspectFit"
+                                       HorizontalOptions="Center" Margin="0,10,0,10" />
+
+                                <Button x:Name="openProductLinkButton" Text="View Online" Style="{StaticResource ActionButton}" 
+                                        HeightRequest="40" Margin="0,10,0,0" Clicked="OpenProductLink_Clicked" 
+                                        IsVisible="False">
+                                    <Button.ImageSource>
+                                        <FontImageSource FontFamily="Font Awesome 6 Free Solid"
+                                                         Glyph="&#xf0c1;"
+                                                         Color="White"
+                                                         Size="16" />
+                                    </Button.ImageSource>
+                                </Button>
+                            </VerticalStackLayout>
+
+                            <!-- QR Code Section -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10" HorizontalOptions="Center">
+                                <Label Text="QR Code" FontSize="16" FontAttributes="Bold" 
+                                       TextColor="#333333" HorizontalOptions="Center" />
+                                <Label Text="Scan for product details" FontSize="14" 
+                                       TextColor="#666666" HorizontalOptions="Center" />
+                                
+                                <Image x:Name="qrCodeImage" HeightRequest="150" WidthRequest="150" Aspect="AspectFit"
+                                       HorizontalOptions="Center" Margin="0,10,0,10" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label Text="Scan with any barcode/QR scanner to access product information" 
+                               TextColor="#64748b" FontSize="14" HorizontalOptions="Center" Margin="0,10,0,0" />
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
